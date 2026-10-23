@@ -1,0 +1,9 @@
+.shift-post { display:inline-flex;align-items:center;gap:10px;min-width:0;max-width:100%;vertical-align:middle; }
+.shift-post-icon { display:inline-grid;place-items:center;flex-shrink:0;width:40px;height:40px;border-radius:10px;color:var(--post-ink);background:var(--post-background); }
+.shift-post-label { min-width:0;overflow-wrap:anywhere; }
+@media print {
+  .shift-post-icon { background:white;border:1px solid currentColor; }
+}
+@media(forced-colors:active) {
+  .shift-post-icon { color:CanvasText;background:Canvas;border:1px solid CanvasText; }
+}

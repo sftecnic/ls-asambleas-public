@@ -1,0 +1,11 @@
+[
+ {"sheet":"Sedes","row":5,"values":{"id":"S-EJEMPLO","name":"Centro de reuniones de ejemplo","city":"Ciudad de ejemplo","address":"Calle de ejemplo, 1"}},
+ {"sheet":"Departamentos","row":5,"values":{"id":"video","name":"Audio y vídeo","icon":"Audio y vídeo"}},
+ {"sheet":"Congregaciones","row":5,"values":{"id":"C-EJEMPLO","name":"Congregación de ejemplo","committeeEmail":"comite@example.test"}},
+ {"sheet":"Eventos","row":5,"values":{"id":"E-EJEMPLO","title":"Asamblea ficticia","type":"Circuito","startDate":"2030-10-27","endDate":"2030-10-27","venueId":"S-EJEMPLO","section":"LSE","timezone":"Europe/Madrid"}},
+ {"sheet":"Personas","row":5,"values":{"id":"P-EJEMPLO","name":"Alex Ejemplo","aliases":"Alejandro Ejemplo","congregationId":"C-EJEMPLO","phone":"+34 000 000 000","email":"alex@example.test","hearingStatus":"Sorda"}},
+ {"sheet":"Equipo","row":5,"values":{"id":"EQ-EJEMPLO","eventId":"E-EJEMPLO","personId":"P-EJEMPLO","departmentId":"video","teamRole":"Voluntario","reserve":"No","committee":"Aprobado","availability":"Aceptado"}},
+ {"sheet":"Turnos","row":5,"values":{"id":"T-EJEMPLO-AM","eventId":"E-EJEMPLO","personId":"P-EJEMPLO","departmentId":"video","role":"Vídeo","date":"2030-10-27","start":"09:40","end":"12:10","meetingPoint":"Entrada principal"}},
+ {"sheet":"Turnos","row":6,"values":{"id":"T-EJEMPLO-PM","eventId":"E-EJEMPLO","personId":"P-EJEMPLO","departmentId":"video","role":"Mesa","date":"2030-10-27","start":"13:20","end":"16:00","meetingPoint":"Entrada principal"}},
+ {"sheet":"Programa","row":5,"values":{"id":"PR-EJEMPLO","eventId":"E-EJEMPLO","date":"2030-10-27","start":"09:40","duration":"20","kind":"Discurso","title":"Título de ejemplo","speaker":"Marina Ejemplo","speakerEmail":"marina@example.test","language":"LSE","material":"Pendiente","rehearsal":"Pendiente"}}
+]

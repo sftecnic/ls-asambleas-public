@@ -1,0 +1,334 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signed() {
+      return request.auth != null && request.auth.token.email_verified == true
+        && request.auth.token.firebase.sign_in_provider == 'google.com'
+        && request.auth.token.email is string;
+    }
+    function email() { return request.auth.token.email.lower(); }
+    function grantPath(eventId, departmentId) { return /databases/$(database)/documents/grants/$(email() + '~' + eventId + '~' + departmentId); }
+    function active(g) { return g.active == true && g.email == email() && (!('uid' in g) || g.uid == request.auth.uid) && !g.get('_deleted', false); }
+    function granted(eventId, departmentId, capability) {
+      let path = grantPath(eventId, departmentId);
+      return exists(path) && active(get(path).data) && capability in get(path).data.capabilities;
+    }
+    function admin() { return signed() && exists(grantPath('*', '*')) && active(get(grantPath('*', '*')).data) && get(grantPath('*', '*')).data.role == 'admin'; }
+    function can(eventId, departmentId, capability) {
+      return signed() && (admin() || granted(eventId, '*', capability) || (departmentId != '*' && granted(eventId, departmentId, capability)));
+    }
+    function profilePath() { return /databases/$(database)/documents/profiles/$(email()); }
+    function ownPerson(personId) { return signed() && exists(profilePath()) && get(profilePath()).data.personId == personId && get(profilePath()).data.uid == request.auth.uid; }
+    function primaryGrant() { return get(/databases/$(database)/documents/grants/$(get(profilePath()).data.primaryGrantId)).data; }
+    function member() { return signed() && exists(profilePath()) && active(primaryGrant()); }
+    function manager() { return member() && primaryGrant().role in ['admin', 'responsible', 'assistant']; }
+    function directoryContact() { return manager() && 'contacts' in primaryGrant().capabilities; }
+    function claimValid(d, after) {
+      let path = /databases/$(database)/documents/candidates/$(d.candidateId);
+      let candidate = after ? getAfter(path).data : get(path).data;
+      return d.email == email() && candidate.personId == d.personId && candidate.eventId == d.eventId && candidate.departmentId == d.departmentId
+        && !candidate.get('_deleted', false) && can(d.eventId, d.departmentId, 'contacts');
+    }
+    function personContact(personId, after) {
+      let path = /databases/$(database)/documents/contactAccess/$(email() + '~' + personId);
+      let claim = after ? getAfter(path).data : get(path).data;
+      return signed() && claim.personId == personId && claimValid(claim, after);
+    }
+    function eventMember(eventId) {
+      let path = /databases/$(database)/documents/memberships/$(email() + '~' + eventId);
+      return signed() && (admin() || (member() && exists(path) && get(path).data.scopes.size() > 0));
+    }
+    function text(value, maximum) { return value is string && value.size() <= maximum; }
+    function boundedId(value) { return text(value, 240) && value.size() > 0 && !value.matches('.*[/].*'); }
+    function auditValid(d) {
+      let audit = getAfter(/databases/$(database)/documents/audit/$(d._audit)).data;
+      return d._actor == request.auth.uid && d._at == request.time && audit.actorUid == request.auth.uid && audit.atServer == request.time;
+    }
+    function metadata(d) {
+      return d.keys().hasAll(['id', 'revision', '_audit', '_actor', '_at', '_deleted'])
+        && boundedId(d.id) && d.revision is int && d.revision > 0 && d._deleted is bool && boundedId(d._audit) && auditValid(d);
+    }
+    function created(d) { return metadata(d) && d.revision == 1 && d._deleted == false; }
+    function updated(d) { return metadata(d) && d.id == resource.data.id && d.revision == resource.data.revision + 1; }
+    function fields(d, names) { return d.keys().hasOnly(names.concat(['revision', '_audit', '_actor', '_at', '_deleted'])); }
+    function scopeUnchanged(d) { return d.eventId == resource.data.eventId && d.get('departmentId', '*') == resource.data.get('departmentId', '*'); }
+    function aliases(a) {
+      return a is list && a.size() <= 10
+        && (a.size() < 1 || text(a[0],160) && a[0].size()>0) && (a.size() < 2 || text(a[1],160) && a[1].size()>0)
+        && (a.size() < 3 || text(a[2],160) && a[2].size()>0) && (a.size() < 4 || text(a[3],160) && a[3].size()>0)
+        && (a.size() < 5 || text(a[4],160) && a[4].size()>0) && (a.size() < 6 || text(a[5],160) && a[5].size()>0)
+        && (a.size() < 7 || text(a[6],160) && a[6].size()>0) && (a.size() < 8 || text(a[7],160) && a[7].size()>0)
+        && (a.size() < 9 || text(a[8],160) && a[8].size()>0) && (a.size() < 10 || text(a[9],160) && a[9].size()>0);
+    }
+    function personSchema(d) { return fields(d, ['id', 'name', 'aliases', 'congregationId', 'source']) && text(d.name, 160) && d.name.size() > 0 && text(d.congregationId, 240) && text(d.get('source', ''), 500) && aliases(d.get('aliases', [])); }
+    function eventSchema(d) { return fields(d, ['id', 'title', 'type', 'startDate', 'endDate', 'venueId', 'section', 'timezone', 'archived']) && text(d.title, 200) && d.type in ['circuit', 'regional', 'pioneers'] && d.startDate.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}') && d.endDate.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}') && d.endDate >= d.startDate && boundedId(d.venueId) && text(d.section, 200) && text(d.timezone, 100) && d.archived is bool; }
+    function candidateSchema(d) {
+      return fields(d, ['id', 'eventId', 'personId', 'departmentId', 'teamRole', 'committee', 'availability', 'access', 'reserve'])
+        && d.get('teamRole','volunteer') in ['responsible','assistant','volunteer','supervisor']
+        && boundedId(d.eventId) && boundedId(d.personId) && boundedId(d.departmentId)
+        && d.committee in ['proposed', 'pending', 'approved', 'denied'] && d.availability in ['unknown', 'invited', 'accepted', 'declined'] && d.access in ['none', 'invited', 'active'] && d.reserve is bool
+        && (d.availability == 'unknown' || d.committee == 'approved') && (d.access == 'none' || (d.committee == 'approved' && d.availability == 'accepted'));
+    }
+    function instant(v) { return v is string && v.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}[.][0-9]{3}Z'); }
+    function shiftSchema(d) {
+      return fields(d, ['id', 'eventId', 'departmentId', 'personId', 'role', 'startsAt', 'endsAt', 'meetingPoint', 'status', 'attendance', 'replacementFor', 'substituteIds'])
+        && boundedId(d.eventId) && boundedId(d.departmentId) && boundedId(d.personId) && text(d.role, 160) && d.role.size() > 0
+        && instant(d.startsAt) && instant(d.endsAt) && d.startsAt < d.endsAt && d.startsAt[0:10] == d.endsAt[0:10]
+        && text(d.meetingPoint, 500) && d.status in ['draft', 'published'] && d.attendance in ['planned', 'present', 'absent', 'completed', 'replaced']
+        && text(d.get('replacementFor', ''), 240) && d.substituteIds is list && d.substituteIds.size() <= 20 && !(d.personId in d.substituteIds);
+    }
+    function reservation(s) { return { 'id': s.id, 'eventId': s.eventId, 'departmentId': s.departmentId, 'startsAt': s.startsAt, 'endsAt': s.endsAt }; }
+    function ledgerPath(s) { return /databases/$(database)/documents/personDays/$(s.personId + '~' + s.startsAt[0:10]); }
+    function reserved(s) { return !s._deleted && s.attendance != 'replaced'; }
+    function shiftLockAfter(s) { return !reserved(s) || reservation(s) in getAfter(ledgerPath(s)).data.entries; }
+    function oldLockReleased(s, n) { return !reserved(s) || (reserved(n) && n.personId == s.personId && n.startsAt == s.startsAt && n.endsAt == s.endsAt) || !(reservation(s) in getAfter(ledgerPath(s)).data.entries); }
+    function shiftLocksUpdated(s, n) {
+      return (reserved(s) && reserved(n) && n.personId == s.personId && n.startsAt == s.startsAt && n.endsAt == s.endsAt)
+        || (shiftLockAfter(n) && oldLockReleased(s, n));
+    }
+    function publishOnly(d) { return d.status == 'published' && d.diff(resource.data).affectedKeys().hasOnly(['status', 'revision', '_audit', '_actor', '_at']); }
+    // Existing entries cannot change: ledgerValid removes only the exact old/new
+    // reservation. The new entry is checked against the simultaneously saved shift.
+    // Only adjacency needs rechecking, keeping rule evaluation below its hard limit.
+    function entryAt(list, i, day) {
+      return list.size() <= i || i == 0 || list[i - 1].endsAt <= list[i].startsAt;
+    }
+    function sorted(list, day) {
+      return list is list && list.size() <= 16 && entryAt(list, 0, day) && entryAt(list, 1, day) && entryAt(list, 2, day) && entryAt(list, 3, day)
+        && entryAt(list, 4, day) && entryAt(list, 5, day) && entryAt(list, 6, day) && entryAt(list, 7, day)
+        && entryAt(list, 8, day) && entryAt(list, 9, day) && entryAt(list, 10, day) && entryAt(list, 11, day)
+        && entryAt(list, 12, day) && entryAt(list, 13, day) && entryAt(list, 14, day) && entryAt(list, 15, day);
+    }
+    function ledgerValid(d, oldEntries) {
+      let m = d.mutation;
+      let shiftPath = /databases/$(database)/documents/shifts/$(m.shiftId);
+      let fresh = getAfter(shiftPath).data;
+      let beforeList = m.before == null ? [] : [m.before];
+      let afterList = m.after == null ? [] : [m.after];
+      return d.keys().hasOnly(['personId', 'day', 'entries', 'mutation', '_audit', '_actor', '_at']) && boundedId(d.personId) && d.day.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}')
+        && m.keys().hasOnly(['shiftId', 'before', 'after']) && sorted(d.entries, d.day) && auditValid(d)
+        && fresh._audit == d._audit && can(fresh.eventId, fresh.departmentId, 'assign')
+        && oldEntries.hasAll(beforeList) && d.entries.hasAll(afterList)
+        && d.entries.removeAll(afterList) == oldEntries.removeAll(beforeList)
+        && (m.before == null || (exists(shiftPath) && m.before == reservation(get(shiftPath).data) && get(shiftPath).data.personId == d.personId))
+        && (m.after == null ? (!reserved(fresh) || fresh.personId != d.personId || fresh.startsAt[0:10] != d.day) : (reserved(fresh) && m.after == reservation(fresh) && fresh.personId == d.personId && fresh.startsAt[0:10] == d.day));
+    }
+    function programSchema(d) {
+      return fields(d, ['id', 'eventId', 'title', 'startsAt', 'duration', 'speaker', 'speakerEmail', 'language', 'interpreter', 'kind', 'driveUrl', 'material', 'rehearsal', 'status'])
+        && boundedId(d.eventId) && text(d.title, 300) && instant(d.startsAt) && d.duration is number && d.duration > 0 && d.duration <= 1440
+        && text(d.speaker, 160) && text(d.speakerEmail, 254) && text(d.interpreter, 160) && d.language in ['LSE', 'oral'] && d.kind in ['talk', 'song', 'break', 'interview']
+        && text(d.driveUrl, 2000) && (d.driveUrl == '' || d.driveUrl.matches('https://(drive|docs)[.]google[.]com/.*')) && d.material in ['pending', 'received', 'reviewed'] && d.rehearsal in ['pending', 'ready'] && d.status in ['draft', 'published'];
+    }
+    function planSchema(d) { return fields(d, ['id', 'eventId', 'programItemId', 'name', 'moments', 'status', 'updatedAt']) && boundedId(d.eventId) && boundedId(d.programItemId) && text(d.name, 300) && d.moments is list && d.moments.size() > 0 && d.moments.size() <= 50 && d.status in ['draft', 'published'] && instant(d.updatedAt); }
+    function grantSchema(d, grantId) {
+      return fields(d, ['id', 'email', 'uid', 'personId', 'eventId', 'departmentId', 'role', 'capabilities', 'active', '_candidateId'])
+        && d.id == grantId && grantId == d.email + '~' + d.eventId + '~' + d.departmentId && d.email == d.email.lower() && text(d.email, 254) && boundedId(d.personId)
+        && boundedId(d.eventId) && boundedId(d.departmentId) && d.role in ['admin', 'responsible', 'assistant', 'volunteer'] && d.active is bool
+        && d.capabilities is list && d.capabilities.size() <= 6 && d.capabilities.hasOnly(['view', 'edit', 'assign', 'publish', 'manageAccess', 'contacts']) && (!d.active || 'view' in d.capabilities)
+        && text(d.get('uid', ''), 128) && text(d._candidateId, 240) && ((d.role == 'admin') == (d.eventId == '*')) && (d.role != 'admin' || d.departmentId == '*');
+    }
+    function accepted(d) {
+      let candidate = getAfter(/databases/$(database)/documents/candidates/$(d._candidateId)).data;
+      let owner = getAfter(/databases/$(database)/documents/gmailOwners/$(d.email)).data;
+      return candidate.eventId == d.eventId && candidate.departmentId == d.departmentId && candidate.personId == d.personId && candidate.committee == 'approved' && candidate.availability == 'accepted' && owner.active && owner.personId == d.personId;
+    }
+    function delegate(d) {
+      let broadPath = grantPath(d.eventId, '*');
+      let localPath = grantPath(d.eventId, d.departmentId);
+      let broad = exists(broadPath) && active(get(broadPath).data) ? get(broadPath).data.capabilities : [];
+      let local = exists(localPath) && active(get(localPath).data) ? get(localPath).data.capabilities : [];
+      let allowed = broad.concat(local);
+      return admin() || (d.role != 'admin' && d.eventId != '*' && d.departmentId != '*' && 'manageAccess' in allowed && allowed.hasAll(d.capabilities));
+    }
+    function membershipMatches(d) {
+      let m = getAfter(/databases/$(database)/documents/memberships/$(d.email + '~' + d.eventId)).data;
+      return d.active && !d._deleted ? m.scopes.get(d.departmentId, '') == d.id : !(d.departmentId in m.scopes);
+    }
+    function adminRegistryMatches(d) { return d.role != 'admin' || ((d.email in getAfter(/databases/$(database)/documents/system/administrators).data.emails) == (d.active && !d._deleted)); }
+    function ownBinding(d) { return signed() && d.email == email() && d.active && !('uid' in resource.data) && d.uid == request.auth.uid && d.diff(resource.data).affectedKeys().hasOnly(['uid', 'revision', '_audit', '_actor', '_at']); }
+
+    match /profiles/{address} {
+      allow get: if signed() && address == email();
+      allow create, update: if signed() && address == email() && request.resource.data.keys().hasOnly(['email', 'uid', 'personId', 'primaryGrantId'])
+        && request.resource.data.email == email() && request.resource.data.uid == request.auth.uid
+        && active(get(/databases/$(database)/documents/grants/$(request.resource.data.primaryGrantId)).data)
+        && get(/databases/$(database)/documents/grants/$(request.resource.data.primaryGrantId)).data.personId == request.resource.data.personId
+        && (!exists(profilePath()) || resource.data.uid == request.auth.uid);
+    }
+    match /grants/{id} {
+      allow get: if signed() && !exists(/databases/$(database)/documents/grants/$(id)) && manager();
+      allow read: if signed() && (resource.data.email == email() || admin() || can(resource.data.eventId, resource.data.departmentId, 'manageAccess'));
+      allow create: if signed() && created(request.resource.data) && grantSchema(request.resource.data, id) && delegate(request.resource.data) && membershipMatches(request.resource.data) && adminRegistryMatches(request.resource.data) && (request.resource.data.role == 'admin' || !request.resource.data.active || accepted(request.resource.data));
+      allow update: if signed() && updated(request.resource.data) && grantSchema(request.resource.data, id) && request.resource.data.email == resource.data.email && request.resource.data.personId == resource.data.personId && scopeUnchanged(request.resource.data)
+        && (delegate(request.resource.data) || ownBinding(request.resource.data)) && membershipMatches(request.resource.data) && adminRegistryMatches(request.resource.data)
+        && (request.resource.data.role == 'admin' || !request.resource.data.active || (resource.data.active && request.resource.data._candidateId == resource.data._candidateId) || accepted(request.resource.data));
+    }
+    match /memberships/{key} {
+      // This index contains only grant IDs, never roles, contacts or capabilities.
+      // Managers need to read a missing index inside the invite transaction.
+      allow get: if signed() && (manager() || key.split('~')[0] == email());
+      function validMembership(d, previous) {
+        let g = getAfter(/databases/$(database)/documents/grants/$(d.grantId)).data;
+        return d.keys().hasOnly(['email', 'eventId', 'scopes', 'changedDepartment', 'grantId']) && key == d.email + '~' + d.eventId
+          && d.scopes is map && d.scopes.size() <= 30 && d.scopes.diff(previous).affectedKeys().hasOnly([d.changedDepartment])
+          && g.email == d.email && g.eventId == d.eventId && g.departmentId == d.changedDepartment && delegate(g)
+          && (g.active && !g._deleted ? d.scopes.get(d.changedDepartment, '') == d.grantId : !(d.changedDepartment in d.scopes));
+      }
+      allow create: if signed() && validMembership(request.resource.data, {});
+      allow update: if signed() && request.resource.data.email == resource.data.email && request.resource.data.eventId == resource.data.eventId && validMembership(request.resource.data, resource.data.scopes);
+    }
+    match /system/administrators {
+      allow read: if admin();
+      allow update: if admin() && request.resource.data.keys().hasOnly(['emails', 'changedEmail']) && request.resource.data.emails is list && request.resource.data.emails.size() > 0 && request.resource.data.emails.size() <= 20
+        && request.resource.data.emails.removeAll([request.resource.data.changedEmail]) == resource.data.emails.removeAll([request.resource.data.changedEmail])
+        && (request.resource.data.changedEmail in request.resource.data.emails) == getAfter(/databases/$(database)/documents/grants/$(request.resource.data.changedEmail + '~*~*')).data.active;
+    }
+    match /events/{id} {
+      allow get: if eventMember(id);
+      allow list: if admin();
+      allow create: if admin() && created(request.resource.data) && eventSchema(request.resource.data);
+      allow update: if admin() && updated(request.resource.data) && eventSchema(request.resource.data);
+    }
+    match /persons/{id} {
+      allow read: if manager() || (member() && ownPerson(id));
+      allow create: if directoryContact() && created(request.resource.data) && personSchema(request.resource.data);
+      allow update: if directoryContact() && updated(request.resource.data) && personSchema(request.resource.data);
+    }
+    match /personContacts/{id} {
+      allow get: if directoryContact() && !exists(/databases/$(database)/documents/personContacts/$(id));
+      allow get: if admin() || personContact(id, false);
+      allow list: if admin();
+      function schema(d) { return fields(d, ['id', 'phone', 'email', 'gmail', 'notes', 'hearingStatus', 'notificationEmail', '_scopeEvent', '_scopeDepartment']) && d.id == id && text(d.phone, 50) && text(d.email, 254) && text(d.gmail, 254) && text(d.notes, 5000) && text(d.get('notificationEmail',''),254) && (d.get('notificationEmail','') == '' || d.notificationEmail.matches('[^@ ]+@[^@ ]+[.][^@ ]+')) && d.get('hearingStatus','unknown') in ['unknown','deaf','hearing'] && boundedId(d._scopeEvent) && boundedId(d._scopeDepartment)
+        && (d._deleted || d.gmail == '' || (getAfter(/databases/$(database)/documents/gmailOwners/$(d.gmail.lower())).data.active && getAfter(/databases/$(database)/documents/gmailOwners/$(d.gmail.lower())).data.personId == id)); }
+      allow create: if (admin() || personContact(id, true)) && created(request.resource.data) && schema(request.resource.data);
+      allow update: if (admin() || personContact(id, true)) && updated(request.resource.data) && schema(request.resource.data) && (!('hearingStatus' in resource.data) || 'hearingStatus' in request.resource.data) && (!('notificationEmail' in resource.data) || 'notificationEmail' in request.resource.data) && request.resource.data._scopeEvent == resource.data._scopeEvent && request.resource.data._scopeDepartment == resource.data._scopeDepartment;
+    }
+    match /contactAccess/{key} {
+      allow get: if signed() && key.split('~')[0] == email();
+      allow list: if signed() && resource.data.email == email();
+      allow create, update: if signed() && request.resource.data.keys().hasOnly(['email', 'personId', 'eventId', 'departmentId', 'candidateId'])
+        && key == email() + '~' + request.resource.data.personId && boundedId(request.resource.data.personId) && boundedId(request.resource.data.eventId)
+        && boundedId(request.resource.data.departmentId) && boundedId(request.resource.data.candidateId) && claimValid(request.resource.data, true);
+    }
+    match /gmailOwners/{address} {
+      allow get: if directoryContact() || (signed() && address == email());
+      function valid(d) { return d.keys().hasOnly(['email', 'personId', 'active', '_scopeEvent', '_scopeDepartment', 'revision', '_audit', '_actor', '_at', '_deleted']) && d.email == address && address == address.lower() && boundedId(d.personId) && d.active is bool && auditValid(d) && (admin() || personContact(d.personId, true)); }
+      allow create: if signed() && valid(request.resource.data);
+      allow update: if signed() && valid(request.resource.data) && (!resource.data.active || request.resource.data.personId == resource.data.personId);
+    }
+    match /committeeContacts/{id} {
+      allow read: if directoryContact();
+      allow create: if admin() && created(request.resource.data) && fields(request.resource.data, ['id', 'committeeEmail']) && text(request.resource.data.committeeEmail, 254);
+      allow update: if admin() && updated(request.resource.data) && fields(request.resource.data, ['id', 'committeeEmail']) && text(request.resource.data.committeeEmail, 254);
+    }
+    match /candidates/{id} {
+      allow read: if can(resource.data.eventId, resource.data.departmentId, 'view') && manager() || (member() && resource.data.personId == get(profilePath()).data.personId);
+      allow create: if can(request.resource.data.eventId, request.resource.data.departmentId, 'edit') && created(request.resource.data) && candidateSchema(request.resource.data);
+      allow update: if updated(request.resource.data) && candidateSchema(request.resource.data) && scopeUnchanged(request.resource.data) && request.resource.data.personId == resource.data.personId
+        && (can(resource.data.eventId, resource.data.departmentId, 'edit') || (member() && ownPerson(resource.data.personId) && request.resource.data.access == 'active' && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['access', 'revision', '_audit', '_actor', '_at'])));
+    }
+    match /shifts/{id} {
+      allow read: if manager() && can(resource.data.eventId, resource.data.departmentId, 'view');
+      allow create: if can(request.resource.data.eventId, request.resource.data.departmentId, 'assign') && created(request.resource.data) && shiftSchema(request.resource.data) && shiftLockAfter(request.resource.data);
+      allow update: if (can(resource.data.eventId, resource.data.departmentId, 'assign') || (can(resource.data.eventId, resource.data.departmentId, 'publish') && publishOnly(request.resource.data)))
+        && updated(request.resource.data) && shiftSchema(request.resource.data) && scopeUnchanged(request.resource.data) && shiftLocksUpdated(resource.data, request.resource.data);
+    }
+    match /personDays/{key} {
+      allow get: if manager();
+      allow create: if signed() && key == request.resource.data.personId + '~' + request.resource.data.day && ledgerValid(request.resource.data, []);
+      allow update: if signed() && request.resource.data.personId == resource.data.personId && request.resource.data.day == resource.data.day && ledgerValid(request.resource.data, resource.data.entries);
+    }
+    match /program/{id} {
+      allow read: if manager() && can(resource.data.eventId, 'platform', 'view');
+      allow create: if can(request.resource.data.eventId, 'platform', 'edit') && created(request.resource.data) && programSchema(request.resource.data);
+      allow update: if (can(resource.data.eventId, 'platform', 'edit') || (can(resource.data.eventId, 'platform', 'publish') && publishOnly(request.resource.data))) && updated(request.resource.data) && programSchema(request.resource.data) && scopeUnchanged(request.resource.data);
+    }
+    match /plans/{id} {
+      allow read: if manager() && can(resource.data.eventId, 'platform', 'view');
+      allow create: if can(request.resource.data.eventId, 'platform', 'edit') && created(request.resource.data) && planSchema(request.resource.data);
+      allow update: if (can(resource.data.eventId, 'platform', 'edit') || (can(resource.data.eventId, 'platform', 'publish') && publishOnly(request.resource.data))) && updated(request.resource.data) && planSchema(request.resource.data) && scopeUnchanged(request.resource.data);
+    }
+    match /publications/{id} {
+      allow read: if can(resource.data.eventId, resource.data.departmentId, 'view');
+      function departmentValid(d) {
+        return !('department' in d) || (d.department is map && d.department.keys().hasOnly(['id', 'revision', 'name', 'icon', 'instructions', 'trainingUrl']) && d.department.id == d.departmentId
+          && text(d.department.name, 160) && d.department.icon in ['video', 'platform', 'makeup', 'other'] && text(d.department.get('instructions', ''), 3000)
+          && text(d.department.get('trainingUrl', ''), 2000) && (d.department.get('trainingUrl', '') == '' || d.department.trainingUrl.matches('https://(drive|docs)[.]google[.]com/.*')));
+      }
+      allow create: if can(request.resource.data.eventId, request.resource.data.departmentId, 'publish') && created(request.resource.data)
+        && fields(request.resource.data, ['id', 'eventId', 'departmentId', 'department', 'team', 'version', 'publishedAt', 'publishedBy', 'shifts', 'program', 'plans']) && departmentValid(request.resource.data)
+        && (!('team' in request.resource.data) || (request.resource.data.team is list && request.resource.data.team.size() <= 150))
+        && request.resource.data.version is int && request.resource.data.version > 0 && instant(request.resource.data.publishedAt) && text(request.resource.data.publishedBy, 160)
+        && request.resource.data.shifts is list && request.resource.data.shifts.size() <= 150 && request.resource.data.program is list && request.resource.data.program.size() <= 150 && request.resource.data.plans is list && request.resource.data.plans.size() <= 150;
+    }
+    match /publicationHeads/{key} {
+      allow get: if admin() || can(key.split('~')[0], key.split('~')[1], 'view');
+      allow list: if can(resource.data.eventId, resource.data.departmentId, 'view');
+      function valid(d) {
+        let publication = getAfter(/databases/$(database)/documents/publications/$(d.publicationId)).data;
+        return d.keys().hasOnly(['eventId', 'departmentId', 'version', 'publicationId']) && key == d.eventId + '~' + d.departmentId
+          && can(d.eventId, d.departmentId, 'publish') && publication.eventId == d.eventId && publication.departmentId == d.departmentId && publication.version == d.version && publication._at == request.time;
+      }
+      allow create: if valid(request.resource.data) && request.resource.data.version == 1;
+      allow update: if valid(request.resource.data) && request.resource.data.version == resource.data.version + 1;
+    }
+    match /communications/{id} {
+      allow read: if can(resource.data.eventId, resource.data._scopeDepartment, 'contacts');
+      allow create: if can(request.resource.data.eventId, request.resource.data._scopeDepartment, 'edit') && can(request.resource.data.eventId, request.resource.data._scopeDepartment, 'contacts') && created(request.resource.data)
+        && fields(request.resource.data, ['id', 'eventId', 'departmentId', 'personId', 'programItemId', 'templateId', 'recipient', 'subject', 'body', 'sentAt', 'sentBy', '_scopeDepartment'])
+        && text(request.resource.data.recipient, 254) && text(request.resource.data.subject, 500) && text(request.resource.data.body, 20000) && instant(request.resource.data.sentAt) && text(request.resource.data.sentBy, 160);
+    }
+    match /notices/{id} {
+      allow read: if eventMember(resource.data.eventId) && (resource.data.departmentId == '*' || can(resource.data.eventId, resource.data.departmentId, 'view')) && (resource.data.personId == '*' || ownPerson(resource.data.personId) || admin());
+      function schema(d) { return fields(d, ['id', 'eventId', 'personId', 'departmentId', 'title', 'body', 'createdAt', 'readBy', 'meetingId', 'meetingVersion']) && boundedId(d.eventId) && boundedId(d.personId) && boundedId(d.departmentId) && text(d.title, 200) && text(d.body, 3000) && instant(d.createdAt) && d.readBy is list && d.readBy.size() <= 1000 && text(d.get('meetingId',''),120) && d.get('meetingVersion',0) is int && d.get('meetingVersion',0) >= 0; }
+      allow create: if !('meetingId' in request.resource.data) && !('meetingVersion' in request.resource.data) && can(request.resource.data.eventId, request.resource.data.departmentId, 'publish') && created(request.resource.data) && schema(request.resource.data);
+      allow update: if eventMember(resource.data.eventId) && updated(request.resource.data) && schema(request.resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['readBy', 'revision', '_audit', '_actor', '_at'])
+        && request.auth.uid in request.resource.data.readBy && request.resource.data.readBy.removeAll([request.auth.uid]) == resource.data.readBy.removeAll([request.auth.uid]);
+    }
+    match /audit/{id} {
+      allow read: if can(resource.data.eventId, '*', 'view') && manager();
+      allow create: if signed() && request.resource.data.keys().hasOnly(['id', 'eventId', 'actor', 'actorUid', 'at', 'action', 'atServer', 'changes'])
+        && request.resource.data.id == id && eventMember(request.resource.data.eventId) && request.resource.data.actorUid == request.auth.uid && request.resource.data.atServer == request.time
+        && text(request.resource.data.actor, 160) && text(request.resource.data.action, 300) && instant(request.resource.data.at) && request.resource.data.changes is list && request.resource.data.changes.size() <= 150;
+    }
+    match /revisions/{eventId} {
+      allow get: if (eventId == 'global' && admin()) || eventMember(eventId) || (eventId.matches('public~.*') && eventMember(eventId.split('~')[1]));
+      allow create, update: if signed() && request.resource.data.keys().hasOnly(['at', 'actor', 'departmentId']) && request.resource.data.at == request.time && request.resource.data.actor == request.auth.uid
+        && (eventId == 'global' ? member() : eventId.matches('public~.*') ? can(eventId.split('~')[1], request.resource.data.departmentId, 'publish') : eventMember(eventId));
+    }
+    match /departments/{id} {
+      allow read: if member();
+      function schema(d) { return fields(d, ['id', 'name', 'icon', 'instructions', 'trainingUrl']) && text(d.name, 160) && d.icon in ['video', 'platform', 'makeup', 'other'] && text(d.get('instructions', ''), 3000) && text(d.get('trainingUrl', ''), 2000) && (d.get('trainingUrl', '') == '' || d.trainingUrl.matches('https://(drive|docs)[.]google[.]com/.*')); }
+      allow create: if admin() && created(request.resource.data) && schema(request.resource.data);
+      allow update: if admin() && updated(request.resource.data) && schema(request.resource.data);
+    }
+    match /venues/{id} {
+      allow read: if member();
+      function schema(d) { return fields(d, ['id', 'name', 'city', 'address', 'stageTemplates']) && text(d.name, 160) && text(d.city, 160) && text(d.address, 500) && d.get('stageTemplates', []) is list && d.get('stageTemplates', []).size() <= 50; }
+      allow create: if admin() && created(request.resource.data) && schema(request.resource.data);
+      allow update: if admin() && updated(request.resource.data) && schema(request.resource.data);
+    }
+    match /congregations/{id} {
+      allow read: if member();
+      allow create: if admin() && created(request.resource.data) && fields(request.resource.data, ['id', 'name']) && text(request.resource.data.name, 160);
+      allow update: if admin() && updated(request.resource.data) && fields(request.resource.data, ['id', 'name']) && text(request.resource.data.name, 160);
+    }
+    match /templates/{id} {
+      allow read: if manager();
+      function schema(d) { return fields(d, ['id', 'name', 'kind', 'subject', 'body']) && text(d.name, 160) && d.kind in ['committee', 'volunteer', 'speaker', 'reminder'] && text(d.subject, 500) && text(d.body, 20000); }
+      allow create: if admin() && created(request.resource.data) && schema(request.resource.data);
+      allow update: if admin() && updated(request.resource.data) && schema(request.resource.data);
+    }
+    // Meeting drafts, versions, OAuth secrets and delivery jobs are served only by
+    // the authenticated Worker. No browser, including an administrator, reads tokens.
+    match /meetings/{id} { allow read, write: if false; }
+    match /meetingPublications/{id} { allow read, write: if false; }
+    match /meetingVersions/{id} { allow read, write: if false; }
+    match /meetingTasks/{id} { allow read, write: if false; }
+    match /meetingDeliveries/{id} { allow read, write: if false; }
+    match /meetingSystem/{id} { allow read, write: if false; }
+    match /meetingOAuth/{id} { allow read, write: if false; }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

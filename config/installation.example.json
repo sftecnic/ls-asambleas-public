@@ -1,0 +1,11 @@
+{
+  "projectId": "mi-asamblea-ejemplo",
+  "adminEmail": "REEMPLAZAR@gmail.com",
+  "adminName": "Administración",
+  "apiKey": "REEMPLAZAR_CONFIG_PUBLICA_FIREBASE",
+  "appId": "1:REEMPLAZAR:web:REEMPLAZAR",
+  "cloudflareAccountId": "REEMPLAZAR_ID_DE_CUENTA",
+  "workerName": "asambleas-reuniones",
+  "workerSubdomain": "REEMPLAZAR",
+  "region": "europe-southwest1"
+}

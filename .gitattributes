@@ -1,0 +1,8 @@
+* text=auto eol=lf
+*.png binary
+*.xlsx binary
+*.woff binary
+*.woff2 binary
+LICENSE -text
+licenses/** -text
+.design-skills/**/LICENSE* -text

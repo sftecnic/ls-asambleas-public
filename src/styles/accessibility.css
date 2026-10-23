@@ -1,0 +1,11 @@
+/* Stable context and keyboard clearance, including the mobile navigation. */
+html{scroll-padding-top:180px;scroll-padding-bottom:110px}
+.event-context{position:sticky;top:0;z-index:15}
+button,input,select,textarea,a{scroll-margin-block:180px 110px}
+h1,h2,h3{text-wrap:balance;overflow-wrap:anywhere}
+.modal,.team-dialog{overscroll-behavior:contain}
+.nav-item span{overflow-wrap:anywhere}
+.data-item>*{min-width:0;overflow-wrap:anywhere}
+.admin-source-row{content-visibility:auto;contain-intrinsic-size:auto 180px}
+.skip-link{scroll-margin:0}
+@media print{.event-context{display:none!important}}

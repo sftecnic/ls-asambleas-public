@@ -1,0 +1,30 @@
+// Versioned workbook contract. Labels are user-facing; field names never come from a file.
+export type ExcelCollection = 'persons'|'congregations'|'departments'|'venues'|'events'|'candidates'|'shifts'|'program';
+export interface ExcelField {key:string;label:string;required?:boolean;kind?:'date'|'time'|'number'|'list';choices?:Record<string,string>;reference?:ExcelCollection;max?:number}
+export interface ExcelSheet {name:string;collection:ExcelCollection;fields:ExcelField[]}
+const code:ExcelField={key:'id',label:'Código',required:true,max:240};
+const f=(key:string,label:string,extra:Partial<ExcelField>={}):ExcelField=>({key,label,...extra});
+const ref=(key:string,label:string,reference:ExcelCollection,required=true)=>f(key,label,{reference,required});
+export const EXCEL_VERSION='LS ASAMBLEAS / EXCEL 1';
+export const EXCEL_HEADER_ROW=4;
+export const EXCEL_MAX_ROWS=1000;
+export const EXCEL_MAX_BYTES=5_000_000;
+export const excelSheets:ExcelSheet[]=[
+ {name:'Personas',collection:'persons',fields:[code,f('name','Nombre completo',{required:true,max:160}),f('aliases','Alias',{kind:'list'}),ref('congregationId','Congregación','congregations',false),f('phone','Teléfono',{max:50}),f('email','Correo de contacto',{max:254}),f('gmail','Gmail de acceso',{max:254}),f('notificationEmail','Correo para avisos',{max:254}),f('hearingStatus','Sorda / Oyente',{choices:{'Sin indicar':'unknown','Sorda':'deaf','Oyente':'hearing'}}),f('notes','Observaciones privadas',{max:5000})]},
+ {name:'Congregaciones',collection:'congregations',fields:[code,f('name','Nombre',{required:true,max:160}),f('committeeEmail','Correo del comité',{max:254})]},
+ {name:'Departamentos',collection:'departments',fields:[code,f('name','Nombre',{required:true,max:160}),f('icon','Icono',{choices:{'Audio y vídeo':'video','Plataforma':'platform','Maquillaje':'makeup','Otro':'other'}}),f('instructions','Instrucciones',{max:3000}),f('trainingUrl','Enlace de formación',{max:2000})]},
+ {name:'Sedes',collection:'venues',fields:[code,f('name','Nombre',{required:true,max:160}),f('city','Localidad',{max:160}),f('address','Dirección',{max:500})]},
+ {name:'Eventos',collection:'events',fields:[code,f('title','Nombre',{required:true,max:200}),f('type','Tipo',{choices:{'Circuito':'circuit','Regional':'regional','Precursores':'pioneers'}}),f('startDate','Fecha inicial',{required:true,kind:'date'}),f('endDate','Fecha final',{required:true,kind:'date'}),ref('venueId','Sede','venues'),f('section','Sección',{max:200}),f('timezone','Zona horaria',{max:100})]},
+ {name:'Equipo',collection:'candidates',fields:[code,ref('eventId','Evento','events'),ref('personId','Persona','persons'),ref('departmentId','Departamento','departments'),f('teamRole','Cargo',{choices:{'Voluntario':'volunteer','Responsable':'responsible','Auxiliar':'assistant','Supervisor':'supervisor'}}),f('reserve','Reserva',{choices:{'No':'false','Sí':'true'}}),f('committee','Comité',{choices:{'Propuesta':'proposed','Pendiente':'pending','Aprobado':'approved','Denegado':'denied'}}),f('availability','Voluntario',{choices:{'Sin respuesta':'unknown','Invitado':'invited','Aceptado':'accepted','No disponible':'declined'}})]},
+ {name:'Turnos',collection:'shifts',fields:[code,ref('eventId','Evento','events'),ref('departmentId','Departamento','departments'),ref('personId','Persona','persons'),f('role','Puesto',{required:true,max:160}),f('date','Fecha',{required:true,kind:'date'}),f('start','Inicio',{required:true,kind:'time'}),f('end','Final',{required:true,kind:'time'}),f('meetingPoint','Encuentro',{max:500}),f('substituteIds','Suplentes',{kind:'list',reference:'persons'})]},
+ {name:'Programa',collection:'program',fields:[code,ref('eventId','Evento','events'),f('date','Fecha',{required:true,kind:'date'}),f('start','Hora',{required:true,kind:'time'}),f('duration','Duración en minutos',{required:true,kind:'number'}),f('kind','Tipo',{choices:{'Discurso':'talk','Entrevista':'interview','Canción':'song','Descanso':'break'}}),f('title','Título',{required:true,max:300}),f('speaker','Discursante',{max:160}),f('speakerEmail','Correo del discursante',{max:254}),f('language','Idioma',{choices:{'LSE':'LSE','Oral':'oral'}}),f('interpreter','Intérprete',{max:160}),f('driveUrl','Enlace Drive',{max:2000}),f('material','Material',{choices:{'Pendiente':'pending','Recibido':'received','Revisado':'reviewed'}}),f('rehearsal','Ensayo',{choices:{'Pendiente':'pending','Preparado':'ready'}})]},
+];
+export const excelOrder:ExcelCollection[]=['venues','departments','congregations','events','persons','candidates','shifts','program'];
+export const excelDefaults:Record<ExcelCollection,Record<string,unknown>>={
+ persons:{name:'',aliases:[],congregationId:'',phone:'',email:'',gmail:'',notificationEmail:'',hearingStatus:'unknown',notes:''},
+ congregations:{name:'',committeeEmail:''},departments:{name:'',icon:'other',instructions:'',trainingUrl:''},venues:{name:'',city:'',address:''},
+ events:{title:'',type:'circuit',startDate:'',endDate:'',venueId:'',section:'Lengua de signos española',timezone:'Europe/Madrid',archived:false},
+ candidates:{eventId:'',personId:'',departmentId:'',teamRole:'volunteer',reserve:false,committee:'proposed',availability:'unknown',access:'none'},
+ shifts:{eventId:'',departmentId:'',personId:'',role:'',startsAt:'',endsAt:'',meetingPoint:'',substituteIds:[],status:'draft',attendance:'planned'},
+ program:{eventId:'',title:'',startsAt:'',duration:0,kind:'talk',speaker:'',speakerEmail:'',language:'LSE',interpreter:'',driveUrl:'',material:'pending',rehearsal:'pending',status:'draft'},
+};

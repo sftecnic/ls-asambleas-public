@@ -1,0 +1,30 @@
+import {openOptions} from './ui-navigation';
+import {test,expect} from '@playwright/test';
+
+test('la compilación abre una copia publicada tras recargar sin red',async({page,context})=>{
+  test.skip(process.env.TEST_OFFLINE_BUILD!=='1','Requiere una compilación demo con service worker en 5175.');
+  const errors:string[]=[];
+  page.on('pageerror',error=>errors.push(error.message));
+  await page.goto('/');
+  await expect(page.getByRole('heading',{name:'Inicio',exact:true})).toBeVisible();
+  await page.evaluate(async()=>{await navigator.serviceWorker.ready;});
+  await page.reload();
+  await expect(page.getByRole('button',{name:'Ver voluntario',exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'Ver voluntario',exact:true}).click();
+  await openOptions(page); await page.getByRole('button',{name:'Guardar consulta',exact:true}).click();
+  await page.getByLabel('Este dispositivo es de uso personal').check();
+  await page.getByRole('dialog').getByRole('button',{name:'Guardar consulta',exact:true}).click();
+  await expect(page.getByText('Consulta guardada para usar sin conexión.')).toBeVisible();
+  await context.setOffline(true);
+  await page.reload();
+  await expect(page.getByText('Sin conexión · Solo consulta',{exact:true}),`Errores del navegador: ${errors.join('; ')}`).toBeVisible();
+  await expect(page.getByRole('heading',{name:'Cámara',exact:true})).toBeVisible();
+  await expect(page.getByText(/Puede estar desactualizado/)).toBeVisible();
+  await expect(page.getByRole('button',{name:'Publicar',exact:true})).toHaveCount(0);
+  const cachePaths=await page.evaluate(async()=>{const paths:string[]=[];for(const key of await caches.keys()){const cache=await caches.open(key);for(const req of await cache.keys())paths.push(new URL(req.url).pathname);}return paths;});
+  expect(cachePaths.every(path=>path==='/index.html'||path.startsWith('/assets/')||path.startsWith('/brand/')||['/templates/ls-asambleas-plantilla.xlsx','/templates/ls-asambleas-ejemplo.xlsx','/manifest.webmanifest','/icon.svg','/favicon.svg'].includes(path))).toBe(true);
+  await page.getByRole('button',{name:'Salir',exact:true}).click();
+  await expect(page.getByText('Sin conexión. No hay una copia guardada para consultar.')).toBeVisible();
+  await page.reload();
+  await expect(page.getByText('Sin conexión. No hay una copia guardada para consultar.')).toBeVisible();
+});
