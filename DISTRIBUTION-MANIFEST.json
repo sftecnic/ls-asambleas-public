@@ -158,8 +158,8 @@
     },
     {
       "path": "docs/VALIDACION.md",
-      "sha256": "2e1a07452526200ba663d34cd22babd84f9f882e0a79353857b4f22519fd7910",
-      "bytes": 4571
+      "sha256": "07f1c73207f17524614206784b1a79c951b1401cbb205af05beca0bab88b0419",
+      "bytes": 5102
     },
     {
       "path": "firebase.json",
@@ -1803,12 +1803,12 @@
     },
     {
       "path": "package-lock.json",
-      "sha256": "dac6e454593dec9a49f22d1e8c645c85ea54f82c287a51213ea7093cf169d974",
+      "sha256": "abe572571b7ef6ea23c554a76a59ebbb0c5788672363401d8e711b503c66bcc0",
       "bytes": 212288
     },
     {
       "path": "package.json",
-      "sha256": "68ac7c43ada63ab619fda7060cc9ff973f967d0ed4df0e3ed06216e1e9d5dc58",
+      "sha256": "c2c1ebf7982138494e9967c443dc614e50b151b8e02870b490419a9b9d710706",
       "bytes": 1723
     },
     {
@@ -2068,13 +2068,13 @@
     },
     {
       "path": "src/components/TourCanvas.tsx",
-      "sha256": "0f31e03a5ab75ffdbe752afe8a3f4d4d3ccb973537630223b3df5a9767bbdc57",
-      "bytes": 4564
+      "sha256": "2da377c8ed96e3cf2adaff298b437151a926e7ffe9d2b204bd22ded89508e6f7",
+      "bytes": 5081
     },
     {
       "path": "src/components/TourDialog.tsx",
-      "sha256": "cdd487ae8c0483bbd9f794b5df66792f2d1f1253b0ebb7f230a452720eadcbcb",
-      "bytes": 8644
+      "sha256": "a42b488bb9f2c7cfcd8705d44b2e216b59e60a20f866b18a02667a375af5a6c4",
+      "bytes": 8732
     },
     {
       "path": "src/components/TourIcons.tsx",
@@ -2513,8 +2513,8 @@
     },
     {
       "path": "tests/tours.e2e.spec.ts",
-      "sha256": "f6526f61849469f3d2f775292579456fdc2337d4303cb471abd3d118fd901fdc",
-      "bytes": 6021
+      "sha256": "fc15a0610e2010fdddfdeca3435fb723544d39cd6ca66f60d7c75ad3329ecb11",
+      "bytes": 8191
     },
     {
       "path": "tests/tours.test.ts",

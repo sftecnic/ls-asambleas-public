@@ -2,6 +2,39 @@ import {test,expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 test.setTimeout(60000);
 async function openVideo(page:import('@playwright/test').Page){await page.goto('/');await page.getByLabel('Ámbito de Inicio').selectOption('all');await page.locator('.tour-entry').filter({hasText:'Audio y vídeo'}).click();return page.getByRole('dialog',{name:'Conocer Audio y vídeo'});}
+
+test('las etiquetas dentro de la panorámica abren su foto con ratón y teclado',async({page})=>{
+ const dialog=await openVideo(page);
+ await expect(dialog.locator('.tour-panorama-wrap')).toHaveAttribute('data-ready','true');
+ const marker=dialog.getByRole('button',{name:'Ampliar Vídeo',exact:true});
+ const position=(await marker.boundingBox())!;
+ await page.mouse.move(position.x+position.width/2,position.y+position.height/2);
+ await page.mouse.down();await page.mouse.move(position.x+position.width/2+80,position.y+position.height/2,{steps:8});await page.mouse.up();
+ await expect(dialog.locator('.tour-detail')).toHaveCount(0);
+ await dialog.getByRole('button',{name:'Restablecer',exact:true}).click();
+ await marker.click();
+ await expect(dialog.getByRole('heading',{name:'Vídeo',exact:true})).toBeVisible();
+ await expect(dialog.locator('.tour-photo-frame img')).toBeVisible();
+ await dialog.getByRole('button',{name:'Volver al recorrido',exact:true}).click();
+ await expect(marker).toBeFocused();
+ await marker.focus();await page.keyboard.press('Enter');
+ await expect(dialog.getByRole('heading',{name:'Vídeo',exact:true})).toBeVisible();
+ await dialog.getByRole('button',{name:'Volver al recorrido',exact:true}).click();
+ await marker.focus();await page.keyboard.press('Space');
+ await expect(dialog.getByRole('heading',{name:'Vídeo',exact:true})).toBeVisible();
+});
+
+test('tocar una etiqueta abre el detalle en móvil',async({browser,baseURL})=>{
+ const context=await browser.newContext({baseURL,viewport:{width:390,height:844},hasTouch:true,isMobile:true});
+ const page=await context.newPage();const dialog=await openVideo(page);
+ await expect(dialog.locator('.tour-panorama-wrap')).toHaveAttribute('data-ready','true');
+ await dialog.getByRole('button',{name:'Ampliar Vídeo',exact:true}).tap();
+ await expect(dialog.getByRole('heading',{name:'Vídeo',exact:true})).toBeVisible();
+ await expect(dialog.locator('.tour-photo-frame img')).toBeVisible();
+ await dialog.getByRole('button',{name:'Volver al recorrido',exact:true}).tap();
+ await expect(dialog.getByRole('button',{name:'Ampliar Vídeo',exact:true})).toBeVisible();
+ await context.close();
+});
 test('360°, zonas, ampliación y retorno conservan la escena',async({page})=>{
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));const dialog=await openVideo(page);
  await expect(dialog.locator('.tour-panorama-wrap')).toHaveAttribute('data-ready','true');await expect(dialog.locator('.psv-canvas-container canvas')).toBeVisible();

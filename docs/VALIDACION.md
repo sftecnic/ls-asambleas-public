@@ -4,6 +4,8 @@ Este documento se actualiza al preparar cada distribución. Distingue pruebas lo
 
 ## Comprobado durante el desarrollo
 
+Corrección 0.3.1, 26 de octubre de 2026: se reprodujo que el toque sobre una etiqueta de la panorámica no abría la foto. La selección usa ahora el evento del visor; el teclado y la tecnología de asistencia conservan la activación nativa. Las seis pruebas del visor comprueban toque emulado, ratón, Enter/Espacio, arrastre sin apertura accidental, retorno y foco, además de las funciones anteriores. Se mantienen 168 pruebas unitarias correctas y tres del instalador. No cambian datos, permisos, fotografías ni el Worker.
+
 Entrega 0.3.0, 26 de octubre de 2026: 168 pruebas unitarias del código mantenido, tres del instalador, compilación y tipos del Worker correctos. Se añaden once pruebas de catálogo, geometría, permisos, rutas privadas y servicio separado de solo lectura. Pasan las ocho pruebas de navegador de Inicio y recorridos; se revisan 320, 360, 390, 820 y 1440 px, texto al 200 %, la alternativa sin WebGL y desconexión. Se realizó además una revisión local privada de las tres panorámicas reales y sus zonas en móvil vertical/horizontal y escritorio, sin errores de JavaScript. Las pruebas que requieren Firestore Emulator se omiten en esta entrega: no se han cambiado reglas ni datos.
 
 Las capturas públicas usan únicamente dibujos ficticios. La preparación de originales y fotografías permanece privada. Los resultados de publicación y lectura autenticada se anotan en las notas de versión, sin atribuir a las pruebas locales resultados de producción. Sigue pendiente la validación de comprensión con participantes y en teléfonos físicos.
