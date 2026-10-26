@@ -37,6 +37,10 @@ Para probar horarios reales elige fechas de ensayo que permitan observarlos; no 
 
 ## Operación
 
+- [ ] Recorridos: sede, departamento y fecha correctos; las fotos no se entregan sin sesión ni a otro departamento.
+- [ ] Zonas: abrir, ampliar y volver conserva la vista; la lista funciona sin WebGL y al cerrar se liberan las imágenes.
+- [ ] Assets privados: Worker primero en todas las rutas, catálogo interno inaccesible directamente y respuestas sin caché persistente.
+
 - [ ] Turnos: asignar, filtrar, marcar/corregir asistencia y sustituir conserva histórico.
 - [ ] Programa y planos publicados son consultables sin permisos de edición.
 - [ ] Descargar consulta, desconectar y consultar muestra fecha/versión; no permite editar.

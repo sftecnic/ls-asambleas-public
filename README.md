@@ -2,6 +2,8 @@
 
 Aplicación visual para coordinar asambleas de lengua de signos: equipo, aprobaciones, turnos, programa, plataforma, reuniones, avisos e histórico. Funciona en móvil y ordenador. Incluye consulta offline explícita e impresión.
 
+Incluye recorridos 360° por sede y departamento, con fotografías ampliables y alternativa en lista. La demostración utiliza dibujos ficticios; consulta [cómo preparar y proteger tus fotografías](docs/RECORRIDOS.md).
+
 **Código disponible para uso no comercial**, bajo [PolyForm Noncommercial 1.0.0](LICENSE). Permite usar, modificar y distribuir respetando sus condiciones. Las dependencias conservan sus licencias; consulta [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
 ## Empezar

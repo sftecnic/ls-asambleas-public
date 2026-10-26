@@ -7,16 +7,17 @@ const args=argumentsMap(),source=resolve('.'),destination=resolve(args.out||'.to
 if(destination===source||source.startsWith(destination+sep))throw new Error('La carpeta de distribución debe ser nueva y distinta del código.');
 try{await stat(destination);throw new Error('El destino ya existe. Elige una carpeta nueva; no se borra ni mezcla contenido.');}catch(e){if(e.code!=='ENOENT')throw e;}
 await mkdir(destination,{recursive:true});
-const scripts=['build-service-worker.mjs','bootstrap-admin.mjs','project-safety.mjs','with-cli-auth.mjs','installation-lib.mjs','configure-installation.mjs','check-installation.mjs','provision-installation.mjs','prepare-public-release.mjs'];
+const scripts=['build-service-worker.mjs','bootstrap-admin.mjs','project-safety.mjs','with-cli-auth.mjs','installation-lib.mjs','configure-installation.mjs','check-installation.mjs','provision-installation.mjs','prepare-public-release.mjs','prepare-tour-assets.py'];
 const deniedTests=new Set(['classify-people.test.ts','migration-model.test.ts','migration-bridge.test.ts','import-admin.test.mjs','regularize-team.test.mjs','test_import_review.py']);
-async function copy(path){await mkdir(dirname(join(destination,path)),{recursive:true});const data=await readFile(join(source,path));const text=!/\.(png|xlsx|woff2?)$/i.test(path)&&!/LICENSE/i.test(path);await writeFile(join(destination,path),text?data.toString('utf8').replace(/\r\n/g,'\n'):data);}
+async function copy(path){await mkdir(dirname(join(destination,path)),{recursive:true});const data=await readFile(join(source,path));const text=!/\.(png|webp|jpg|xlsx|woff2?)$/i.test(path)&&!/LICENSE/i.test(path);await writeFile(join(destination,path),text?data.toString('utf8').replace(/\r\n/g,'\n'):data);}
 async function tree(path,filter=()=>true){for(const e of await readdir(join(source,path),{withFileTypes:true})){if(e.isSymbolicLink()||e.name==='__pycache__')continue;const p=path+'/'+e.name;if(!filter(p,e))continue;if(e.isDirectory())await tree(p,filter);else await copy(p);}}
 for(const dir of ['src','public','config'])await tree(dir);
 await tree('tests',p=>!deniedTests.has(p.split('/').at(-1))&&!/\.pyc$/.test(p));
 for(const file of ['AGENTS.md','LICENSE','.gitattributes','.gitignore','.env.example','package.json','package-lock.json','tsconfig.json','tsconfig.worker.json','vite.config.ts','vitest.config.ts','playwright.config.ts','index.html','firestore.rules','firestore.indexes.json'])await copy(file);
 for(const file of scripts)await copy('scripts/'+file);
-for(const file of ['index.ts','auth.ts','gmail.ts','service.ts','store.ts'])await copy('worker/'+file);
-for(const file of ['INSTALACION.md','IMPORTACION-EXCEL.md','COMPROBACION.md','MANTENIMIENTO.md','ARQUITECTURA.md','VALIDACION.md'])await copy('docs/'+file);
+for(const file of ['index.ts','auth.ts','gmail.ts','service.ts','store.ts','tours.ts','tour-entry.ts'])await copy('worker/'+file);
+await mkdir(join(destination,'worker/tour-assets'),{recursive:true});await writeFile(join(destination,'worker/tour-assets/__tour_catalog.json'),'{"format":1,"tours":[]}\n');
+for(const file of ['INSTALACION.md','IMPORTACION-EXCEL.md','COMPROBACION.md','MANTENIMIENTO.md','ARQUITECTURA.md','VALIDACION.md','RECORRIDOS.md'])await copy('docs/'+file);
 await copy('docs/distribution/README.md');await copyFile(join(source,'docs/distribution/README.md'),join(destination,'README.md'));
 await writeFile(join(destination,'worker/README.md'),'# Servicio de reuniones y correo\n\nConsulta [Instalación](../docs/INSTALACION.md), [Arquitectura](../docs/ARQUITECTURA.md) y [Recuperación](../docs/MANTENIMIENTO.md). Usa `worker/wrangler.local.jsonc`, generado para tus cuentas. No hay un destino predeterminado.\n');
 await copyFile(join(source,'config/firebase.example.json'),join(destination,'firebase.json'));

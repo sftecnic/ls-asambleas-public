@@ -1,0 +1,17 @@
+{
+  "name": "recorridos-ejemplo",
+  "account_id": "TU_ID_DE_CUENTA_CLOUDFLARE",
+  "main": "../worker/tour-entry.ts",
+  "compatibility_date": "2026-10-23",
+  "workers_dev": true,
+  "assets": {
+    "directory": "../worker/tour-assets",
+    "binding": "TOUR_ASSETS",
+    "run_worker_first": true
+  },
+  "vars": {
+    "FIREBASE_PROJECT_ID": "TU_PROYECTO",
+    "APP_ORIGIN": "https://TU_PROYECTO.firebaseapp.com"
+  },
+  "observability": {"enabled": false}
+}

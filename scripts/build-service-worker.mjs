@@ -5,11 +5,13 @@ const output = process.argv[2] || 'dist';
 async function walk(path, prefix = '') { for (const file of await readdir(path, { withFileTypes: true })) { const url = `${prefix}/${file.name}`; if (file.isDirectory()) await walk(join(path, file.name), url); else if (file.name !== 'sw.js') files.push(url); } }
 await walk(output);
 const cache = `ls-asambleas-${Date.now()}`;
+// The online-only 360° viewer is downloaded when opened, never during installation.
+const precache = files.filter(file => !/\/assets\/(tour-viewer|TourDialog)-/.test(file));
 await writeFile(join(output, 'sw.js'), `
 const CACHE = ${JSON.stringify(cache)};
 const FILES = ${JSON.stringify(files)};
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES)));
+  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(${JSON.stringify(precache)})));
 });
 self.addEventListener('activate', event => {
   event.waitUntil(caches.keys().then(keys => Promise.all(

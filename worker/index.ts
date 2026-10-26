@@ -15,6 +15,7 @@ import {
   validateMeetingTemplate,
 } from "../src/domain/meetingMail";
 import { authenticate } from "./auth";
+import {handleTourRequest,TourHttpError,type TourAssetsBinding} from './tours';
 import {
   FirestoreStore,
   b64,
@@ -49,6 +50,7 @@ interface Env extends MailEnv {
   FIREBASE_PROJECT_ID: string;
   APP_ORIGIN: string;
   MEETING_QUEUE: Queue;
+  TOUR_ASSETS?: TourAssetsBinding;
 }
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), {
@@ -161,6 +163,7 @@ export async function handle(request: Request, env: Env, store: Store) {
       store,
     ),
     data = { ...emptyData(), grants };
+  if(url.pathname==='/tours'||url.pathname.startsWith('/tours/'))return handleTourRequest(request,store,user,grants,env.TOUR_ASSETS);
   if (url.pathname === "/meetings" && request.method === "GET")
     return json(await listMeetings(store, user, grants));
   if (url.pathname === "/meetings/preview" && request.method === "POST") {
@@ -376,7 +379,7 @@ export default {
               ? e.message
               : "No se pudo completar la operación.",
         },
-        400,
+        e instanceof TourHttpError ? e.status : 400,
       );
     }
     const out = new Response(response.body, response);

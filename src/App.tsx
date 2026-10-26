@@ -14,6 +14,7 @@ import { publishedData, publishDepartment } from './domain/publication';
 import { clearOfflineCopies, listOfflineCopies, saveOfflineCopy, type OfflineCopy } from './offline';
 import { ErrorMessage, Modal, Status, Empty } from './components/UI';
 import HomePanel from './components/HomePanel';
+import {ToursProvider} from './components/DepartmentTours';
 import {clearHomeScopes,type HomeIntent} from './domain/homeDashboard';
 import TeamPanel from './components/TeamPanel';
 import ShiftsPanel from './components/ShiftsPanel';
@@ -200,7 +201,7 @@ export default function App() {
         {busy && <p className="small no-print" role="status" style={{ marginBottom: 16 }}>Guardando…</p>}
         {!event ? <Empty>No tienes eventos asignados. Administración debe crear un evento o revisar tus permisos.</Empty> : offline && !offlineCopy ? <Empty>No hay una copia guardada de este evento. Conecta a internet para consultarlo.</Empty> : panelProps && <ViewStateProvider key={`${activeUser!.uid}:${event.id}:${readOnly}`} scope={`${activeUser!.uid}:${event.id}:${readOnly}`}>
           {(page==='shifts'||page==='program')&&publishable.length>0&&<div className="publication-action no-print"><button className="btn" disabled={!online||busy} onClick={()=>{const selected=new URLSearchParams(location.search).get('departamento');setPublishDepartmentId(publishable.find(d=>d.id===selected)?.id||publishable[0].id);setPublishModal(true);}}><Send size={20} aria-hidden="true"/>Publicar</button></div>}
-          {page === 'home' && <HomePanel key={`${activeUser!.uid}:${event.id}:${readOnly}`} {...panelProps} readOnly={readOnly} navigate={navigate} />}
+          {page === 'home' && <ToursProvider key={`${activeUser!.uid}:${event.id}:${readOnly}`} eventId={event.id} user={activeUser!} data={sessionData} online={online} demo={!configured}><HomePanel {...panelProps} readOnly={readOnly} navigate={navigate} /></ToursProvider>}
           {page === 'team' && !volunteer && <TeamPanel key={`${event.id}:${routeRevision}:${JSON.stringify(homeIntent)}`} initialIntent={homeIntent} {...panelProps} onShowHistory={personId=>{if(!allowNavigation())return;navigate('more');setHistoryPersonId(personId);}} />}
           {page === 'shifts' && activeUser?.role !== 'volunteer' && <ShiftsPanel key={`${event.id}:${routeRevision}:${JSON.stringify(homeIntent)}`} initialIntent={homeIntent} {...panelProps} />}
           {(page==='program'||page==='meetings')&&<nav className="program-tabs no-print" aria-label="Programa y reuniones"><button className="btn" aria-pressed={page==='program'} onClick={()=>navigate('program')}><Presentation size={21}/>Programa</button><button className="btn" aria-pressed={page==='meetings'} onClick={()=>navigate('meetings')}><CalendarDays size={21}/>Reuniones</button></nav>}

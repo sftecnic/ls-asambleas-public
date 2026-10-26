@@ -14,6 +14,10 @@ React + TypeScript + Vite sirven la aplicación estática desde Hosting clásico
 | firestore.rules, firestore.indexes.json | Autorización y consultas |
 | scripts/installation-lib.mjs | Configuración sin destinos heredados, CLI fijadas y comprobación de coste |
 | public/templates | Plantilla vacía y ejemplo ficticio versionados |
+| src/domain/tours.ts, src/components/Tour* | Catálogo por sede/departamento, visor 360° bajo demanda y fotos ampliables |
+| worker/tours.ts | Autorización de cada imagen y entrega desde Static Assets privados |
+
+Los [recorridos](RECORRIDOS.md) no alteran Firestore. El catálogo y las fotos se despliegan juntos detrás del Worker, que verifica los permisos vigentes por evento y departamento antes de cada respuesta. `run_worker_first: true` es obligatorio. La distribución pública contiene un catálogo vacío y escenas ficticias. El visor se descarga solo al abrirlo y sus imágenes no forman parte del almacenamiento offline.
 
 Los cargos del equipo y las capacidades de acceso son distintos. La aprobación del comité y la aceptación del voluntario también. Las publicaciones son instantáneas operativas; cambiar un borrador no modifica una versión publicada. Los datos privados se mantienen separados de esas instantáneas y de la consulta offline.
 

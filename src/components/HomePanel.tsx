@@ -36,6 +36,7 @@ import { AttendanceSummary } from "./AttendanceControl";
 import { ShiftPost } from "./ShiftPost";
 import { MeetingDetail } from "./MeetingsPanel";
 import "../styles/home.css";
+import {TourLinks,TourButton} from './DepartmentTours';
 
 type Props = PanelProps & {
   readOnly: boolean;
@@ -432,6 +433,7 @@ export default function HomePanel({
           )}
         </section>
       )}
+      <TourLinks data={data} departmentIds={volunteer?undefined:selected.map(d=>d.id)}/>
       <section className="home-program" aria-label="Programa común">
         <div>
           <h2>
@@ -501,6 +503,7 @@ export default function HomePanel({
               {detailDepartment?.instructions ||
                 "Consulta el programa y el plano de las intervenciones de tu turno."}
             </p>
+            <TourButton departmentId={shiftDetail.departmentId} beforeOpen={()=>setShiftDetail(undefined)}/>
             {detailDepartment?.trainingUrl && (
               <a
                 className="btn"

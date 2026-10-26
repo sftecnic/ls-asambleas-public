@@ -1,6 +1,6 @@
 {
   "name": "ls-asambleas",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -20,6 +20,9 @@
   },
   "dependencies": {
     "@fontsource/source-sans-3": "5.3.1",
+    "@photo-sphere-viewer/core": "5.15.1",
+    "@photo-sphere-viewer/markers-plugin": "5.15.1",
+    "@photo-sphere-viewer/visible-range-plugin": "5.15.1",
     "exceljs": "4.4.0",
     "fflate": "0.8.3",
     "firebase": "12.19.0",

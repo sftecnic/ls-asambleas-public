@@ -17,7 +17,7 @@ export const origin=c=>`https://${c.projectId}.firebaseapp.com`;
 export const workerUrl=c=>`https://${c.workerName}.${c.workerSubdomain}.workers.dev`;
 export function generatedConfiguration(c,base){
  const firebase={...base,auth:{providers:{googleSignIn:{oAuthBrandDisplayName:'LS Asambleas',supportEmail:c.adminEmail}}},firestore:{...base.firestore,location:c.region}};
- const worker={name:c.workerName,account_id:c.cloudflareAccountId,main:'index.ts',compatibility_date:'2026-10-23',workers_dev:true,triggers:{crons:['* * * * *']},vars:{FIREBASE_PROJECT_ID:c.projectId,APP_ORIGIN:origin(c)},queues:{producers:[{binding:'MEETING_QUEUE',queue:`${c.workerName}-mail`}],consumers:[{queue:`${c.workerName}-mail`,max_batch_size:1,max_batch_timeout:1,max_retries:3,max_concurrency:2}]},observability:{enabled:false}};
+ const worker={name:c.workerName,account_id:c.cloudflareAccountId,main:'index.ts',compatibility_date:'2026-10-23',workers_dev:true,assets:{directory:'tour-assets',binding:'TOUR_ASSETS',run_worker_first:true},triggers:{crons:['* * * * *']},vars:{FIREBASE_PROJECT_ID:c.projectId,APP_ORIGIN:origin(c)},queues:{producers:[{binding:'MEETING_QUEUE',queue:`${c.workerName}-mail`}],consumers:[{queue:`${c.workerName}-mail`,max_batch_size:1,max_batch_timeout:1,max_retries:3,max_concurrency:2}]},observability:{enabled:false}};
  const env=`VITE_FIREBASE_API_KEY=${c.apiKey}\nVITE_FIREBASE_PROJECT_ID=${c.projectId}\nVITE_FIREBASE_APP_ID=${c.appId}\nVITE_FIREBASE_AUTH_DOMAIN=${c.projectId}.firebaseapp.com\nVITE_MEETING_SERVICE_URL=${workerUrl(c)}\n`;
  return {'firebase.local.json':JSON.stringify(firebase,null,2)+'\n','worker/wrangler.local.jsonc':JSON.stringify(worker,null,2)+'\n','.env.production.local':env};
 }

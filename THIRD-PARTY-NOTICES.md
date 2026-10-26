@@ -112,6 +112,9 @@ Source Sans 3: SIL OFL-1.1. Lucide: ISC y avisos incluidos. Firebase: Apache-2.0
 | @jridgewell/trace-mapping | 0.3.31 | MIT |
 | @js-sdsl/ordered-map | 4.4.2 | MIT |
 | @napi-rs/lzma-linux-x64-gnu | 1.5.1 | MIT |
+| @photo-sphere-viewer/core | 5.15.1 | MIT |
+| @photo-sphere-viewer/markers-plugin | 5.15.1 | MIT |
+| @photo-sphere-viewer/visible-range-plugin | 5.15.1 | MIT |
 | @playwright/test | 1.64.1 | Apache-2.0 |
 | @protobufjs/aspromise | 1.1.2 | BSD-3-Clause |
 | @protobufjs/base64 | 1.1.2 | BSD-3-Clause |
@@ -390,6 +393,7 @@ Source Sans 3: SIL OFL-1.1. Lucide: ISC y avisos incluidos. Firebase: Apache-2.0
 | string_decoder | 1.3.0 | MIT |
 | strip-ansi | 6.0.1 | MIT |
 | tar-stream | 2.2.0 | MIT |
+| three | 0.185.1 | MIT |
 | tinybench | 6.2.2 | MIT |
 | tinyexec | 1.3.1 | MIT |
 | tinyglobby | 0.2.17 | MIT |
