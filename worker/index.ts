@@ -16,6 +16,7 @@ import {
 } from "../src/domain/meetingMail";
 import { authenticate } from "./auth";
 import {handleTourRequest,TourHttpError,type TourAssetsBinding} from './tours';
+import {handleLeadershipContacts} from './contacts';
 import {
   FirestoreStore,
   b64,
@@ -164,6 +165,7 @@ export async function handle(request: Request, env: Env, store: Store) {
     ),
     data = { ...emptyData(), grants };
   if(url.pathname==='/tours'||url.pathname.startsWith('/tours/'))return handleTourRequest(request,store,user,grants,env.TOUR_ASSETS);
+  if(url.pathname==='/contacts/leadership')return handleLeadershipContacts(request,store,user,grants);
   if (url.pathname === "/meetings" && request.method === "GET")
     return json(await listMeetings(store, user, grants));
   if (url.pathname === "/meetings/preview" && request.method === "POST") {

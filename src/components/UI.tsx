@@ -10,7 +10,7 @@ export function DepartmentIcon({ department, size = 24 }: { department?: Departm
   const Icon = { video: Video, platform: Presentation, makeup: Brush, other: Users }[department?.icon ?? 'other'];
   return <Icon size={size} aria-hidden="true" />;
 }
-export function Modal({ title, children, onClose, wide = false }: { title: string; children: ReactNode; onClose: () => void; wide?: boolean }) {
+export function Modal({ title, children, onClose, wide = false, titleAction }: { title: string; children: ReactNode; onClose: () => void; wide?: boolean; titleAction?:ReactNode }) {
   const ref = useRef<HTMLDialogElement>(null);
   const opener = useRef(document.activeElement as HTMLElement | null);
   useEffect(() => {
@@ -18,7 +18,7 @@ export function Modal({ title, children, onClose, wide = false }: { title: strin
     dialog?.showModal();
     return () => { dialog?.close(); requestAnimationFrame(() => { if (opener.current?.isConnected) opener.current.focus(); }); };
   }, []);
-  return <dialog ref={ref} className={`modal ${wide ? 'modal-wide' : ''}`} aria-label={title} onCancel={e => { e.preventDefault(); onClose(); }}><div className="modal-heading"><h2>{title}</h2><button className="btn btn-ghost" onClick={onClose}><X size={20} />Cerrar</button></div>{children}</dialog>;
+  return <dialog ref={ref} className={`modal ${wide ? 'modal-wide' : ''}`} aria-label={title} onCancel={e => { e.preventDefault(); onClose(); }}><div className="modal-heading"><div className="modal-title-contact"><h2>{title}</h2>{titleAction}</div><button className="btn btn-ghost" onClick={onClose}><X size={20} />Cerrar</button></div>{children}</dialog>;
 }
 export function Empty({ children }: { children: ReactNode }) { return <div className="empty-state"><CircleHelp size={28} /><p>{children}</p></div>; }
 export function ErrorMessage({ message }: { message: string }) {

@@ -16,10 +16,14 @@ React + TypeScript + Vite sirven la aplicación estática desde Hosting clásico
 | public/templates | Plantilla vacía y ejemplo ficticio versionados |
 | src/domain/tours.ts, src/components/Tour* | Catálogo por sede/departamento, visor 360° bajo demanda y fotos ampliables |
 | worker/tours.ts | Autorización de cada imagen y entrega desde Static Assets privados |
+| src/domain/whatsapp.ts, src/components/PersonContact.tsx | Formato de enlaces, botón compartido y contactos departamentales solo en memoria |
+| worker/contacts.ts | Proyección de lectura de responsables y auxiliares, con permisos actuales y sin documentos privados completos |
 
 Los [recorridos](RECORRIDOS.md) no alteran Firestore. El catálogo y las fotos se despliegan juntos detrás del Worker, que verifica los permisos vigentes por evento y departamento antes de cada respuesta. `run_worker_first: true` es obligatorio. La distribución pública contiene un catálogo vacío y escenas ficticias. El visor se descarga solo al abrirlo y sus imágenes no forman parte del almacenamiento offline.
 
 Los cargos del equipo y las capacidades de acceso son distintos. La aprobación del comité y la aceptación del voluntario también. Las publicaciones son instantáneas operativas; cambiar un borrador no modifica una versión publicada. Los datos privados se mantienen separados de esas instantáneas y de la consulta offline.
+
+Los [contactos de WhatsApp](WHATSAPP.md) reutilizan el teléfono de la ficha. Los permisos privados siguen vigentes; el voluntario recibe una proyección limitada de responsables y auxiliares aprobados y aceptados de sus departamentos, independiente de las publicaciones. No se enlazan personas por el texto del nombre. El endpoint de lectura se ofrece en ambas entradas del Worker y no cambia reglas, datos, correo ni esquema.
 
 La importación lee localmente y valida toda la selección, luego guarda por dependencias en lotes pequeños. Cada lote comprueba versiones de filas y referencias utilizadas. La reserva de horarios sigue siendo transaccional. Si un lote falla, no se anuncia rollback de los ya guardados: la revisión posterior permite retomar por identificadores.
 

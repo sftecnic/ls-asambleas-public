@@ -8,6 +8,7 @@ import {isEmail} from '../domain/mail';
 import {canReadProfile,profileMatches,type ProfileFilters as Filters} from '../domain/personProfile';
 import {Empty,ErrorMessage,Modal} from './UI';
 import {PersonFields,ProfileClassification,ProfileFilters,ProfileSummary} from './PersonProfile';
+import {PersonName,WhatsAppButton} from './PersonContact';
 
 export default function DirectoryPanel({data,user,onChange,canEdit,online,onShowHistory}:PanelProps&{onShowHistory?:(id:string)=>void}){
   const [filters,setFilters]=useViewState<Filters>('directory.filters',{query:'',congregationId:'',hearingStatus:''});
@@ -37,9 +38,9 @@ export default function DirectoryPanel({data,user,onChange,canEdit,online,onShow
     ]} onClear={()=>setFilters({...filters,congregationId:'',hearingStatus:''})}><ProfileFilters data={data} value={filters} onChange={setFilters} canFilterPrivate={authorizedIds.size>0}/></FilterDisclosure>
     <ProfileSummary people={people} authorizedIds={authorizedIds}/>
     <p className="small directory-result" role="status">{people.length} personas del directorio</p>
-    <div className="directory-list">{people.map(person=><article key={person.id}><div><h2>{person.name}</h2><p>{data.congregations.find(c=>c.id===person.congregationId)?.name||'Congregación sin indicar'}</p>{authorizedIds.has(person.id)&&<ProfileClassification person={person}/>}</div><button className="team-button" aria-label={`Ver ficha de ${person.name}`} onClick={()=>{setSelectedId(person.id);setDraft(undefined);setError('');}}>Ver ficha</button></article>)}</div>
+    <div className="directory-list">{people.map(person=><article key={person.id}><div><PersonName as="h2" personId={person.id} name={person.name}/><p>{data.congregations.find(c=>c.id===person.congregationId)?.name||'Congregación sin indicar'}</p>{authorizedIds.has(person.id)&&<ProfileClassification person={person}/>}</div><button className="team-button" aria-label={`Ver ficha de ${person.name}`} onClick={()=>{setSelectedId(person.id);setDraft(undefined);setError('');}}>Ver ficha</button></article>)}</div>
     {!people.length&&<Empty>No hay personas con estos filtros.</Empty>}
-    {(selected||draft)&&<Modal title={selected?.name||'Añadir persona'} onClose={close}>
+    {(selected||draft)&&<Modal title={selected?.name||'Añadir persona'} titleAction={selected&&!draft?<WhatsAppButton personId={selected.id} name={selected.name}/>:undefined} onClose={close}>
       {draft?<form onSubmit={e=>{e.preventDefault();void save();}}><fieldset className="profile-fieldset" disabled={busy}><PersonFields data={data} person={draft} onChange={setDraft}/></fieldset><ErrorMessage message={error}/><div className="modal-actions"><button type="button" className="btn" disabled={busy} onClick={close}>Cancelar</button><button type="submit" className="btn btn-primary" disabled={busy||!online}><Check size={20} aria-hidden="true"/>{busy?'Guardando…':'Guardar ficha'}</button></div></form>:selected&&<>
         <p>{data.congregations.find(c=>c.id===selected.congregationId)?.name||'Congregación sin indicar'}</p>
         {privateVisible&&<><ProfileClassification person={selected}/><dl className="team-contact-list"><div><dt>Teléfono</dt><dd>{selected.phone||'Sin indicar'}</dd></div><div><dt>Correo</dt><dd>{selected.email||'Sin indicar'}</dd></div>{selected.notes&&<div><dt>Notas privadas</dt><dd>{selected.notes}</dd></div>}</dl></>}

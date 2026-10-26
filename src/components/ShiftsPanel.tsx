@@ -15,6 +15,7 @@ import ShiftEditor from './ShiftEditor';
 import {AttendanceControl} from './AttendanceControl';
 import {attendanceState,type EditableAttendance} from '../domain/attendance';
 import '../styles/shifts.css';
+import {PersonName} from './PersonContact';
 
 /** A repeated majority can be shared; ties keep their details on each card. */
 function sharedShift(shifts:Shift[],key:(shift:Shift)=>string):Shift|undefined {
@@ -83,9 +84,9 @@ export default function ShiftsPanel(props: PanelProps & {initialIntent?:HomeInte
     return <article className="shift-card" key={shift.id} aria-describedby={description||undefined}>
       <header><h4><ShiftPost departmentId={shift.departmentId} department={data.departments.find(d=>d.id===shift.departmentId)} role={shift.role}/></h4><Status kind={shift.status === 'published' ? 'good' : 'draft'}>{shift.status === 'published' ? 'Publicado' : 'Borrador'}</Status></header>
       {!sharedTime&&<div className="shift-card-detail"><span className="shift-detail-label"><Clock3 size={18} aria-hidden="true"/>{context.time?'Horario propio':'Horario'}</span><div className="shift-time">{timeLabel(shift.startsAt, event.timezone)} – {timeLabel(shift.endsAt, event.timezone)}</div></div>}
-      <div className="person-line"><span className="avatar" aria-hidden="true">{name?.split(' ').map(w => w[0]).slice(0, 2).join('') ?? '?'}</span><div className="shift-person-copy"><strong>{name ?? 'Persona no disponible'}</strong>{duty&&<span className="shift-person-role">{teamRoleLabels[duty]}</span>}</div></div>
+      <div className="person-line"><span className="avatar" aria-hidden="true">{name?.split(' ').map(w => w[0]).slice(0, 2).join('') ?? '?'}</span><div className="shift-person-copy"><PersonName as="strong" personId={shift.personId} name={name??'Persona no disponible'} departmentId={shift.departmentId}/>{duty&&<span className="shift-person-role">{teamRoleLabels[duty]}</span>}</div></div>
       {!sharedPoint&&<div className="shift-card-detail"><span className="shift-detail-label"><MapPin size={18} aria-hidden="true"/>{context.point!==undefined?'Otro encuentro':'Encuentro'}</span><div>{shift.meetingPoint.trim() || 'Sin punto de encuentro'}</div></div>}
-      {shift.substituteIds.length > 0 && <div className="small">Suplentes: {shift.substituteIds.map(id => personName(id,shift.departmentId)).filter(Boolean).join(', ')}</div>}
+      {shift.substituteIds.length > 0 && <div className="small shift-substitutes">Suplentes: {shift.substituteIds.map(id=><PersonName key={id} personId={id} name={personName(id,shift.departmentId)||'Persona no disponible'} departmentId={shift.departmentId}/>)}</div>}
       <AttendanceControl value={shift.attendance} editable={editable} saving={attendanceBusy===shift.id} disabled={!!attendanceBusy}
         error={attendanceError?.shiftId===shift.id?attendanceError.message:undefined} onSelect={attendance=>void changeAttendance(shift,attendance)}/>
       {editable&&shift.attendance!=='replaced'&&<div className="shift-edit-action no-print"><button className="btn" disabled={!!attendanceBusy} onClick={()=>setEditing(shift)}><Pencil size={18} aria-hidden="true"/>Editar</button></div>}
@@ -98,7 +99,7 @@ export default function ShiftsPanel(props: PanelProps & {initialIntent?:HomeInte
     {!shifts.length ? <Empty>{focusedIds?'No quedan turnos con este pendiente.':department==='all'?'No hay turnos para este día.':`No hay turnos de ${departments.find(d=>d.id===department)?.name||'este departamento'} para este día.`}</Empty> : <div className="shift-departments">{groups.map(group=><section className="shift-department" key={group.id} aria-labelledby={`shift-department-${group.id}`}>
       <header className="shift-department-heading"><div className="shift-department-icon"><DepartmentIcon department={group.department} size={28}/></div><h2 id={`shift-department-${group.id}`}>{group.department.name}{focusedIds&&<span className="small"> · {dateLabel(group.day)}</span>}</h2><span className="shift-department-count">{group.count} {group.count===1?'turno':'turnos'}</span></header>
       {(group.leadership.length>0||group.point!==undefined)&&<dl className="shift-department-summary">
-        {group.leadership.map(lead=><div className="shift-summary-leader" key={lead.role}><dt>{lead.role==='responsible'?(lead.people.length===1?'Responsable':'Responsables'):(lead.people.length===1?'Auxiliar':'Auxiliares')}</dt><dd>{lead.people.map(person=><span key={person.id}>{person.name}</span>)}</dd></div>)}
+        {group.leadership.map(lead=><div className="shift-summary-leader" key={lead.role}><dt>{lead.role==='responsible'?(lead.people.length===1?'Responsable':'Responsables'):(lead.people.length===1?'Auxiliar':'Auxiliares')}</dt><dd>{lead.people.map(person=><PersonName key={person.id} personId={person.id} name={person.name} departmentId={group.department.id}/>)}</dd></div>)}
         {group.point!==undefined&&<div className="shift-summary-place"><dt><MapPin size={18} aria-hidden="true"/>Encuentro general</dt><dd id={group.pointId}>{group.point||'Sin punto de encuentro'}</dd></div>}
       </dl>}
       <div className={`shift-department-sessions${list?' shift-department-list':''}`}>{group.sessions.map(session=><section className="shift-session" key={String(session.afternoon)} aria-labelledby={`shift-session-${group.id}-${session.afternoon?'afternoon':'morning'}`}>

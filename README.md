@@ -4,6 +4,8 @@ Aplicación visual para coordinar asambleas de lengua de signos: equipo, aprobac
 
 Incluye recorridos 360° por sede y departamento, con fotografías ampliables y alternativa en lista. La demostración utiliza dibujos ficticios; consulta [cómo preparar y proteger tus fotografías](docs/RECORRIDOS.md).
 
+También incluye [contactos por WhatsApp](docs/WHATSAPP.md): botones junto a las personas autorizadas y acceso del voluntario a responsables y auxiliares de su departamento. Abre la conversación sin enviar mensajes; utiliza el teléfono existente en la ficha.
+
 **Código disponible para uso no comercial**, bajo [PolyForm Noncommercial 1.0.0](LICENSE). Permite usar, modificar y distribuir respetando sus condiciones. Las dependencias conservan sus licencias; consulta [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
 ## Empezar

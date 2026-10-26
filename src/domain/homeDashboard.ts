@@ -325,6 +325,7 @@ export function departmentSummary(
   return {
     responsible: names("responsible"),
     assistants: names("assistant"),
+    leaders:team.filter(m=>m.role==='responsible'||m.role==='assistant'),
     publication,
     counts,
   };

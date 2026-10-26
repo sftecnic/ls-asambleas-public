@@ -37,6 +37,7 @@ import { ShiftPost } from "./ShiftPost";
 import { MeetingDetail } from "./MeetingsPanel";
 import "../styles/home.css";
 import {TourLinks,TourButton} from './DepartmentTours';
+import {DepartmentContacts,PersonName} from './PersonContact';
 
 type Props = PanelProps & {
   readOnly: boolean;
@@ -357,11 +358,11 @@ export default function HomePanel({
                   <dl className="home-leadership">
                     <div>
                       <dt>Responsable</dt>
-                      <dd>{summary.responsible.join(", ") || "Sin indicar"}</dd>
+                      <dd>{summary.responsible.length?summary.leaders.filter(p=>p.role==='responsible').map(p=><PersonName key={p.personId} personId={p.personId} name={p.name} departmentId={department.id}/>):"Sin indicar"}</dd>
                     </div>
                     <div>
                       <dt>Auxiliares</dt>
-                      <dd>{summary.assistants.join(", ") || "Sin indicar"}</dd>
+                      <dd>{summary.assistants.length?summary.leaders.filter(p=>p.role==='assistant').map(p=><PersonName key={p.personId} personId={p.personId} name={p.name} departmentId={department.id}/>):"Sin indicar"}</dd>
                     </div>
                   </dl>
                   {summary.counts && (
@@ -433,6 +434,7 @@ export default function HomePanel({
           )}
         </section>
       )}
+      {volunteer&&<DepartmentContacts/>}
       <TourLinks data={data} departmentIds={volunteer?undefined:selected.map(d=>d.id)}/>
       <section className="home-program" aria-label="Programa común">
         <div>
@@ -503,6 +505,7 @@ export default function HomePanel({
               {detailDepartment?.instructions ||
                 "Consulta el programa y el plano de las intervenciones de tu turno."}
             </p>
+            <DepartmentContacts departmentId={shiftDetail.departmentId} headingLevel={4}/>
             <TourButton departmentId={shiftDetail.departmentId} beforeOpen={()=>setShiftDetail(undefined)}/>
             {detailDepartment?.trainingUrl && (
               <a

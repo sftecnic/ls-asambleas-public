@@ -83,8 +83,8 @@
     },
     {
       "path": ".env.example",
-      "sha256": "0fecaee778b003f4d232be1f1770ed4081b8a5593d78da3a79a229d9fab5c6a6",
-      "bytes": 427
+      "sha256": "9f74820b0648e00067e1591224cd6ebfdee8f876003548f84caaccdda29af775",
+      "bytes": 507
     },
     {
       "path": ".gitattributes",
@@ -123,18 +123,18 @@
     },
     {
       "path": "docs/ARQUITECTURA.md",
-      "sha256": "585653b6954729a52bd294bda9f87c9ea052f7781f8c348f354574b33d8ec5bc",
-      "bytes": 4007
+      "sha256": "0bb3dcb2049435a083e509b3f58c69258c743f01d3321165284c21f2de638cc1",
+      "bytes": 4717
     },
     {
       "path": "docs/COMPROBACION.md",
-      "sha256": "3368c06ab37e06b9d0bd8756b443f31a0a183b5a75c91d6ea88a8245587f7e2f",
-      "bytes": 3693
+      "sha256": "08cc65dd6774ada7090280fdf61105eb3d4b7f9b4cb98b4205a4122441326dd4",
+      "bytes": 4110
     },
     {
       "path": "docs/distribution/README.md",
-      "sha256": "344b0497b8a6fb2f81ce8e0bbb2043c8679b9398403038d5def2ae68a0192c81",
-      "bytes": 3354
+      "sha256": "ab55de01cbb993d0d345bbed204e576c7c0b9a58178fc178d2cb5a5b64383470",
+      "bytes": 3616
     },
     {
       "path": "docs/IMPORTACION-EXCEL.md",
@@ -153,13 +153,18 @@
     },
     {
       "path": "docs/RECORRIDOS.md",
-      "sha256": "1d49ea27b80b51531bfe0a8bd4328d8bd7fab39ed24d4a334b5ccd55024cff2b",
-      "bytes": 10396
+      "sha256": "bd75cf6850221ee8704cc2c974157344bb4ebb49665b73c52f0b167d2d40e373",
+      "bytes": 10442
     },
     {
       "path": "docs/VALIDACION.md",
-      "sha256": "07f1c73207f17524614206784b1a79c951b1401cbb205af05beca0bab88b0419",
-      "bytes": 5102
+      "sha256": "3761be95e52940c8fa09832273006db606249b81a64f29aec05badd4dd1c0dfa",
+      "bytes": 6543
+    },
+    {
+      "path": "docs/WHATSAPP.md",
+      "sha256": "14ce746552127de192b3230dba54cebfa5a70285367eab892bb6164e7f14879b",
+      "bytes": 6033
     },
     {
       "path": "firebase.json",
@@ -1803,12 +1808,12 @@
     },
     {
       "path": "package-lock.json",
-      "sha256": "abe572571b7ef6ea23c554a76a59ebbb0c5788672363401d8e711b503c66bcc0",
+      "sha256": "ef82b561cda213a4f8e3fe2b873e08a7ba149ef128c52b1145ea6e97136da045",
       "bytes": 212288
     },
     {
       "path": "package.json",
-      "sha256": "c2c1ebf7982138494e9967c443dc614e50b151b8e02870b490419a9b9d710706",
+      "sha256": "e7d4a7674dc0191455cb81b505a2cb5059a766f77effa411117469fa4d6e8ef7",
       "bytes": 1723
     },
     {
@@ -1903,8 +1908,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "344b0497b8a6fb2f81ce8e0bbb2043c8679b9398403038d5def2ae68a0192c81",
-      "bytes": 3354
+      "sha256": "ab55de01cbb993d0d345bbed204e576c7c0b9a58178fc178d2cb5a5b64383470",
+      "bytes": 3616
     },
     {
       "path": "scripts/bootstrap-admin.mjs",
@@ -1933,8 +1938,8 @@
     },
     {
       "path": "scripts/prepare-public-release.mjs",
-      "sha256": "30182c229995481ac7769f53f9cdea9e07cca928b0e412a9acb92f86458f8446",
-      "bytes": 7463
+      "sha256": "e76fc068bf2c3a9e75689fc2fe4ad905040b9946d878f1da28fa549df30ffe55",
+      "bytes": 7491
     },
     {
       "path": "scripts/prepare-tour-assets.py",
@@ -1958,8 +1963,8 @@
     },
     {
       "path": "src/App.tsx",
-      "sha256": "4bce3c302485108ab6c1bc4a81f594d7f6d8c11015048712d05ad4000bc373f3",
-      "bytes": 29519
+      "sha256": "9eacfecde20257f355e03b35840608b25d0197d6bcdc4fcc87ecd9492ec4b001",
+      "bytes": 29727
     },
     {
       "path": "src/components/AdminPanel.tsx",
@@ -1993,8 +1998,8 @@
     },
     {
       "path": "src/components/DirectoryPanel.tsx",
-      "sha256": "9ddf8305466e2e77370754554c3660425e94c919f5ee4df4a5408e88cf7c7a74",
-      "bytes": 6834
+      "sha256": "60782386eeb12d2d534012fab122fd5da3b373b7dd398ad9a30249d633785a0f",
+      "bytes": 7035
     },
     {
       "path": "src/components/ExcelImporter.tsx",
@@ -2008,8 +2013,8 @@
     },
     {
       "path": "src/components/HistoryPanel.tsx",
-      "sha256": "5d365310e79f8c69671af5f916e694e97b0ff5d542b64e3a26e93c1f706033da",
-      "bytes": 10195
+      "sha256": "5eb8835b969147fa30519937a8630c3fc43b7419251f5c80be1a4414ff9c8b08",
+      "bytes": 10385
     },
     {
       "path": "src/components/HomeFocus.tsx",
@@ -2018,8 +2023,8 @@
     },
     {
       "path": "src/components/HomePanel.tsx",
-      "sha256": "095b237d1e3de9a75d3720ebab400056b239fdba7e62fdb73fb493f20696b449",
-      "bytes": 19291
+      "sha256": "d2d84ea7147e25f8c55d3acb5181ae925e506a8c0a0a5cf26d1c295397b3348d",
+      "bytes": 19778
     },
     {
       "path": "src/components/MeetingsPanel.tsx",
@@ -2027,9 +2032,14 @@
       "bytes": 32934
     },
     {
+      "path": "src/components/PersonContact.tsx",
+      "sha256": "d289373974e2a0f26d586c4309ac407eb24ff3fdffc787bcabd5a6cd0bbf9bbf",
+      "bytes": 6475
+    },
+    {
       "path": "src/components/PersonProfile.tsx",
-      "sha256": "d3aada0080a3d2cedc5ae25e53c0aba0da41e45e58fb2b07c88f60930a40c662",
-      "bytes": 4756
+      "sha256": "6cce0ef43b5305602bf598a73458dd358875da7ce69a928ada20340d48774024",
+      "bytes": 4786
     },
     {
       "path": "src/components/ProgramPanel.tsx",
@@ -2053,8 +2063,8 @@
     },
     {
       "path": "src/components/ShiftsPanel.tsx",
-      "sha256": "2a63bf37afcd55f3fc50a1bb858091c82dd3e0d2d043538abb923b7f106ab9b8",
-      "bytes": 13778
+      "sha256": "191eb15e31e7dc18dfb2100a0c6a83dbe9e7b21939ea9e53af942c40dea9b453",
+      "bytes": 14048
     },
     {
       "path": "src/components/StageEditor.tsx",
@@ -2063,8 +2073,8 @@
     },
     {
       "path": "src/components/TeamPanel.tsx",
-      "sha256": "507e116ae6c28c0b4d1980823a383eb9fbe1c5ee8573957c9044366db52f9682",
-      "bytes": 30910
+      "sha256": "8938e632cc94ffb86947c5640c3736806f6d380e03406cf0d7569d44b48d6b46",
+      "bytes": 31245
     },
     {
       "path": "src/components/TourCanvas.tsx",
@@ -2083,8 +2093,8 @@
     },
     {
       "path": "src/components/UI.tsx",
-      "sha256": "4ac94e60a003a4d4b25971f56e9995987bef36fafabcdf0b3f344cebb3a21bc9",
-      "bytes": 3603
+      "sha256": "cde67ebecedfed35a5af5b66313eafff17cda242488c7d0725c96757d65e2ef4",
+      "bytes": 3696
     },
     {
       "path": "src/components/useUnsavedChanges.ts",
@@ -2100,6 +2110,11 @@
       "path": "src/data/authDiagnostics.ts",
       "sha256": "130bb9cd3c1368a8edb97b2bad61f2bb3ac5f36a75fbdaae8915e61d3928b5cc",
       "bytes": 2631
+    },
+    {
+      "path": "src/data/contactApi.ts",
+      "sha256": "a8412f98c2b2aa6845b3f803bd7aae25ed5537510e3f97be66762c871cf890d7",
+      "bytes": 1056
     },
     {
       "path": "src/data/meetingApi.ts",
@@ -2203,8 +2218,8 @@
     },
     {
       "path": "src/domain/homeDashboard.ts",
-      "sha256": "f605d1337db58bb965224822ff7a1849009da76e672919f65c8ee50e2cfb8b6d",
-      "bytes": 9593
+      "sha256": "0e5ff560a77327d227f57cefa84860472747a748ab4a86389eab2fa017c3c86b",
+      "bytes": 9667
     },
     {
       "path": "src/domain/mail.test.ts",
@@ -2287,6 +2302,11 @@
       "bytes": 5586
     },
     {
+      "path": "src/domain/whatsapp.ts",
+      "sha256": "879ef29c93c73d7103d51e539ac70023fb3aa25f35de3779bf6f29c1dc35896b",
+      "bytes": 3194
+    },
+    {
       "path": "src/main.tsx",
       "sha256": "5bf0b65ec420b9defdea4a0cf436a1cd6bbe3ae84419644813d4bd943def8b68",
       "bytes": 711
@@ -2315,6 +2335,11 @@
       "path": "src/styles/app.css",
       "sha256": "3044138320de1e42e7129677823a92b9addc1f0cb5a278208b451dc53f750ce0",
       "bytes": 14882
+    },
+    {
+      "path": "src/styles/contacts.css",
+      "sha256": "206bb6ad17744b0d487abafcb89a2b8b8d1916aa59160f751d7b8856e18cdfb3",
+      "bytes": 1976
     },
     {
       "path": "src/styles/excel-import.css",
@@ -2537,6 +2562,16 @@
       "bytes": 13529
     },
     {
+      "path": "tests/whatsapp.e2e.spec.ts",
+      "sha256": "8ef125e9d8c4c641a3651dceb5fc828e6cf8e60a4323996f7e9da9301e9c9c00",
+      "bytes": 8250
+    },
+    {
+      "path": "tests/whatsapp.test.ts",
+      "sha256": "b810f3841e8aa167de5a705163e7ebb40275aad21b4888ca9803685cfff7ff60",
+      "bytes": 7247
+    },
+    {
       "path": "THIRD-PARTY-NOTICES.md",
       "sha256": "1a4b0e97c8c304ce786baeb5d0cf09cd255724256db2079d8ea8d48c852f2815",
       "bytes": 16504
@@ -2567,14 +2602,19 @@
       "bytes": 2722
     },
     {
+      "path": "worker/contacts.ts",
+      "sha256": "7d49af3fbb316dfde857a476bf231107f28f9618ded007412a0ef6ac7054ba4b",
+      "bytes": 2492
+    },
+    {
       "path": "worker/gmail.ts",
       "sha256": "30ff5ce85dee7011ce22e386820ba835261a6fbc2201da8b4b7df1c24176987f",
       "bytes": 4162
     },
     {
       "path": "worker/index.ts",
-      "sha256": "d89f1b5a4dc34ee201b56b120763ed182659afbfb9bb41f4de7a9aad7752ead1",
-      "bytes": 16135
+      "sha256": "2d75d851912bc79e69829bfbe9946dd81c22cd6fb100f937d696ac1fd4cf59ae",
+      "bytes": 16291
     },
     {
       "path": "worker/README.md",
@@ -2598,8 +2638,8 @@
     },
     {
       "path": "worker/tour-entry.ts",
-      "sha256": "02ee7b9d89e8bc7f76fb9ea4c27f45bdfb64c5626b113303a1f0d1836f0ca07f",
-      "bytes": 2349
+      "sha256": "2ec2cb860dd5308b541b1c193bd4ee542507a46967236e194951bc3917710820",
+      "bytes": 2522
     },
     {
       "path": "worker/tours.ts",

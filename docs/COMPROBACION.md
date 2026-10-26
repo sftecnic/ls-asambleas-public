@@ -15,7 +15,7 @@ Anota fecha, versión, proyecto y quién comprueba cada casilla en una copia pri
 ## Acceso y datos
 
 - [ ] Administrador explícito entra en el dominio canónico; una cuenta sin permiso no obtiene datos.
-- [ ] Voluntario autorizado ve únicamente ámbitos y publicaciones permitidos; no contactos privados.
+- [ ] Voluntario autorizado ve únicamente ámbitos y publicaciones permitidos; los contactos se limitan a nombre y teléfono de responsables/auxiliares aprobados y aceptados de sus departamentos, sin fichas privadas completas.
 - [ ] Cerrar sesión y cambiar de usuario no permite ver la copia privada del anterior.
 - [ ] Importar ejemplo vacío, altas, cambios, blancos, coincidencia de nombres y reimportación funciona.
 - [ ] Se conservan identificadores, histórico y publicaciones previas; los cambios quedan en borrador.
@@ -36,6 +36,9 @@ Anota fecha, versión, proyecto y quién comprueba cada casilla en una copia pri
 Para probar horarios reales elige fechas de ensayo que permitan observarlos; no alteres el reloj del servidor ni inventes resultados. Las pruebas unitarias verifican cálculos de horario de verano, pero no la entrega real de Gmail.
 
 ## Operación
+
+- [ ] WhatsApp: abre el contacto correcto en Android, iPhone y ordenador; sin enviar mensajes durante la prueba.
+- [ ] Contactos: un teléfono inválido no genera enlace; cambiar de evento/usuario o desconectar retira los contactos anteriores; no aparecen en impresión ni consulta offline.
 
 - [ ] Recorridos: sede, departamento y fecha correctos; las fotos no se entregan sin sesión ni a otro departamento.
 - [ ] Zonas: abrir, ampliar y volver conserva la vista; la lista funciona sin WebGL y al cerrar se liberan las imágenes.
