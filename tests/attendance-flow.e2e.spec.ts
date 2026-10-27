@@ -3,7 +3,7 @@ import {test,expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import {createDemoData} from '../src/seed';
 
-test('los completados antiguos se leen como presentes sin migrar y la consulta no tiene controles',async({page,context})=>{
+test('los completados antiguos se leen como presentes sin migrar y la consulta no permite cambiar asistencia',async({page,context})=>{
   const data=createDemoData();data.shifts[0].attendance='completed';data.publications[0].shifts[0].attendance='completed';
   await page.clock.install({time:new Date('2027-04-10T08:30:00Z')});
   await page.addInitScript(data=>localStorage.setItem('ls-asambleas:demo:v1',JSON.stringify(data)),data);
@@ -17,7 +17,7 @@ test('los completados antiguos se leen como presentes sin migrar y la consulta n
   await expect(page.getByRole('button',{name:/Completado|Volver a presente|Desmarcar/})).toHaveCount(0);
   await openOptions(page); await page.getByRole('button',{name:'Ver publicado',exact:true}).click();
   await expect(camera.locator('.attendance-status')).toHaveText('Presente');
-  await expect(camera.getByRole('button')).toHaveCount(0);
+  await expect(camera.getByRole('button',{name:/^(Editar|Sustituir|Presente|Ausente|Sin marcar)$/})).toHaveCount(0);
   await page.emulateMedia({media:'print'});await expect(camera.locator('.attendance-status')).toBeVisible();
   await page.emulateMedia({media:'screen'});
   await openOptions(page); await page.getByRole('button',{name:'Guardar consulta',exact:true}).click();

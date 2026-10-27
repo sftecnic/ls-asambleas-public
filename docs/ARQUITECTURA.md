@@ -25,6 +25,8 @@ Los cargos del equipo y las capacidades de acceso son distintos. La aprobación 
 
 Los [contactos de WhatsApp](WHATSAPP.md) reutilizan el teléfono de la ficha. Los permisos privados siguen vigentes; el voluntario recibe una proyección limitada de responsables y auxiliares aprobados y aceptados de sus departamentos, independiente de las publicaciones. No se enlazan personas por el texto del nombre. El endpoint de lectura se ofrece en ambas entradas del Worker y no cambia reglas, datos, correo ni esquema.
 
+La consulta nueva pide `include=hearingStatus` para añadir la clasificación al contacto. Sin ese parámetro se conserva la respuesta antigua. `ContactIcons` mantiene los pictogramas, etiquetas táctiles/de teclado y cierre accesible; `PersonContactActions` mantiene la pareja clasificación/WhatsApp unida, separada del encabezado semántico. La información no se copia a publicaciones ni a almacenamiento persistente.
+
 La importación lee localmente y valida toda la selección, luego guarda por dependencias en lotes pequeños. Cada lote comprueba versiones de filas y referencias utilizadas. La reserva de horarios sigue siendo transaccional. Si un lote falla, no se anuncia rollback de los ya guardados: la revisión posterior permite retomar por identificadores.
 
 ## Pruebas

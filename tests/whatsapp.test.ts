@@ -13,8 +13,9 @@ function fixture(){
  Object.assign(data.candidates[1],{teamRole:'responsible',committee:'approved',availability:'accepted'});
  data.candidates[5].teamRole='assistant';data.candidates[3].teamRole='responsible';
  data.persons.find(p=>p.id==='p2')!.phone='600 123 456';data.persons.find(p=>p.id==='p6')!.phone='+1 (202) 555-0123';data.persons.find(p=>p.id==='p4')!.phone='+34 611 123 456';
+ data.persons.find(p=>p.id==='p2')!.hearingStatus='deaf';data.persons.find(p=>p.id==='p6')!.hearingStatus='hearing';
  const reads:string[]=[];
- const get=(path:string)=>{const [collection,id]=path.split('/');if(collection==='events')return data.events.find(e=>e.id===id)||null;const p=data.persons.find(p=>p.id===id);return !p?null:collection==='persons'?{id:p.id,name:p.name}:collection==='personContacts'?{id:p.id,phone:p.phone,email:'privado@example.test',notes:'nota privada',gmail:'privado@gmail.com',hearingStatus:'deaf'}:null;};
+ const get=(path:string)=>{const [collection,id]=path.split('/');if(collection==='events')return data.events.find(e=>e.id===id)||null;const p=data.persons.find(p=>p.id===id);return !p?null:collection==='persons'?{id:p.id,name:p.name}:collection==='personContacts'?{id:p.id,phone:p.phone,email:'privado@example.test',notes:'nota privada',gmail:'privado@gmail.com',hearingStatus:p.hearingStatus}:null;};
  const store={get:vi.fn(async(path:string)=>{reads.push(path);return get(path);}),query:vi.fn(async(_collection:string,filters:any[])=>data.candidates.filter(c=>filters.every(f=>(c as any)[f.field]===f.value))),getMany:vi.fn(async(paths:string[])=>{reads.push(...paths);return paths.map(get);})} as unknown as Store;
  return {data,store,reads,grants:data.grants.filter(g=>g.email===user.email)};
 }
@@ -29,4 +30,24 @@ describe('enlaces WhatsApp y proyección de contactos',()=>{
  it('rechaza respuesta ajena, propiedades privadas e identificadores ambiguos',()=>{const {data}=fixture(),good=leadershipContacts(data,user,'e1');for(const bad of [[{...good[0],notes:'privado'}],[{...good[0],phone:'+null'}],[{...good[0],personId:'x/y'}],[{...good[0],role:'volunteer'}],[good[0],good[0]]])expect(()=>validateLeadershipContacts(bad)).toThrow();});
  it('no admite escritura ni eventos sin acceso',async()=>{const {store,grants}=fixture();await expect(handleLeadershipContacts(new Request('https://api.test/contacts/leadership?event=e1',{method:'POST'}),store,user,grants)).rejects.toMatchObject({status:405});for(const event of ['','x%2Fy','*'])await expect(handleLeadershipContacts(new Request('https://api.test/contacts/leadership?event='+event),store,user,grants)).rejects.toMatchObject({status:400});await expect(handleLeadershipContacts(new Request('https://api.test/contacts/leadership?event=e2'),store,user,grants)).rejects.toMatchObject({status:403});});
  it('está protegido en ambos Workers y mantiene el bloqueo de las rutas de archivos',async()=>{const {store,grants}=fixture(),env={APP_ORIGIN:'https://app.test',FIREBASE_PROJECT_ID:'demo',FIREBASE_SERVICE_ACCOUNT:'',TOUR_ASSETS:{fetch:vi.fn()}};const req=new Request('https://api.test/contacts/leadership?event=e1',{headers:{Authorization:'Bearer example',Origin:'https://app.test'}});auth.run.mockResolvedValue({user,grants});const r=await serveTours(req,env,store);expect(r.status).toBe(200);expect(r.headers.get('Access-Control-Allow-Origin')).toBe('https://app.test');expect(r.headers.get('Cache-Control')).toBe('private, no-store');expect((await handle(req,env as any,store)).status).toBe(200);expect((await serveTours(new Request(req.url),env,store)).status).toBe(401);expect((await serveTours(new Request(req.url,{headers:{Origin:'https://otra.test'}}),env,store)).status).toBe(403);expect((await serveTours(new Request('https://api.test/personContacts/p2'),env,store)).status).toBe(404);});
+ it('añade clasificación solo por petición explícita y conserva el contrato de los clientes antiguos en ambos Workers',async()=>{
+  const {store,grants}=fixture(),env={APP_ORIGIN:'https://app.test',FIREBASE_PROJECT_ID:'demo',FIREBASE_SERVICE_ACCOUNT:'',TOUR_ASSETS:{fetch:vi.fn()}};auth.run.mockResolvedValue({user,grants});
+  for(const serve of [(req:Request)=>serveTours(req,env,store),(req:Request)=>handle(req,env as any,store)]){
+   const request=(extra='')=>new Request('https://api.test/contacts/leadership?event=e1'+extra,{headers:{Authorization:'Bearer example',Origin:'https://app.test'}});
+   const previous=(await(await serve(request())).json()).contacts;validateLeadershipContacts(previous);expect(previous.every((c:any)=>!('hearingStatus' in c))).toBe(true);
+   const current=(await(await serve(request('&include=hearingStatus'))).json()).contacts;expect(current.map((c:any)=>c.hearingStatus)).toEqual(['deaf','hearing']);validateLeadershipContacts(current,{includeHearingStatus:true});expect(()=>validateLeadershipContacts(current)).toThrow();
+   expect(current.map(({hearingStatus,...contact}:any)=>contact)).toEqual(previous);expect(JSON.stringify(current)).not.toMatch(/notes|gmail|privado/);
+  }
+ });
+ it('no deduce clasificación de un teléfono ni deja de compartirla cuando el teléfono falta',async()=>{
+  const {data,store,grants}=fixture();data.persons.find(p=>p.id==='p2')!.phone='';delete data.persons.find(p=>p.id==='p6')!.hearingStatus;
+  const response=await handleLeadershipContacts(new Request('https://api.test/contacts/leadership?event=e1&include=hearingStatus'),store,user,grants),body=await response.json();
+  expect(body.contacts[0]).toMatchObject({phone:'',hearingStatus:'deaf'});expect(body.contacts[1].hearingStatus).toBe('unknown');
+  await expect(handleLeadershipContacts(new Request('https://api.test/contacts/leadership?event=e2&include=hearingStatus'),store,user,grants)).rejects.toMatchObject({status:403});
+ });
+ it('valida el campo opcional sin admitir otros campos privados ni valores inventados',()=>{
+  const {data}=fixture(),legacy=leadershipContacts(data,user,'e1');expect(()=>validateLeadershipContacts(legacy,{includeHearingStatus:true})).not.toThrow();
+  for(const status of ['deaf','hearing','unknown'])expect(()=>validateLeadershipContacts([{...legacy[0],hearingStatus:status}],{includeHearingStatus:true})).not.toThrow();
+  for(const bad of [{hearingStatus:'LSE'},{hearingStatus:null},{hearingStatus:'deaf',notes:'privado'}])expect(()=>validateLeadershipContacts([{...legacy[0],...bad}],{includeHearingStatus:true})).toThrow();
+ });
 });

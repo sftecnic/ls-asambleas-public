@@ -12,13 +12,16 @@ export function DepartmentIcon({ department, size = 24 }: { department?: Departm
 }
 export function Modal({ title, children, onClose, wide = false, titleAction }: { title: string; children: ReactNode; onClose: () => void; wide?: boolean; titleAction?:ReactNode }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const closeButton = useRef<HTMLButtonElement>(null);
   const opener = useRef(document.activeElement as HTMLElement | null);
   useEffect(() => {
     const dialog = ref.current;
+    if(titleAction&&closeButton.current)closeButton.current.autofocus=true;
     dialog?.showModal();
+    if(titleAction)closeButton.current?.focus({preventScroll:true});
     return () => { dialog?.close(); requestAnimationFrame(() => { if (opener.current?.isConnected) opener.current.focus(); }); };
   }, []);
-  return <dialog ref={ref} className={`modal ${wide ? 'modal-wide' : ''}`} aria-label={title} onCancel={e => { e.preventDefault(); onClose(); }}><div className="modal-heading"><div className="modal-title-contact"><h2>{title}</h2>{titleAction}</div><button className="btn btn-ghost" onClick={onClose}><X size={20} />Cerrar</button></div>{children}</dialog>;
+  return <dialog ref={ref} className={`modal ${wide ? 'modal-wide' : ''}`} aria-label={title} onCancel={e => { e.preventDefault(); onClose(); }}><div className="modal-heading"><div className="modal-title-contact"><h2>{title}</h2>{titleAction}</div><button className="btn btn-ghost" ref={closeButton} onClick={onClose}><X size={20} />Cerrar</button></div>{children}</dialog>;
 }
 export function Empty({ children }: { children: ReactNode }) { return <div className="empty-state"><CircleHelp size={28} /><p>{children}</p></div>; }
 export function ErrorMessage({ message }: { message: string }) {

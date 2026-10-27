@@ -1,4 +1,4 @@
-import {UserRound,Users} from 'lucide-react';
+import {Users} from 'lucide-react';
 import type {AppData,HearingStatus,Person} from '../domain/types';
 import {hearingOptions,profileStats,type ProfileFilters as Filters} from '../domain/personProfile';
 import '../styles/profiles.css';
@@ -29,7 +29,4 @@ export function PersonFields({data,person,onChange}:{data:AppData;person:Person;
     <label className="team-field">Otros nombres (uno por línea)<textarea name="person-aliases" autoComplete="off" rows={2} value={(person.aliases||[]).join('\n')} onChange={e=>onChange({...person,aliases:e.target.value.split('\n')})}/></label>
     <label className="team-field">Notas privadas<textarea name="person-notes" autoComplete="off" rows={3} value={person.notes} onChange={e=>onChange({...person,notes:e.target.value})}/></label>
   </div>;
-}
-export function ProfileClassification({person}:{person:Person}){
-  return <span className="profile-classification"><UserRound size={17} aria-hidden="true"/>{hearingOptions.find(([key])=>key===(person.hearingStatus??'unknown'))?.[1]}</span>;
 }

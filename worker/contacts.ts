@@ -8,7 +8,8 @@ import type {Store,RecordData} from './store';
 /** Read-only projection: never return an entire private contact document. */
 export async function handleLeadershipContacts(request:Request,store:Store,user:AppUser,grants:Grant[]){
  if(request.method!=='GET')throw new TourHttpError('Acción no permitida.',405);
- const eventId=new URL(request.url).searchParams.get('event')||'';
+ const params=new URL(request.url).searchParams,eventId=params.get('event')||'';
+ const includeHearingStatus=params.get('include')==='hearingStatus';
  if(!eventId.trim()||eventId.length>240||eventId.includes('/')||eventId==='*')throw new TourHttpError('Evento no válido.',400);
  if(!hasEventView(user,grants,eventId))throw new TourHttpError('No tienes acceso a estos contactos.',403);
  const event=await store.get('events/'+eventId);
@@ -26,9 +27,9 @@ export async function handleLeadershipContacts(request:Request,store:Store,user:
   for(let i=0;i<batch.length;i++){
    const person=rows[i*2],contact=rows[i*2+1] as RecordData|null;
    if(!person||person._deleted)continue;
-   persons.push({id:batch[i],name:person.name,phone:contact&&!contact._deleted?contact.phone||'':''} as Person);
+   persons.push({id:batch[i],name:person.name,phone:contact&&!contact._deleted?contact.phone||'':'',...(includeHearingStatus&&contact&&!contact._deleted?{hearingStatus:contact.hearingStatus}:{})} as Person);
   }
  }
- const contacts=leadershipContacts({...scope,persons,candidates:candidates as Candidate[]},user,eventId);
+ const contacts=leadershipContacts({...scope,persons,candidates:candidates as Candidate[]},user,eventId,{includeHearingStatus});
  return Response.json({eventId,contacts},{headers:{'Cache-Control':'private, no-store'}});
 }

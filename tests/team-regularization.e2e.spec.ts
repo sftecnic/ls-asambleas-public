@@ -23,7 +23,7 @@ test('shows unique people, scoped counts and separate supervision; roles do not 
   }
   await team.getByLabel('Departamento del equipo').selectOption('video');
   await team.getByLabel('Buscar persona o congregación').fill('alias de prueba');await expect(cards).toHaveCount(1);
-  await cards.first().getByRole('button').click();
+  await cards.first().getByRole('button',{name:'Preparar acceso',exact:true}).click();
   const dialog=page.getByRole('dialog');await expect(dialog.getByLabel('Cargo en este departamento')).toHaveValue('assistant');
   const before=await page.evaluate(()=>JSON.parse(localStorage.getItem('ls-asambleas:demo:v1')!).grants);
   await dialog.getByLabel('Cargo en este departamento').selectOption('responsible');

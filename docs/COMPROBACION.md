@@ -15,7 +15,7 @@ Anota fecha, versión, proyecto y quién comprueba cada casilla en una copia pri
 ## Acceso y datos
 
 - [ ] Administrador explícito entra en el dominio canónico; una cuenta sin permiso no obtiene datos.
-- [ ] Voluntario autorizado ve únicamente ámbitos y publicaciones permitidos; los contactos se limitan a nombre y teléfono de responsables/auxiliares aprobados y aceptados de sus departamentos, sin fichas privadas completas.
+- [ ] Voluntario autorizado ve únicamente ámbitos y publicaciones permitidos; los contactos se limitan a nombre, teléfono y clasificación Sorda/Oyente/Sin indicar de responsables/auxiliares aprobados y aceptados de sus departamentos, sin fichas privadas completas.
 - [ ] Cerrar sesión y cambiar de usuario no permite ver la copia privada del anterior.
 - [ ] Importar ejemplo vacío, altas, cambios, blancos, coincidencia de nombres y reimportación funciona.
 - [ ] Se conservan identificadores, histórico y publicaciones previas; los cambios quedan en borrador.
@@ -38,6 +38,8 @@ Para probar horarios reales elige fechas de ensayo que permitan observarlos; no 
 ## Operación
 
 - [ ] WhatsApp: abre el contacto correcto en Android, iPhone y ordenador; sin enviar mensajes durante la prueba.
+- [ ] Iconos: la clasificación se reconoce, tocarla muestra su etiqueta y no abre WhatsApp; la pareja de controles permanece junta y es utilizable con teclado.
+- [ ] Compatibilidad: la API conserva los campos antiguos sin `include`; añade solo la clasificación al pedir `include=hearingStatus`.
 - [ ] Contactos: un teléfono inválido no genera enlace; cambiar de evento/usuario o desconectar retira los contactos anteriores; no aparecen en impresión ni consulta offline.
 
 - [ ] Recorridos: sede, departamento y fecha correctos; las fotos no se entregan sin sesión ni a otro departamento.

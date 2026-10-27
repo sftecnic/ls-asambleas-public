@@ -1,16 +1,17 @@
 import {createContext,useCallback,useContext,useEffect,useMemo,useRef,useState,type ReactNode} from 'react';
-import {MessageCircle,RefreshCw,Users} from 'lucide-react';
-import type {AppData,AppUser} from '../domain/types';
+import {RefreshCw,Users} from 'lucide-react';
+import type {AppData,AppUser,HearingStatus} from '../domain/types';
 import {can} from '../domain/rules';
-import {canReadProfile} from '../domain/personProfile';
+import {canReadProfile,validHearingStatus} from '../domain/personProfile';
 import {leadershipContacts,whatsappHref,whatsappNumber,type LeadershipContact} from '../domain/whatsapp';
 import {fetchLeadershipContacts} from '../data/contactApi';
 import {DepartmentIcon} from './UI';
+import {HearingIndicator,WhatsAppMark} from './ContactIcons';
 import '../styles/contacts.css';
 
 interface ContactContext {
  eventId:string;online:boolean;contacts:LeadershipContact[];loading:boolean;error:string;
- retry:()=>void;href:(personId:string,eventId?:string,departmentId?:string)=>string|null;
+ retry:()=>void;details:(personId:string,eventId?:string,departmentId?:string)=>{href:string|null;classification:HearingStatus|null};
  departmentName:(id:string)=>string;
  department:(id:string)=>AppData['departments'][number]|undefined;
 }
@@ -21,13 +22,13 @@ export function ContactsProvider({data,user,eventId,online,demo,children}:{data:
  const [state,setState]=useState<{key:string;contacts:LeadershipContact[];error:string;loading:boolean}>({key:'',contacts:[],error:'',loading:false});
  const [refresh,setRefresh]=useState(0),lastRefresh=useRef(0);
  const ownGrants=data.grants.filter(g=>g.email.trim().toLowerCase()===user.email.trim().toLowerCase());
- const requestKey=JSON.stringify([user.uid,user.email,eventId,ownGrants,data.candidates.filter(c=>c.eventId===eventId),data.persons.map(p=>[p.id,p.revision,p.phone])]);
+ const requestKey=JSON.stringify([user.uid,user.email,eventId,ownGrants,data.candidates.filter(c=>c.eventId===eventId),data.persons.map(p=>[p.id,p.revision,p.phone,p.hearingStatus])]);
  const retry=useCallback(()=>setRefresh(n=>n+1),[]);
  useEffect(()=>{
   const controller=new AbortController();
   if(!online||!eventId){setState({key:requestKey,contacts:[],error:'',loading:false});return;}
   setState(previous=>({key:requestKey,contacts:previous.key===requestKey?previous.contacts:[],error:'',loading:true}));
-  const result=demo?Promise.resolve(leadershipContacts(data,user,eventId)):fetchLeadershipContacts(eventId,controller.signal);
+  const result=demo?Promise.resolve(leadershipContacts(data,user,eventId,{includeHearingStatus:true})):fetchLeadershipContacts(eventId,controller.signal);
   void result.then(contacts=>{if(!controller.signal.aborted)setState({key:requestKey,contacts,error:'',loading:false});}).catch(error=>{if(!controller.signal.aborted)setState({key:requestKey,contacts:[],error:error instanceof Error?error.message:'No se pudieron cargar los contactos.',loading:false});});
   return()=>controller.abort();
  },[requestKey,online,demo,refresh]);
@@ -40,27 +41,30 @@ export function ContactsProvider({data,user,eventId,online,demo,children}:{data:
  const contacts=useMemo(()=>current?state.contacts.filter(c=>can(user,data,'view',eventId,c.departmentId)):[],[current,state.contacts,user,data,eventId]);
  const value:ContactContext={eventId,online,contacts,loading:online&&!!eventId&&(!current||state.loading),error:current?state.error:'',retry,
   departmentName:id=>data.departments.find(d=>d.id===id)?.name||'Departamento',department:id=>data.departments.find(d=>d.id===id),
-  href:(personId,contactEvent=eventId,departmentId)=>{
-   if(!online||personId===user.personId)return null;
+  details:(personId,contactEvent=eventId,departmentId)=>{
+   const unavailable={href:null,classification:null};
+   if(!online)return unavailable;
    const person=data.persons.find(p=>p.id===personId);
-   if(person&&canReadProfile(data,user,personId))return whatsappHref(person.phone);
-   if(contactEvent!==eventId)return null;
-   const contact=contacts.find(c=>c.personId===personId&&(!departmentId||c.departmentId===departmentId));
-   return contact?whatsappHref(contact.phone):null;
+   const privateVisible=!!person&&canReadProfile(data,user,personId);
+   const contact=privateVisible?person:contactEvent===eventId?contacts.find(c=>c.personId===personId&&(!departmentId||c.departmentId===departmentId)):undefined;
+   return contact?{href:personId===user.personId?null:whatsappHref(contact.phone),classification:validHearingStatus(contact.hearingStatus)?contact.hearingStatus:'unknown'}:unavailable;
   }};
  return <Context.Provider value={value}>{children}</Context.Provider>;
 }
 
-export function WhatsAppButton({personId,name,eventId,departmentId}:{personId:string;name:string;eventId?:string;departmentId?:string}){
- const context=useContext(Context),href=context?.href(personId,eventId,departmentId);
- if(!href)return null;
- return <a className="person-whatsapp no-print" href={href} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" aria-label={`Abrir WhatsApp con ${name}`}><MessageCircle size={20} aria-hidden="true"/>WhatsApp</a>;
+export function PersonContactActions({personId,name,eventId,departmentId}:{personId:string;name:string;eventId?:string;departmentId?:string}){
+ const context=useContext(Context),details=context?.details(personId,eventId,departmentId);
+ if(!details||details.classification===null&&!details.href)return null;
+ return <span className="person-contact-actions no-print">
+  {details.classification!==null&&<HearingIndicator status={details.classification} name={name}/>}
+  {details.href&&<a className="person-contact-icon person-whatsapp" href={details.href} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" aria-label={`Abrir WhatsApp con ${name}`} title={`Abrir WhatsApp con ${name}`}><WhatsAppMark/></a>}
+ </span>;
 }
 
 /** Keeps actions outside headings so a person's accessible name stays unchanged. */
 export function PersonName({personId,name,as:Tag='span',eventId,departmentId}:{personId:string;name:string;as?:'span'|'strong'|'h2'|'h3'|'h6';eventId?:string;departmentId?:string}){
  const Wrapper=Tag.startsWith('h')?'div':'span';
- return <Wrapper className="person-contact"><Tag className="person-contact-name">{name}</Tag><WhatsAppButton personId={personId} name={name} eventId={eventId} departmentId={departmentId}/></Wrapper>;
+ return <Wrapper className="person-contact"><Tag className="person-contact-name">{name}</Tag><PersonContactActions personId={personId} name={name} eventId={eventId} departmentId={departmentId}/></Wrapper>;
 }
 
 export function DepartmentContacts({departmentId,headingLevel=2}:{departmentId?:string;headingLevel?:2|4}){

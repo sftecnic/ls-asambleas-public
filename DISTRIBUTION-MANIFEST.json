@@ -123,18 +123,18 @@
     },
     {
       "path": "docs/ARQUITECTURA.md",
-      "sha256": "0bb3dcb2049435a083e509b3f58c69258c743f01d3321165284c21f2de638cc1",
-      "bytes": 4717
+      "sha256": "f754d09f7ff417c53804b4dd5dd428e90a47d0504d1420ce71f8ba652fa8edbc",
+      "bytes": 5140
     },
     {
       "path": "docs/COMPROBACION.md",
-      "sha256": "08cc65dd6774ada7090280fdf61105eb3d4b7f9b4cb98b4205a4122441326dd4",
-      "bytes": 4110
+      "sha256": "b768dc89cd7ff5b64ad2c2c16ae5881dae367384dd4d9058eecaf9103f2af4a4",
+      "bytes": 4449
     },
     {
       "path": "docs/distribution/README.md",
-      "sha256": "ab55de01cbb993d0d345bbed204e576c7c0b9a58178fc178d2cb5a5b64383470",
-      "bytes": 3616
+      "sha256": "54bbd3634e6b03b9808ca9cc89d2e544ed441c6ca94e7a096369e99d0f92905b",
+      "bytes": 3913
     },
     {
       "path": "docs/IMPORTACION-EXCEL.md",
@@ -158,13 +158,13 @@
     },
     {
       "path": "docs/VALIDACION.md",
-      "sha256": "3761be95e52940c8fa09832273006db606249b81a64f29aec05badd4dd1c0dfa",
-      "bytes": 6543
+      "sha256": "75986d850fa257f67438123af2d3a93d59e8e38300ae653f12d12460cefb7d37",
+      "bytes": 7822
     },
     {
       "path": "docs/WHATSAPP.md",
-      "sha256": "14ce746552127de192b3230dba54cebfa5a70285367eab892bb6164e7f14879b",
-      "bytes": 6033
+      "sha256": "225617a2b4eefe01785873812c1e29ad37d6925f3584cfc69fb7430c1483aaa8",
+      "bytes": 8293
     },
     {
       "path": "firebase.json",
@@ -1808,12 +1808,12 @@
     },
     {
       "path": "package-lock.json",
-      "sha256": "ef82b561cda213a4f8e3fe2b873e08a7ba149ef128c52b1145ea6e97136da045",
+      "sha256": "4255204774166b1d66ebfe8ba07ec5959222b472a54765117a4037a546057ade",
       "bytes": 212288
     },
     {
       "path": "package.json",
-      "sha256": "e7d4a7674dc0191455cb81b505a2cb5059a766f77effa411117469fa4d6e8ef7",
+      "sha256": "fd767494ae4054788ced00c86c17061a2eb30cc97ab6c2f1b0ec85efc0069ff2",
       "bytes": 1723
     },
     {
@@ -1908,8 +1908,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "ab55de01cbb993d0d345bbed204e576c7c0b9a58178fc178d2cb5a5b64383470",
-      "bytes": 3616
+      "sha256": "54bbd3634e6b03b9808ca9cc89d2e544ed441c6ca94e7a096369e99d0f92905b",
+      "bytes": 3913
     },
     {
       "path": "scripts/bootstrap-admin.mjs",
@@ -1987,6 +1987,11 @@
       "bytes": 464
     },
     {
+      "path": "src/components/ContactIcons.tsx",
+      "sha256": "75c781c54da7c205c2d8beebe2419f8fb05731b46f6856a0022063c216596c9a",
+      "bytes": 3144
+    },
+    {
       "path": "src/components/Correspondence.tsx",
       "sha256": "3a58ae6a5e049723fe949dda1f698cccc3b5affb34fbfc316de23b9e7af7ff0c",
       "bytes": 14187
@@ -1998,8 +2003,8 @@
     },
     {
       "path": "src/components/DirectoryPanel.tsx",
-      "sha256": "60782386eeb12d2d534012fab122fd5da3b373b7dd398ad9a30249d633785a0f",
-      "bytes": 7035
+      "sha256": "c864f1a3e4bc56b45d43c5d2409f7f7af64b8b260c410926c550ddf152e462ae",
+      "bytes": 6911
     },
     {
       "path": "src/components/ExcelImporter.tsx",
@@ -2033,13 +2038,13 @@
     },
     {
       "path": "src/components/PersonContact.tsx",
-      "sha256": "d289373974e2a0f26d586c4309ac407eb24ff3fdffc787bcabd5a6cd0bbf9bbf",
-      "bytes": 6475
+      "sha256": "fd9b2c2aa56a2a9a73650ea9533a3b3b8c473be855fc7ada346041ea6e752c1a",
+      "bytes": 7076
     },
     {
       "path": "src/components/PersonProfile.tsx",
-      "sha256": "6cce0ef43b5305602bf598a73458dd358875da7ce69a928ada20340d48774024",
-      "bytes": 4786
+      "sha256": "eb7ab03dc97578fa1b410c45d6d17440ed095307bcf9019c6023b41ddcb67193",
+      "bytes": 4533
     },
     {
       "path": "src/components/ProgramPanel.tsx",
@@ -2073,8 +2078,8 @@
     },
     {
       "path": "src/components/TeamPanel.tsx",
-      "sha256": "8938e632cc94ffb86947c5640c3736806f6d380e03406cf0d7569d44b48d6b46",
-      "bytes": 31245
+      "sha256": "53e6f035effa0552a181f1725039c37d3195d2d16f4befc9e914ddcd30f436fe",
+      "bytes": 31284
     },
     {
       "path": "src/components/TourCanvas.tsx",
@@ -2093,8 +2098,8 @@
     },
     {
       "path": "src/components/UI.tsx",
-      "sha256": "cde67ebecedfed35a5af5b66313eafff17cda242488c7d0725c96757d65e2ef4",
-      "bytes": 3696
+      "sha256": "8bcc9054e03690e605e540aa224c37321a2d12ea2239425fbb55109a492ec06e",
+      "bytes": 3914
     },
     {
       "path": "src/components/useUnsavedChanges.ts",
@@ -2113,8 +2118,8 @@
     },
     {
       "path": "src/data/contactApi.ts",
-      "sha256": "a8412f98c2b2aa6845b3f803bd7aae25ed5537510e3f97be66762c871cf890d7",
-      "bytes": 1056
+      "sha256": "58d0b37537d35730f50ade24b88db46daa9c5c5de475f9779497f5bad32fd8a1",
+      "bytes": 1109
     },
     {
       "path": "src/data/meetingApi.ts",
@@ -2303,8 +2308,8 @@
     },
     {
       "path": "src/domain/whatsapp.ts",
-      "sha256": "879ef29c93c73d7103d51e539ac70023fb3aa25f35de3779bf6f29c1dc35896b",
-      "bytes": 3194
+      "sha256": "717650e0d7e917c4805061dbd5d4200f5e2f9154f94ba5d39725bc2b7d9bd6a6",
+      "bytes": 3763
     },
     {
       "path": "src/main.tsx",
@@ -2338,8 +2343,8 @@
     },
     {
       "path": "src/styles/contacts.css",
-      "sha256": "206bb6ad17744b0d487abafcb89a2b8b8d1916aa59160f751d7b8856e18cdfb3",
-      "bytes": 1976
+      "sha256": "b95e0cfa8be8c8a687dce105872eba2fed20c0acacbe31bcef0a05b5c53c0da6",
+      "bytes": 2596
     },
     {
       "path": "src/styles/excel-import.css",
@@ -2363,8 +2368,8 @@
     },
     {
       "path": "src/styles/profiles.css",
-      "sha256": "2c81a15494886877fc4ce78512b06c4c534ab066a07096c62bf7ff2cde785fd1",
-      "bytes": 2973
+      "sha256": "270345032bc24525d1252c3491426104315a2152f4ebe76e0d24a1a97174b043",
+      "bytes": 2858
     },
     {
       "path": "src/styles/shift-post.css",
@@ -2398,8 +2403,8 @@
     },
     {
       "path": "src/styles/visual-system.css",
-      "sha256": "9d9456cba52691a3d02717dd0f90d326d10ddc7ade6a41aec3a9bfe3b6e503af",
-      "bytes": 19709
+      "sha256": "4165013ee93a8e1b983cba95c0154c3ea9009d036f5bb1f6cdbb144cc2ff0e4a",
+      "bytes": 19630
     },
     {
       "path": "tests/accessibility.e2e.spec.ts",
@@ -2418,13 +2423,18 @@
     },
     {
       "path": "tests/attendance-flow.e2e.spec.ts",
-      "sha256": "2edf91664bbc29ac82ed3c70595abbd4c51656a403f14ed5c09e954d42010dd4",
-      "bytes": 7569
+      "sha256": "9733c7ec288f6ff0efb2a0e8e19cd2890da64e823849333321bba7ef17246de6",
+      "bytes": 7638
     },
     {
       "path": "tests/auth-diagnostics.test.ts",
       "sha256": "737bf98104f41a98fee3cb117a505ff55545fe909c76298bb9dec583c77215f0",
       "bytes": 2324
+    },
+    {
+      "path": "tests/contact-api.test.ts",
+      "sha256": "e8376c581a47d364600407db8294c7e6e0749ef68799a5b2715dad1f00859b7c",
+      "bytes": 1763
     },
     {
       "path": "tests/domain-repository.test.ts",
@@ -2528,8 +2538,8 @@
     },
     {
       "path": "tests/team-regularization.e2e.spec.ts",
-      "sha256": "63428a091728102aa1dfeafd9601bea8004cfa8987ab4969e43f1dd62fec6b21",
-      "bytes": 5324
+      "sha256": "edcc6b20557bccbebc610f52ff1b5c64b18f99efe605371cf448cd990dd64ae8",
+      "bytes": 5360
     },
     {
       "path": "tests/team.e2e.spec.ts",
@@ -2563,13 +2573,13 @@
     },
     {
       "path": "tests/whatsapp.e2e.spec.ts",
-      "sha256": "8ef125e9d8c4c641a3651dceb5fc828e6cf8e60a4323996f7e9da9301e9c9c00",
-      "bytes": 8250
+      "sha256": "532bc9a3443c3fd6da96ddf1e7ec729996e3265dbe1e884a57be42990c7a2d71",
+      "bytes": 12808
     },
     {
       "path": "tests/whatsapp.test.ts",
-      "sha256": "b810f3841e8aa167de5a705163e7ebb40275aad21b4888ca9803685cfff7ff60",
-      "bytes": 7247
+      "sha256": "c481add63f0c8afd1ac0df6d71c1355c7a4d88f8617a1685c0357c260c0ea130",
+      "bytes": 9969
     },
     {
       "path": "THIRD-PARTY-NOTICES.md",
@@ -2603,8 +2613,8 @@
     },
     {
       "path": "worker/contacts.ts",
-      "sha256": "7d49af3fbb316dfde857a476bf231107f28f9618ded007412a0ef6ac7054ba4b",
-      "bytes": 2492
+      "sha256": "beaa7d43f49c1a4da6ac90e3fe5e2b650398b52bc18d62584a3bc0383072090b",
+      "bytes": 2693
     },
     {
       "path": "worker/gmail.ts",

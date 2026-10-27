@@ -6,6 +6,8 @@ Incluye recorridos 360° por sede y departamento, con fotografías ampliables y 
 
 También incluye [contactos por WhatsApp](docs/WHATSAPP.md): botones junto a las personas autorizadas y acceso del voluntario a responsables y auxiliares de su departamento. Abre la conversación sin enviar mensajes; utiliza el teléfono existente en la ficha.
 
+Desde 0.5.0, el icono de WhatsApp es verde y se acompaña de Sorda/Oyente/Sin indicar mediante iconos neutros. Tocar la clasificación muestra su etiqueta, sin texto permanente. La proyección opcional conserva compatibilidad con las versiones anteriores y no comparte fichas privadas completas.
+
 **Código disponible para uso no comercial**, bajo [PolyForm Noncommercial 1.0.0](LICENSE). Permite usar, modificar y distribuir respetando sus condiciones. Las dependencias conservan sus licencias; consulta [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
 ## Empezar
