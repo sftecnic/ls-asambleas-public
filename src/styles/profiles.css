@@ -5,3 +5,5 @@
 .directory-list article{content-visibility:auto;contain-intrinsic-size:auto 140px}.profile-summary dd{font-variant-numeric:tabular-nums}.profile-form input[type=email]{text-transform:none}
 
 .team-profile-toolbar>.team-field{margin:0;max-width:none}.team-profile-toolbar{align-items:end}
+
+.person-service-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;border:0;padding:0;margin:0;min-width:0}.person-service-fields legend{font-weight:600;margin-bottom:12px}.person-service-fields .team-field{margin:0}.person-service-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:18px 0}.person-service-details dt{color:#475569;font-size:16px}.person-service-details dd{margin:4px 0 0;overflow-wrap:anywhere}@media(max-width:600px){.person-service-fields,.person-service-details{grid-template-columns:minmax(0,1fr)}}

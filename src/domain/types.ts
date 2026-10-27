@@ -4,7 +4,9 @@ export type Capability = 'view'|'edit'|'assign'|'publish'|'manageAccess'|'contac
 export interface Department extends Row {name:string;icon:'video'|'platform'|'makeup'|'other';instructions?:string;trainingUrl?:string}
 export interface Congregation extends Row {name:string;committeeEmail:string}
 export type HearingStatus='unknown'|'deaf'|'hearing';
-export interface Person extends Row {name:string;aliases?:string[];congregationId:string;phone:string;email:string;gmail:string;notificationEmail?:string;notes:string;hearingStatus?:HearingStatus;source?:string}
+export type Appointment='unknown'|'none'|'ministerial-servant'|'elder'|'circuit-overseer';
+export type RegularPioneer='unknown'|'yes'|'no'|'not-applicable';
+export interface Person extends Row {name:string;aliases?:string[];congregationId:string;phone:string;email:string;gmail:string;notificationEmail?:string;notes:string;hearingStatus?:HearingStatus;appointment?:Appointment;regularPioneer?:RegularPioneer;source?:string}
 export interface VenueTemplate {id:string;name:string;elements:StageElement[]}
 export interface Venue extends Row {name:string;city:string;address:string;stageTemplates?:VenueTemplate[]}
 export interface AssemblyEvent extends Row {title:string;type:'circuit'|'regional'|'pioneers';startDate:string;endDate:string;venueId:string;section:string;timezone:string;archived:boolean}

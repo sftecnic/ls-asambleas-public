@@ -14,8 +14,9 @@ function fixture(){
  data.candidates[5].teamRole='assistant';data.candidates[3].teamRole='responsible';
  data.persons.find(p=>p.id==='p2')!.phone='600 123 456';data.persons.find(p=>p.id==='p6')!.phone='+1 (202) 555-0123';data.persons.find(p=>p.id==='p4')!.phone='+34 611 123 456';
  data.persons.find(p=>p.id==='p2')!.hearingStatus='deaf';data.persons.find(p=>p.id==='p6')!.hearingStatus='hearing';
+ Object.assign(data.persons.find(p=>p.id==='p2')!,{appointment:'elder',regularPioneer:'yes'});
  const reads:string[]=[];
- const get=(path:string)=>{const [collection,id]=path.split('/');if(collection==='events')return data.events.find(e=>e.id===id)||null;const p=data.persons.find(p=>p.id===id);return !p?null:collection==='persons'?{id:p.id,name:p.name}:collection==='personContacts'?{id:p.id,phone:p.phone,email:'privado@example.test',notes:'nota privada',gmail:'privado@gmail.com',hearingStatus:p.hearingStatus}:null;};
+ const get=(path:string)=>{const [collection,id]=path.split('/');if(collection==='events')return data.events.find(e=>e.id===id)||null;const p=data.persons.find(p=>p.id===id);return !p?null:collection==='persons'?{id:p.id,name:p.name}:collection==='personContacts'?{id:p.id,phone:p.phone,email:'privado@example.test',notes:'nota privada',gmail:'privado@gmail.com',hearingStatus:p.hearingStatus,appointment:p.appointment,regularPioneer:p.regularPioneer}:null;};
  const store={get:vi.fn(async(path:string)=>{reads.push(path);return get(path);}),query:vi.fn(async(_collection:string,filters:any[])=>data.candidates.filter(c=>filters.every(f=>(c as any)[f.field]===f.value))),getMany:vi.fn(async(paths:string[])=>{reads.push(...paths);return paths.map(get);})} as unknown as Store;
  return {data,store,reads,grants:data.grants.filter(g=>g.email===user.email)};
 }
@@ -36,7 +37,7 @@ describe('enlaces WhatsApp y proyección de contactos',()=>{
    const request=(extra='')=>new Request('https://api.test/contacts/leadership?event=e1'+extra,{headers:{Authorization:'Bearer example',Origin:'https://app.test'}});
    const previous=(await(await serve(request())).json()).contacts;validateLeadershipContacts(previous);expect(previous.every((c:any)=>!('hearingStatus' in c))).toBe(true);
    const current=(await(await serve(request('&include=hearingStatus'))).json()).contacts;expect(current.map((c:any)=>c.hearingStatus)).toEqual(['deaf','hearing']);validateLeadershipContacts(current,{includeHearingStatus:true});expect(()=>validateLeadershipContacts(current)).toThrow();
-   expect(current.map(({hearingStatus,...contact}:any)=>contact)).toEqual(previous);expect(JSON.stringify(current)).not.toMatch(/notes|gmail|privado/);
+   expect(current.map(({hearingStatus,...contact}:any)=>contact)).toEqual(previous);expect(JSON.stringify(current)).not.toMatch(/notes|gmail|privado|appointment|regularPioneer/);expect(JSON.stringify(previous)).not.toMatch(/appointment|regularPioneer/);
   }
  });
  it('no deduce clasificación de un teléfono ni deja de compartirla cuando el teléfono falta',async()=>{

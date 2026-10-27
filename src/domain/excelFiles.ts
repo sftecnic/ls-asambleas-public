@@ -30,7 +30,7 @@ export async function readExcel(buffer:ArrayBuffer):Promise<ExcelInputRow[]>{
   if(sheet.rowCount>EXCEL_MAX_ROWS+EXCEL_HEADER_ROW||sheet.columnCount>40)throw new Error('Máximo 1.000 filas por libro. Elimina las filas sobrantes.');
   const indexes=new Map<number,string>();const found=new Set<string>();
   sheet.getRow(EXCEL_HEADER_ROW).eachCell((cell,col)=>{const label=cell.text.replace(/\s*\*$/,'').trim();const field=schema.fields.find(f=>f.label===label);if(!field)throw new Error(`${sheet.name}: columna desconocida «${label}».`);if(found.has(field.key))throw new Error(`${sheet.name}: columna repetida «${label}».`);found.add(field.key);indexes.set(col,field.key);});
-  for(const field of schema.fields)if(!found.has(field.key))throw new Error(`${sheet.name}: falta la columna «${field.label}».`);
+  for(const field of schema.fields)if(!found.has(field.key)&&!field.optionalColumn)throw new Error(`${sheet.name}: falta la columna «${field.label}».`);
   for(let n=EXCEL_HEADER_ROW+1;n<=sheet.rowCount;n++){const row=sheet.getRow(n),values:Record<string,string>={};let used=false;
    row.eachCell((cell,col)=>{const key=indexes.get(col);if(!key){if(cell.text.trim())throw new Error(`${sheet.name}, fila ${n}: datos fuera de las columnas de la plantilla.`);return;}
     const field=schema.fields.find(f=>f.key===key)!;let value=cell.value;

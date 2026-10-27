@@ -25,3 +25,5 @@
 .modal-title-contact>h2{margin:0}
 @media(max-width:420px){.department-contact-person{grid-template-columns:minmax(0,1fr);gap:.15rem}.department-contact-person>small{grid-column:1}.modal-title-contact{gap:.25rem}}
 @media print{.person-contact-actions,.person-contact-hint,.department-contacts{display:none!important}}
+
+.person-service-button{width:auto;padding-inline:8px;font-size:16px;font-weight:700;white-space:nowrap}.person-contact-hint>span,.person-contact-hint>strong{display:block}.person-contact-hint>strong{font-weight:600;margin-bottom:4px}

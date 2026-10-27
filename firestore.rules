@@ -1,4 +1,8 @@
 rules_version = '2';
+// persons contains operational names/congregations, never private service data.
+// personContacts optionally stores appointment and regularPioneer enums.
+// Circuit overseer requires pioneer not-applicable; fields already saved cannot
+// be removed by older clients. Existing contacts/edit scope and audit apply.
 service cloud.firestore {
   match /databases/{database}/documents {
     function signed() {
@@ -198,10 +202,30 @@ service cloud.firestore {
       allow get: if directoryContact() && !exists(/databases/$(database)/documents/personContacts/$(id));
       allow get: if admin() || personContact(id, false);
       allow list: if admin();
-      function schema(d) { return fields(d, ['id', 'phone', 'email', 'gmail', 'notes', 'hearingStatus', 'notificationEmail', '_scopeEvent', '_scopeDepartment']) && d.id == id && text(d.phone, 50) && text(d.email, 254) && text(d.gmail, 254) && text(d.notes, 5000) && text(d.get('notificationEmail',''),254) && (d.get('notificationEmail','') == '' || d.notificationEmail.matches('[^@ ]+@[^@ ]+[.][^@ ]+')) && d.get('hearingStatus','unknown') in ['unknown','deaf','hearing'] && boundedId(d._scopeEvent) && boundedId(d._scopeDepartment)
+      function serviceSchema(d) {
+        return d.get('appointment','unknown') in ['unknown','none','ministerial-servant','elder','circuit-overseer']
+          && d.get('regularPioneer','unknown') in ['unknown','yes','no','not-applicable']
+          && ((d.get('appointment','unknown') == 'circuit-overseer') == (d.get('regularPioneer','unknown') == 'not-applicable'));
+      }
+      function scopedWriter(needsServiceEdit) {
+        let claim = getAfter(/databases/$(database)/documents/contactAccess/$(email() + '~' + id)).data;
+        let candidate = getAfter(/databases/$(database)/documents/candidates/$(claim.candidateId)).data;
+        let eventPath = grantPath(claim.eventId, '*');
+        let departmentPath = grantPath(claim.eventId, claim.departmentId);
+        let eventCaps = exists(eventPath) && active(get(eventPath).data) ? get(eventPath).data.capabilities : [];
+        let departmentCaps = claim.departmentId != '*' && exists(departmentPath) && active(get(departmentPath).data) ? get(departmentPath).data.capabilities : [];
+        let caps = eventCaps.concat(departmentCaps);
+        return signed() && claim.email == email() && claim.personId == id
+          && candidate.personId == id && candidate.eventId == claim.eventId && candidate.departmentId == claim.departmentId
+          && !candidate.get('_deleted', false) && 'contacts' in caps && (!needsServiceEdit || 'edit' in caps);
+      }
+      function writer(needsServiceEdit) {
+        return admin() || scopedWriter(needsServiceEdit);
+      }
+      function schema(d) { return fields(d, ['id', 'phone', 'email', 'gmail', 'notes', 'hearingStatus', 'notificationEmail', 'appointment', 'regularPioneer', '_scopeEvent', '_scopeDepartment']) && d.id == id && text(d.phone, 50) && text(d.email, 254) && text(d.gmail, 254) && text(d.notes, 5000) && text(d.get('notificationEmail',''),254) && (d.get('notificationEmail','') == '' || d.notificationEmail.matches('[^@ ]+@[^@ ]+[.][^@ ]+')) && d.get('hearingStatus','unknown') in ['unknown','deaf','hearing'] && serviceSchema(d) && boundedId(d._scopeEvent) && boundedId(d._scopeDepartment)
         && (d._deleted || d.gmail == '' || (getAfter(/databases/$(database)/documents/gmailOwners/$(d.gmail.lower())).data.active && getAfter(/databases/$(database)/documents/gmailOwners/$(d.gmail.lower())).data.personId == id)); }
-      allow create: if (admin() || personContact(id, true)) && created(request.resource.data) && schema(request.resource.data);
-      allow update: if (admin() || personContact(id, true)) && updated(request.resource.data) && schema(request.resource.data) && (!('hearingStatus' in resource.data) || 'hearingStatus' in request.resource.data) && (!('notificationEmail' in resource.data) || 'notificationEmail' in request.resource.data) && request.resource.data._scopeEvent == resource.data._scopeEvent && request.resource.data._scopeDepartment == resource.data._scopeDepartment;
+      allow create: if writer(request.resource.data.keys().hasAny(['appointment','regularPioneer'])) && created(request.resource.data) && schema(request.resource.data);
+      allow update: if writer(request.resource.data.diff(resource.data).affectedKeys().hasAny(['appointment','regularPioneer'])) && updated(request.resource.data) && schema(request.resource.data) && (!('hearingStatus' in resource.data) || 'hearingStatus' in request.resource.data) && (!('notificationEmail' in resource.data) || 'notificationEmail' in request.resource.data) && (!('appointment' in resource.data) || 'appointment' in request.resource.data) && (!('regularPioneer' in resource.data) || 'regularPioneer' in request.resource.data) && request.resource.data._scopeEvent == resource.data._scopeEvent && request.resource.data._scopeDepartment == resource.data._scopeDepartment;
     }
     match /contactAccess/{key} {
       allow get: if signed() && key.split('~')[0] == email();

@@ -123,23 +123,23 @@
     },
     {
       "path": "docs/ARQUITECTURA.md",
-      "sha256": "f754d09f7ff417c53804b4dd5dd428e90a47d0504d1420ce71f8ba652fa8edbc",
-      "bytes": 5140
+      "sha256": "6d308d6972f9dfaec5b1002a4d542fc2cf8e36790ae12cedf597b2214ebb4e48",
+      "bytes": 5878
     },
     {
       "path": "docs/COMPROBACION.md",
-      "sha256": "b768dc89cd7ff5b64ad2c2c16ae5881dae367384dd4d9058eecaf9103f2af4a4",
-      "bytes": 4449
+      "sha256": "073c22f4be85850fc9d109b35c5ace70135d408fdc6ef511caeae080aea018d3",
+      "bytes": 4860
     },
     {
       "path": "docs/distribution/README.md",
-      "sha256": "54bbd3634e6b03b9808ca9cc89d2e544ed441c6ca94e7a096369e99d0f92905b",
-      "bytes": 3913
+      "sha256": "a367594ed35d6696f246291d585d4200a578612f503cd08b63f9394fa9288510",
+      "bytes": 4251
     },
     {
       "path": "docs/IMPORTACION-EXCEL.md",
-      "sha256": "0c4ae0049a8347291ef95ccae1180f70f6b5417685b69b188a5ab7fc48969ce0",
-      "bytes": 6653
+      "sha256": "7b52a05789e7c517825d1cc5c8e1e38fff2d9a1385c4b36120e40ab59f4be54e",
+      "bytes": 7257
     },
     {
       "path": "docs/INSTALACION.md",
@@ -157,9 +157,14 @@
       "bytes": 10442
     },
     {
+      "path": "docs/SERVICIO-PERSONAS.md",
+      "sha256": "dcfb3ba308106d194e89f4d339b04fffad5cad84c9f87b402f68b35655028814",
+      "bytes": 4606
+    },
+    {
       "path": "docs/VALIDACION.md",
-      "sha256": "75986d850fa257f67438123af2d3a93d59e8e38300ae653f12d12460cefb7d37",
-      "bytes": 7822
+      "sha256": "18ef8adbcb34db666c4adac4e65998ec49cbcd89876595b92285c12eac61a22d",
+      "bytes": 9876
     },
     {
       "path": "docs/WHATSAPP.md",
@@ -178,8 +183,8 @@
     },
     {
       "path": "firestore.rules",
-      "sha256": "2e6997d6a10e6b113addb6f28aa5cbc71bd4782067c078c9642099e2c1b1ad72",
-      "bytes": 33417
+      "sha256": "dd5dc1d33b84d2c690cb730a00fa3c1222def75915edda332357368ef60de5f6",
+      "bytes": 35584
     },
     {
       "path": "index.html",
@@ -1808,12 +1813,12 @@
     },
     {
       "path": "package-lock.json",
-      "sha256": "4255204774166b1d66ebfe8ba07ec5959222b472a54765117a4037a546057ade",
+      "sha256": "b75af828444ddb95a9724d0083efdd9b5ade99f956dfa2eae1793902653d5241",
       "bytes": 212288
     },
     {
       "path": "package.json",
-      "sha256": "fd767494ae4054788ced00c86c17061a2eb30cc97ab6c2f1b0ec85efc0069ff2",
+      "sha256": "34f044376d61e7f93c9304642d6ce2d95385cb284df48d2a48f4bda607879146",
       "bytes": 1723
     },
     {
@@ -1888,13 +1893,13 @@
     },
     {
       "path": "public/templates/ls-asambleas-ejemplo.xlsx",
-      "sha256": "9c90ea3fdd09bfa250a5843c5e38ecc463eecadf189c98e6f774fcb60f6d3c9c",
-      "bytes": 167017
+      "sha256": "4c4e345c8da675eb7c9f0e145b34a8596c44cd8c73ada451bc7a52bd5ec8916a",
+      "bytes": 170770
     },
     {
       "path": "public/templates/ls-asambleas-plantilla.xlsx",
-      "sha256": "121542a27dfb37f92a2a4963a11e3493f5e6255a44377282ac8f491b8f26e688",
-      "bytes": 166230
+      "sha256": "0aed44afa2d6bcfc3b4aba2ad557145c68529ba23a0a310734f0101efa643052",
+      "bytes": 169966
     },
     {
       "path": "public/tour-demo/detail.svg",
@@ -1908,8 +1913,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "54bbd3634e6b03b9808ca9cc89d2e544ed441c6ca94e7a096369e99d0f92905b",
-      "bytes": 3913
+      "sha256": "a367594ed35d6696f246291d585d4200a578612f503cd08b63f9394fa9288510",
+      "bytes": 4251
     },
     {
       "path": "scripts/bootstrap-admin.mjs",
@@ -1938,8 +1943,8 @@
     },
     {
       "path": "scripts/prepare-public-release.mjs",
-      "sha256": "e76fc068bf2c3a9e75689fc2fe4ad905040b9946d878f1da28fa549df30ffe55",
-      "bytes": 7491
+      "sha256": "e3113c6aebeea895f88bc17ede6f35a1e73315a480b4d4151b46e87d0935e260",
+      "bytes": 7514
     },
     {
       "path": "scripts/prepare-tour-assets.py",
@@ -1988,8 +1993,8 @@
     },
     {
       "path": "src/components/ContactIcons.tsx",
-      "sha256": "75c781c54da7c205c2d8beebe2419f8fb05731b46f6856a0022063c216596c9a",
-      "bytes": 3144
+      "sha256": "d97e1e20ef3e115c8255062989c178bebc63ad515bf116b714e033021fcf4e48",
+      "bytes": 4600
     },
     {
       "path": "src/components/Correspondence.tsx",
@@ -2003,8 +2008,8 @@
     },
     {
       "path": "src/components/DirectoryPanel.tsx",
-      "sha256": "c864f1a3e4bc56b45d43c5d2409f7f7af64b8b260c410926c550ddf152e462ae",
-      "bytes": 6911
+      "sha256": "847457e00e1d408bc1ec6c95b4d3469445c74bef6b94ad943997e1624bd2942a",
+      "bytes": 7100
     },
     {
       "path": "src/components/ExcelImporter.tsx",
@@ -2038,13 +2043,13 @@
     },
     {
       "path": "src/components/PersonContact.tsx",
-      "sha256": "fd9b2c2aa56a2a9a73650ea9533a3b3b8c473be855fc7ada346041ea6e752c1a",
-      "bytes": 7076
+      "sha256": "df968d238bf142f68beef24dc8e0919ea37929e1f03838850428b1635feff492",
+      "bytes": 7369
     },
     {
       "path": "src/components/PersonProfile.tsx",
-      "sha256": "eb7ab03dc97578fa1b410c45d6d17440ed095307bcf9019c6023b41ddcb67193",
-      "bytes": 4533
+      "sha256": "6b9b29796b0ae53ad90d5b41e47d610474ea1038de1873b2a74a73a27bc8020e",
+      "bytes": 6850
     },
     {
       "path": "src/components/ProgramPanel.tsx",
@@ -2078,8 +2083,8 @@
     },
     {
       "path": "src/components/TeamPanel.tsx",
-      "sha256": "53e6f035effa0552a181f1725039c37d3195d2d16f4befc9e914ddcd30f436fe",
-      "bytes": 31284
+      "sha256": "bb7172d62176d57abddf44fd14bbc6bef4d764a5241ba277d7fcc9ff7d65dd66",
+      "bytes": 31751
     },
     {
       "path": "src/components/TourCanvas.tsx",
@@ -2128,8 +2133,8 @@
     },
     {
       "path": "src/data/repository.ts",
-      "sha256": "2c952b9da8b21654225fbf72238e05afc29f595e8fa556df347efd15498f0586",
-      "bytes": 36937
+      "sha256": "481ad4d4288bf9e5362ac74b5ba95d6e942e33d85599d6598d5eecf3c5d3b0f1",
+      "bytes": 37365
     },
     {
       "path": "src/data/tourApi.ts",
@@ -2143,8 +2148,8 @@
     },
     {
       "path": "src/domain/adminImport.ts",
-      "sha256": "01ff6e5b7883d127473d890c95c9c63ca6ada300d91cd8e53a5ef8b7250ec08a",
-      "bytes": 12375
+      "sha256": "c14de118a056809bdfd0a0c667fa82bb58268c81f0b362999dee2576aecd81c0",
+      "bytes": 12578
     },
     {
       "path": "src/domain/attendance.ts",
@@ -2173,8 +2178,8 @@
     },
     {
       "path": "src/domain/excelFiles.ts",
-      "sha256": "8512485dd19642133ba0fe5a4a1bdce0dc27cd60136e3349976d74877e4fd14a",
-      "bytes": 9058
+      "sha256": "7da4ca1b8e4c578cfeece247a38f0c68c0ec149266f0d74012d2799f621b4ce6",
+      "bytes": 9081
     },
     {
       "path": "src/domain/excelImport.test.ts",
@@ -2183,13 +2188,13 @@
     },
     {
       "path": "src/domain/excelImport.ts",
-      "sha256": "88b99be63c6ea29c2a7a1f7d2d212f4588a3968204448684805cd5a791a8a80b",
-      "bytes": 16322
+      "sha256": "95e853349274402e785dfa4d8b526b199183abf0cd422fe1f5879c09a40f24f1",
+      "bytes": 16529
     },
     {
       "path": "src/domain/excelSchema.ts",
-      "sha256": "d020ec92e2ce1e090577f591eb471abfcb6c796e5f58964e542c20031202f8f6",
-      "bytes": 5570
+      "sha256": "4c34656a030e2ddf7b4547763da8754f0dda1a4233ef74f4f2fa0fe364440f72",
+      "bytes": 5956
     },
     {
       "path": "src/domain/format.ts",
@@ -2248,8 +2253,13 @@
     },
     {
       "path": "src/domain/personProfile.ts",
-      "sha256": "f946fd57753348793337cc992f3c6c0098ceb346d3b6e81ca3cd9b0808500287",
-      "bytes": 1710
+      "sha256": "18ffb817a166087769b1de3e491c335429216ba03a77aa1b83702de18cf57388",
+      "bytes": 2831
+    },
+    {
+      "path": "src/domain/personService.ts",
+      "sha256": "8bdc8edce3c8db9bfd2c8255eaae7834c56f3ec17b0ef645c73f222daabce19d",
+      "bytes": 2082
     },
     {
       "path": "src/domain/publication.test.ts",
@@ -2258,13 +2268,13 @@
     },
     {
       "path": "src/domain/publication.ts",
-      "sha256": "40bfa37569e3331dca1d1ca2a7f4b9e62e9c005ac9fbbc813340214dc9e4a2d6",
-      "bytes": 5167
+      "sha256": "c18b06c4d1d1c2deb12bfa31ee19ce323603ded5e8a7292cc84718ff0c4ab0fe",
+      "bytes": 5223
     },
     {
       "path": "src/domain/rules.ts",
-      "sha256": "8a9df56d6af5644ba3380c4595475b8576447dbbf44d2d788bb427b742c9ebc7",
-      "bytes": 13408
+      "sha256": "1da3541b31dceeca19fad2eac9833274ed68d3d0fc1aebc5d263e3131aa0bfab",
+      "bytes": 14001
     },
     {
       "path": "src/domain/shiftPosts.test.ts",
@@ -2303,8 +2313,8 @@
     },
     {
       "path": "src/domain/types.ts",
-      "sha256": "76d368075712a9662c04475a1bdb6cd5a8eae5b6848046ca59bcf396d05a5354",
-      "bytes": 5586
+      "sha256": "a2974cfa875ef2fc7b5d92dad41db3da121fd7bf6281da66eb89dc5e97376b0b",
+      "bytes": 5799
     },
     {
       "path": "src/domain/whatsapp.ts",
@@ -2343,8 +2353,8 @@
     },
     {
       "path": "src/styles/contacts.css",
-      "sha256": "b95e0cfa8be8c8a687dce105872eba2fed20c0acacbe31bcef0a05b5c53c0da6",
-      "bytes": 2596
+      "sha256": "2cc4d831f2e14b2c2fddf2b4367bf4ea9db4a477bf5624b2592258407c7478ad",
+      "bytes": 2831
     },
     {
       "path": "src/styles/excel-import.css",
@@ -2368,8 +2378,8 @@
     },
     {
       "path": "src/styles/profiles.css",
-      "sha256": "270345032bc24525d1252c3491426104315a2152f4ebe76e0d24a1a97174b043",
-      "bytes": 2858
+      "sha256": "d2aabbdecb651276400d66ea38829c6288917618430c37b98a95a4c2d25acaf7",
+      "bytes": 3435
     },
     {
       "path": "src/styles/shift-post.css",
@@ -2463,13 +2473,13 @@
     },
     {
       "path": "tests/firestore-security.test.ts",
-      "sha256": "ea21d14cbdda6a3231bcd5780fe052224c420645eeb9f65f2f6d313441e80667",
-      "bytes": 28092
+      "sha256": "b1e03209e95e4c9a3fe36ca009dec47c8868d6c1b47e44633f5c19317a9137bb",
+      "bytes": 33141
     },
     {
       "path": "tests/fixtures/excel-example.json",
-      "sha256": "38c6c6c151196796d9aa0fb63c29378eaed39828c95bd0f9c1f3486609f12b65",
-      "bytes": 1818
+      "sha256": "856a7418db99c391f2d68c46c2bfad16d8bf740fa26f2b3bc9baae5ed34e091e",
+      "bytes": 1876
     },
     {
       "path": "tests/history-team.e2e.spec.ts",
@@ -2515,6 +2525,21 @@
       "path": "tests/operation-guards.e2e.spec.ts",
       "sha256": "e7cb2851a8008f526091f590eaf81f4ca0372cf3fc2fd61fb7f5a57ecf50e0e9",
       "bytes": 11671
+    },
+    {
+      "path": "tests/person-service-excel.test.ts",
+      "sha256": "a2453feb9c4c8ecbfc849bb958c47353e8344784d33dd46dffaf9031ddf7eb78",
+      "bytes": 3207
+    },
+    {
+      "path": "tests/person-service.e2e.spec.ts",
+      "sha256": "54788bd2f319e1fd9f4ae63f8f6334a25e098f4294480e6af4e3c5952a20b733",
+      "bytes": 11036
+    },
+    {
+      "path": "tests/person-service.test.ts",
+      "sha256": "0ba558fee75b157041f86da0a5159b1128d0d74764bda7a01e5b083c10657ee4",
+      "bytes": 6393
     },
     {
       "path": "tests/shift-departments.e2e.spec.ts",
@@ -2578,8 +2603,8 @@
     },
     {
       "path": "tests/whatsapp.test.ts",
-      "sha256": "c481add63f0c8afd1ac0df6d71c1355c7a4d88f8617a1685c0357c260c0ea130",
-      "bytes": 9969
+      "sha256": "14d891d3db8324783af232c49b7a89e3d1e2b93d74ab8119aa1f24a4999ad060",
+      "bytes": 10224
     },
     {
       "path": "THIRD-PARTY-NOTICES.md",

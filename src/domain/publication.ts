@@ -47,7 +47,7 @@ export function publishedData(data: AppData, user: AppUser, eventId: string): Ap
   return {
     ...data, events: data.events.filter(e => e.id === eventId), venues: data.venues.filter(v => v.id === event?.venueId),
     departments: data.departments.map(d => pubs.find(p => p.departmentId === d.id)?.department ?? { id:d.id, name:d.name, icon:d.icon }),
-    persons: data.persons.filter(p => ids.has(p.id)).map(p => {const {hearingStatus:_hearingStatus,notificationEmail:_notificationEmail,...person}=p;return {...person,phone:'',email:'',gmail:'',notes:'',source:undefined};}),
+    persons: data.persons.filter(p => ids.has(p.id)).map(p => {const {hearingStatus:_hearingStatus,notificationEmail:_notificationEmail,appointment:_appointment,regularPioneer:_regularPioneer,...person}=p;return {...person,phone:'',email:'',gmail:'',notes:'',source:undefined};}),
     congregations: [], candidates: [], shifts, program: (latest?.program ?? []).map(p => ({ ...p, speakerEmail: '' })),
     plans: latest?.plans ?? [], publications: pubs.map(p => ({ ...p, shifts: p.shifts.filter(s => !own || s.personId === user.personId || s.substituteIds.includes(user.personId)), program: p.program.map(item => ({ ...item, speakerEmail: '' })) })),
     templates: [], communications: [], audit: [], grants: [], meetings: [],

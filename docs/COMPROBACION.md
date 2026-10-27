@@ -20,6 +20,8 @@ Anota fecha, versión, proyecto y quién comprueba cada casilla en una copia pri
 - [ ] Importar ejemplo vacío, altas, cambios, blancos, coincidencia de nombres y reimportación funciona.
 - [ ] Se conservan identificadores, histórico y publicaciones previas; los cambios quedan en borrador.
 - [ ] Los accesos posteriores son solo consulta; un cargo no concede permisos.
+- [ ] Servicio actual: SC guarda No aplica; filtros distinguen Anciano de SC; los libros anteriores conservan los campos al actualizar. Solo los lectores privados ven las siglas y la leyenda dice Condición actual en Histórico.
+- [ ] Los campos de servicio no aparecen para voluntarios, impresión ni consulta offline. Una ficha guardada no pierde esos campos por un cliente antiguo; se recarga para editarla.
 - [ ] Móvil, teclado, texto grande y escritorio permiten revisar y corregir.
 
 ## Correo y reuniones

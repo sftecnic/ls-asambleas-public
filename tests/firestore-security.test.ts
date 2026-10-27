@@ -64,6 +64,35 @@ run('Firestore: autorización real y concurrencia', () => {
     const denied=client('p1',volunteerEmail);await assertFails(getDoc(doc(denied,'personContacts','p1')));
     const manager=client('manager',managerEmail),edit=writeBatch(manager);audit(edit,manager,'permitted','manager');edit.update(doc(manager,'personContacts','p1'),{hearingStatus:'deaf',...meta('permitted','manager',current.data()!.revision+1)});await assertSucceeds(edit.commit());
   });
+  it('servicio privado: creación y actualización validan opciones y exclusividad de SC',async()=>{
+    await env.withSecurityRulesDisabled(ctx=>setDoc(doc(ctx.firestore(),'gmailOwners',volunteerEmail),{email:volunteerEmail,personId:'p1',active:true}));
+    const db=client('admin',adminEmail);
+    const valid=[{appointment:'unknown',regularPioneer:'unknown'},{appointment:'none',regularPioneer:'no'},{appointment:'none',regularPioneer:'yes'},{appointment:'ministerial-servant',regularPioneer:'yes'},{appointment:'elder',regularPioneer:'yes'},{appointment:'circuit-overseer',regularPioneer:'not-applicable'}];
+    const invalid=[{appointment:'admin',regularPioneer:'no'},{appointment:null,regularPioneer:'no'},{appointment:123,regularPioneer:'no'},{appointment:'elder',regularPioneer:true},{appointment:'elder',regularPioneer:'not-applicable'},{appointment:'circuit-overseer',regularPioneer:'yes'},{appointment:'circuit-overseer',regularPioneer:'no'},{appointment:'circuit-overseer',regularPioneer:'unknown'}];
+    for(const [values,allowed] of [...valid.map(v=>[v,true] as const),...invalid.map(v=>[v,false] as const)]){
+      const id=crypto.randomUUID(),create=writeBatch(db);audit(create,db,id);create.set(doc(db,'personContacts',id),{id,email:'',gmail:'',phone:'',notes:'',_scopeEvent:'e1',_scopeDepartment:'video',...values,...meta(id)});
+      await (allowed?assertSucceeds(create.commit()):assertFails(create.commit()));
+      const current=await getDoc(doc(db,'personContacts','p1')),update=writeBatch(db),a=crypto.randomUUID();audit(update,db,a);update.update(doc(db,'personContacts','p1'),{...values,...meta(a,'admin',current.data()!.revision+1)});
+      await (allowed?assertSucceeds(update.commit()):assertFails(update.commit()));
+    }
+  });
+  it('clientes antiguos no borran el servicio guardado ni lo filtran al directorio operativo',async()=>{
+    const db=client('admin',adminEmail);await env.withSecurityRulesDisabled(async ctx=>{await updateDoc(doc(ctx.firestore(),'personContacts','p1'),{gmail:'',appointment:'elder',regularPioneer:'yes'});});
+    const current=(await getDoc(doc(db,'personContacts','p1'))).data()!;
+    for(const key of ['appointment','regularPioneer']){const body={...current};delete body[key];const batch=writeBatch(db),id=crypto.randomUUID();audit(batch,db,id);batch.set(doc(db,'personContacts','p1'),{...body,...meta(id,'admin',2)});await assertFails(batch.commit());}
+    for(const collection of ['persons','publications']){const batch=writeBatch(db),id=crypto.randomUUID();audit(batch,db,id);batch.update(doc(db,collection,collection==='persons'?'p1':'pub1'),{appointment:'elder',regularPioneer:'yes',...meta(id,'admin',2)});await assertFails(batch.commit());}
+    const preserve=writeBatch(db);audit(preserve,db,'keep-service');preserve.update(doc(db,'personContacts','p1'),{phone:'600000000',...meta('keep-service','admin',2)});await assertSucceeds(preserve.commit());expect((await getDoc(doc(db,'personContacts','p1'))).data()).toMatchObject({appointment:'elder',regularPioneer:'yes'});
+  });
+  it('el servicio requiere contactos y edición en el mismo ámbito y no concede acceso al voluntario',async()=>{
+    await env.withSecurityRulesDisabled(async ctx=>{const db=ctx.firestore();await updateDoc(doc(db,'personContacts','p1'),{gmail:'',appointment:'none',regularPioneer:'unknown'});});
+    const manager=client('manager',managerEmail),write=async()=>{const current=(await getDoc(doc(manager,'personContacts','p1'))).data()!;const b=writeBatch(manager),id=crypto.randomUUID();audit(b,manager,id,'manager');b.update(doc(manager,'personContacts','p1'),{appointment:'elder',regularPioneer:'yes',...meta(id,'manager',current.revision+1)});return b.commit();};
+    await env.withSecurityRulesDisabled(ctx=>updateDoc(doc(ctx.firestore(),'grants',`${managerEmail}~e1~video`),{capabilities:['view','contacts']}));await assertSucceeds(getDoc(doc(manager,'personContacts','p1')));await assertFails(write());
+    await env.withSecurityRulesDisabled(ctx=>setDoc(doc(ctx.firestore(),'grants',`${managerEmail}~e1~*`),grant(managerEmail,'manager','e1','*','assistant',['view','edit'])));await assertSucceeds(write());
+    await env.withSecurityRulesDisabled(ctx=>updateDoc(doc(ctx.firestore(),'grants',`${managerEmail}~e1~*`),{active:false}));
+    await env.withSecurityRulesDisabled(ctx=>updateDoc(doc(ctx.firestore(),'grants',`${managerEmail}~e1~video`),{capabilities:caps}));await assertSucceeds(write());
+    const volunteer=client('p1',volunteerEmail);await assertFails(getDoc(doc(volunteer,'personContacts','p1')));const b=writeBatch(volunteer);audit(b,volunteer,'invent-sc','p1');b.update(doc(volunteer,'personContacts','p1'),{appointment:'circuit-overseer',regularPioneer:'not-applicable',...meta('invent-sc','p1',3)});await assertFails(b.commit());
+    const other=writeBatch(manager);audit(other,manager,'other-service','manager');other.update(doc(manager,'personContacts','p2'),{appointment:'elder',regularPioneer:'yes',...meta('other-service','manager',2)});await assertFails(other.commit());
+  });
   it('valida alias y cargos sin convertirlos en permisos',async()=>{
     const db=client('manager',managerEmail),batch=writeBatch(db);audit(batch,db,'roles','manager');
     batch.update(doc(db,'persons','p1'),{aliases:['Nombre anterior'],...meta('roles','manager',2)});

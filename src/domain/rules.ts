@@ -1,5 +1,6 @@
 import { type AppData, type AppUser, type Capability, type CollectionName, type Grant, type Row, type Shift } from './types';
 import { isPublishedTeamMember } from './team';
+import {serviceError} from './personService';
 
 export const capabilities: Capability[] = ['view', 'edit', 'assign', 'publish', 'manageAccess', 'contacts'];
 export const emailKey = (email: string) => email.trim().toLowerCase();
@@ -51,6 +52,7 @@ export function validateData(data: AppData): void {
   const gmails = data.persons.map(p => emailKey(p.gmail)).filter(Boolean);
   assert(new Set(gmails).size === gmails.length, 'Un Gmail no puede pertenecer a dos personas.');
   for(const person of data.persons){
+    const serviceIssue=serviceError(person);assert(!serviceIssue,serviceIssue);
     assert(person.aliases===undefined||(Array.isArray(person.aliases)&&person.aliases.length<=10&&person.aliases.every(a=>typeof a==='string'&&a.trim().length>0&&a.length<=160)), 'Los alias admiten hasta diez nombres de 160 caracteres.');
     assert(person.notificationEmail===undefined||typeof person.notificationEmail==='string'&&person.notificationEmail.length<=254&&(!person.notificationEmail||/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(person.notificationEmail)),'Revisa el correo para avisos.');
     assert(person.hearingStatus===undefined||['unknown','deaf','hearing'].includes(person.hearingStatus),'Selecciona sorda, oyente o sin indicar.');
@@ -136,6 +138,8 @@ export function validateChange(before: AppData, next: AppData, user: AppUser, ev
     if (['events', 'venues', 'departments', 'congregations', 'templates'].includes(change.collection)) throw new Error('Esta configuración requiere administración.');
     if (change.collection === 'persons') {
       assert(next.candidates.some(c => c.personId === row.id && can(user, before, 'contacts', c.eventId, c.departmentId)), 'Esta ficha requiere una candidatura y permiso de contactos en su departamento.');
+      const old=change.before as AppData['persons'][number]|undefined,fresh=change.after as AppData['persons'][number]|undefined;
+      if(old?.appointment!==fresh?.appointment||old?.regularPioneer!==fresh?.regularPioneer)assert(next.candidates.some(c=>c.personId===row.id&&can(user,before,'contacts',c.eventId,c.departmentId)&&can(user,before,'edit',c.eventId,c.departmentId)),'Modificar el servicio actual requiere contactos y edición en el mismo departamento.');
       continue;
     }
     const capability: Capability = change.collection === 'shifts' ? 'assign' : 'edit';

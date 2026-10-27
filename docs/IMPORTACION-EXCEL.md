@@ -18,7 +18,7 @@ Un nombre no prueba identidad. Si coincide nombre, alias o Gmail de una persona 
 
 | Hoja | Obligatorio para altas | Opcional |
 |---|---|---|
-| Personas | Código, Nombre completo | Alias separados por `;`, Congregación, Teléfono, Correo de contacto, Gmail de acceso, Correo para avisos, Sorda / Oyente, Observaciones privadas |
+| Personas | Código, Nombre completo | Alias separados por `;`, Congregación, Teléfono, Correo de contacto, Gmail de acceso, Correo para avisos, Sorda / Oyente, Observaciones privadas, Nombramiento, Precursor regular |
 | Congregaciones | Código, Nombre | Correo del comité |
 | Departamentos | Código, Nombre | Icono, Instrucciones, Enlace de formación |
 | Sedes | Código, Nombre | Localidad, Dirección |
@@ -55,5 +55,7 @@ Los cambios quedan auditados con actor, fecha, hoja y filas de procedencia. Impo
 ## Privacidad y compatibilidad
 
 La exportación administrativa contiene contactos y observaciones privadas. Conserva el archivo en un lugar protegido. No lo adjuntes a una incidencia pública. La publicación operativa y las copias offline no incorporan estos contactos.
+
+Desde 0.6.0 se añaden **Nombramiento** y **Precursor regular**, ambos privados y actuales. Se admiten libros anteriores sin esas dos columnas. Sus celdas vacías conservan valores; para retirar una respuesta elige **Sin indicar**. SC requiere indicar **No aplica** expresamente; otras combinaciones con No aplica se rechazan. No se convierten silenciosamente valores incompatibles. Consulta [opciones, siglas y privacidad](SERVICIO-PERSONAS.md). Exportaciones y respaldos administrativos conservan los campos; publicaciones, impresión y consulta offline los excluyen.
 
 Los libros usan controles estándar XLSX. Las pruebas de lectura y estructura no sustituyen abrirlos en la versión concreta de Excel o LibreOffice de tu organización; comprueba desplegables, fechas, filtros y guardado antes de una carga grande. La validación de la aplicación es la comprobación final, incluso si el editor de hojas permite escribir un valor inválido.

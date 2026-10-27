@@ -6,12 +6,13 @@ import {canReadProfile,validHearingStatus} from '../domain/personProfile';
 import {leadershipContacts,whatsappHref,whatsappNumber,type LeadershipContact} from '../domain/whatsapp';
 import {fetchLeadershipContacts} from '../data/contactApi';
 import {DepartmentIcon} from './UI';
-import {HearingIndicator,WhatsAppMark} from './ContactIcons';
+import {HearingIndicator,ServiceBadge,WhatsAppMark} from './ContactIcons';
+import type {PersonService} from '../domain/personService';
 import '../styles/contacts.css';
 
 interface ContactContext {
  eventId:string;online:boolean;contacts:LeadershipContact[];loading:boolean;error:string;
- retry:()=>void;details:(personId:string,eventId?:string,departmentId?:string)=>{href:string|null;classification:HearingStatus|null};
+ retry:()=>void;details:(personId:string,eventId?:string,departmentId?:string)=>{href:string|null;classification:HearingStatus|null;service:PersonService|null};
  departmentName:(id:string)=>string;
  department:(id:string)=>AppData['departments'][number]|undefined;
 }
@@ -42,12 +43,12 @@ export function ContactsProvider({data,user,eventId,online,demo,children}:{data:
  const value:ContactContext={eventId,online,contacts,loading:online&&!!eventId&&(!current||state.loading),error:current?state.error:'',retry,
   departmentName:id=>data.departments.find(d=>d.id===id)?.name||'Departamento',department:id=>data.departments.find(d=>d.id===id),
   details:(personId,contactEvent=eventId,departmentId)=>{
-   const unavailable={href:null,classification:null};
+   const unavailable={href:null,classification:null,service:null};
    if(!online)return unavailable;
    const person=data.persons.find(p=>p.id===personId);
    const privateVisible=!!person&&canReadProfile(data,user,personId);
    const contact=privateVisible?person:contactEvent===eventId?contacts.find(c=>c.personId===personId&&(!departmentId||c.departmentId===departmentId)):undefined;
-   return contact?{href:personId===user.personId?null:whatsappHref(contact.phone),classification:validHearingStatus(contact.hearingStatus)?contact.hearingStatus:'unknown'}:unavailable;
+   return contact?{href:personId===user.personId?null:whatsappHref(contact.phone),classification:validHearingStatus(contact.hearingStatus)?contact.hearingStatus:'unknown',service:privateVisible&&person?{appointment:person.appointment,regularPioneer:person.regularPioneer}:null}:unavailable;
   }};
  return <Context.Provider value={value}>{children}</Context.Provider>;
 }
@@ -56,6 +57,7 @@ export function PersonContactActions({personId,name,eventId,departmentId}:{perso
  const context=useContext(Context),details=context?.details(personId,eventId,departmentId);
  if(!details||details.classification===null&&!details.href)return null;
  return <span className="person-contact-actions no-print">
+  {details.service&&<ServiceBadge person={details.service} name={name}/>}
   {details.classification!==null&&<HearingIndicator status={details.classification} name={name}/>}
   {details.href&&<a className="person-contact-icon person-whatsapp" href={details.href} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" aria-label={`Abrir WhatsApp con ${name}`} title={`Abrir WhatsApp con ${name}`}><WhatsAppMark/></a>}
  </span>;

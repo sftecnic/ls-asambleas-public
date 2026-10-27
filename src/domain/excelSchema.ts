@@ -1,6 +1,6 @@
 // Versioned workbook contract. Labels are user-facing; field names never come from a file.
 export type ExcelCollection = 'persons'|'congregations'|'departments'|'venues'|'events'|'candidates'|'shifts'|'program';
-export interface ExcelField {key:string;label:string;required?:boolean;kind?:'date'|'time'|'number'|'list';choices?:Record<string,string>;reference?:ExcelCollection;max?:number}
+export interface ExcelField {key:string;label:string;required?:boolean;optionalColumn?:boolean;kind?:'date'|'time'|'number'|'list';choices?:Record<string,string>;reference?:ExcelCollection;max?:number}
 export interface ExcelSheet {name:string;collection:ExcelCollection;fields:ExcelField[]}
 const code:ExcelField={key:'id',label:'Código',required:true,max:240};
 const f=(key:string,label:string,extra:Partial<ExcelField>={}):ExcelField=>({key,label,...extra});
@@ -10,7 +10,7 @@ export const EXCEL_HEADER_ROW=4;
 export const EXCEL_MAX_ROWS=1000;
 export const EXCEL_MAX_BYTES=5_000_000;
 export const excelSheets:ExcelSheet[]=[
- {name:'Personas',collection:'persons',fields:[code,f('name','Nombre completo',{required:true,max:160}),f('aliases','Alias',{kind:'list'}),ref('congregationId','Congregación','congregations',false),f('phone','Teléfono',{max:50}),f('email','Correo de contacto',{max:254}),f('gmail','Gmail de acceso',{max:254}),f('notificationEmail','Correo para avisos',{max:254}),f('hearingStatus','Sorda / Oyente',{choices:{'Sin indicar':'unknown','Sorda':'deaf','Oyente':'hearing'}}),f('notes','Observaciones privadas',{max:5000})]},
+ {name:'Personas',collection:'persons',fields:[code,f('name','Nombre completo',{required:true,max:160}),f('aliases','Alias',{kind:'list'}),ref('congregationId','Congregación','congregations',false),f('phone','Teléfono',{max:50}),f('email','Correo de contacto',{max:254}),f('gmail','Gmail de acceso',{max:254}),f('notificationEmail','Correo para avisos',{max:254}),f('hearingStatus','Sorda / Oyente',{choices:{'Sin indicar':'unknown','Sorda':'deaf','Oyente':'hearing'}}),f('notes','Observaciones privadas',{max:5000}),f('appointment','Nombramiento',{optionalColumn:true,choices:{'Sin indicar':'unknown','Ninguno':'none','Siervo ministerial':'ministerial-servant','Anciano':'elder','Superintendente de circuito':'circuit-overseer'}}),f('regularPioneer','Precursor regular',{optionalColumn:true,choices:{'Sin indicar':'unknown','Sí':'yes','No':'no','No aplica':'not-applicable'}})]},
  {name:'Congregaciones',collection:'congregations',fields:[code,f('name','Nombre',{required:true,max:160}),f('committeeEmail','Correo del comité',{max:254})]},
  {name:'Departamentos',collection:'departments',fields:[code,f('name','Nombre',{required:true,max:160}),f('icon','Icono',{choices:{'Audio y vídeo':'video','Plataforma':'platform','Maquillaje':'makeup','Otro':'other'}}),f('instructions','Instrucciones',{max:3000}),f('trainingUrl','Enlace de formación',{max:2000})]},
  {name:'Sedes',collection:'venues',fields:[code,f('name','Nombre',{required:true,max:160}),f('city','Localidad',{max:160}),f('address','Dirección',{max:500})]},

@@ -2,6 +2,7 @@ import type {AppData,AppUser,Row,Grant,Shift,CollectionName} from './types';
 import {validateData,validateChange,grantId,same,emailKey,findShiftConflicts} from './rules';
 import {searchKey} from './team';
 import {excelSheets,excelOrder,excelDefaults,type ExcelCollection,type ExcelField} from './excelSchema';
+import {serviceError,type PersonService} from './personService';
 
 export interface ExcelInputRow {sheet:string;row:number;values:Record<string,string>}
 export interface ExcelIssue {sheet:string;row:number;column:string;message:string}
@@ -75,6 +76,7 @@ export function prepareExcel(rows:ExcelInputRow[],current:AppData,resolutions:Ex
   }
   if(collection==='candidates'&&before&&['eventId','personId','departmentId'].some(k=>after[k]!==asRecord(before)[k]))issue('Código','La participación existente no puede cambiar de persona, evento o departamento.');
   if(collection==='persons'){
+   const serviceIssue=serviceError(after as unknown as PersonService);if(serviceIssue)issue('Nombramiento / Precursor regular',serviceIssue);
    const names=[after.name,...(after.aliases as string[]||[])].map(x=>searchKey(String(x)));
    const duplicates=next.persons.filter(p=>p.id!==id&&([p.name,...(p.aliases||[])].some(n=>names.includes(searchKey(n)))||(after.gmail&&emailKey(p.gmail)===emailKey(String(after.gmail)))));
    if(duplicates.length&&(!resolution.distinct||duplicates.some(p=>after.gmail&&emailKey(p.gmail)===emailKey(String(after.gmail)))))issue('Nombre / Gmail',`Posible coincidencia: ${duplicates.map(p=>`${p.name} (${p.id})`).join(', ')}. Elige la ficha existente o confirma que son personas diferentes.`);

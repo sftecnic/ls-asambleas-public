@@ -5,13 +5,13 @@ import {History,Pencil,Search,UserPlus,Check} from 'lucide-react';
 import type {PanelProps,Person} from '../domain/types';
 import {can,isAdmin} from '../domain/rules';
 import {isEmail} from '../domain/mail';
-import {canReadProfile,profileMatches,type ProfileFilters as Filters} from '../domain/personProfile';
+import {canReadProfile,canEditService,profileMatches,emptyProfileFilters,serviceFilterChips,type ProfileFilters as Filters} from '../domain/personProfile';
 import {Empty,ErrorMessage,Modal} from './UI';
-import {PersonFields,ProfileFilters,ProfileSummary} from './PersonProfile';
+import {PersonFields,ProfileFilters,ProfileSummary,ServiceDetails} from './PersonProfile';
 import {PersonName,PersonContactActions} from './PersonContact';
 
 export default function DirectoryPanel({data,user,onChange,canEdit,online,onShowHistory}:PanelProps&{onShowHistory?:(id:string)=>void}){
-  const [filters,setFilters]=useViewState<Filters>('directory.filters',{query:'',congregationId:'',hearingStatus:''});
+  const [filters,setFilters]=useViewState<Filters>('directory.filters',{...emptyProfileFilters});
   const [selectedId,setSelectedId]=useState(''),[draft,setDraft]=useState<Person>(),[error,setError]=useState(''),[busy,setBusy]=useState(false);
   const baseline=useRef('');
   const admin=isAdmin(user,data),authorizedIds=new Set(data.persons.filter(p=>canReadProfile(data,user,p.id)).map(p=>p.id));
@@ -33,17 +33,18 @@ export default function DirectoryPanel({data,user,onChange,canEdit,online,onShow
   return <div className="directory-panel">
     <div className="directory-tools"><label className="team-search"><Search size={21} aria-hidden="true"/><input type="search" name="directory-query" autoComplete="off" aria-label="Buscar en el directorio" placeholder="Nombre o congregación" value={filters.query} onChange={e=>setFilters({...filters,query:e.target.value})}/></label>{admin&&canEdit&&<button className="team-button team-button-primary" disabled={!online} onClick={()=>{setSelectedId('');edit({id:crypto.randomUUID(),name:'',congregationId:'',phone:'',email:'',gmail:'',notes:'',hearingStatus:'unknown'});}}><UserPlus size={20} aria-hidden="true"/>Añadir persona</button>}</div>
     <FilterDisclosure active={[
+      ...serviceFilterChips(filters,setFilters),
       ...(filters.congregationId?[{label:data.congregations.find(c=>c.id===filters.congregationId)?.name||'Congregación',clear:()=>setFilters({...filters,congregationId:''})}]:[]),
       ...(filters.hearingStatus?[{label:filters.hearingStatus==='deaf'?'Sorda':filters.hearingStatus==='hearing'?'Oyente':'Sin indicar',clear:()=>setFilters({...filters,hearingStatus:''})}]:[])
-    ]} onClear={()=>setFilters({...filters,congregationId:'',hearingStatus:''})}><ProfileFilters data={data} value={filters} onChange={setFilters} canFilterPrivate={authorizedIds.size>0}/></FilterDisclosure>
+    ]} onClear={()=>setFilters({...emptyProfileFilters,query:filters.query})}><ProfileFilters data={data} value={filters} onChange={setFilters} canFilterPrivate={authorizedIds.size>0}/></FilterDisclosure>
     <ProfileSummary people={people} authorizedIds={authorizedIds}/>
     <p className="small directory-result" role="status">{people.length} personas del directorio</p>
     <div className="directory-list">{people.map(person=><article key={person.id}><div><PersonName as="h2" personId={person.id} name={person.name}/><p>{data.congregations.find(c=>c.id===person.congregationId)?.name||'Congregación sin indicar'}</p></div><button className="team-button" aria-label={`Ver ficha de ${person.name}`} onClick={()=>{setSelectedId(person.id);setDraft(undefined);setError('');}}>Ver ficha</button></article>)}</div>
     {!people.length&&<Empty>No hay personas con estos filtros.</Empty>}
     {(selected||draft)&&<Modal title={selected?.name||'Añadir persona'} titleAction={selected&&!draft?<PersonContactActions personId={selected.id} name={selected.name}/>:undefined} onClose={close}>
-      {draft?<form onSubmit={e=>{e.preventDefault();void save();}}><fieldset className="profile-fieldset" disabled={busy}><PersonFields data={data} person={draft} onChange={setDraft}/></fieldset><ErrorMessage message={error}/><div className="modal-actions"><button type="button" className="btn" disabled={busy} onClick={close}>Cancelar</button><button type="submit" className="btn btn-primary" disabled={busy||!online}><Check size={20} aria-hidden="true"/>{busy?'Guardando…':'Guardar ficha'}</button></div></form>:selected&&<>
+      {draft?<form onSubmit={e=>{e.preventDefault();void save();}}><fieldset className="profile-fieldset" disabled={busy}><PersonFields data={data} person={draft} onChange={setDraft} serviceEditable={admin||canEditService(data,user,draft.id)}/></fieldset><ErrorMessage message={error}/><div className="modal-actions"><button type="button" className="btn" disabled={busy} onClick={close}>Cancelar</button><button type="submit" className="btn btn-primary" disabled={busy||!online}><Check size={20} aria-hidden="true"/>{busy?'Guardando…':'Guardar ficha'}</button></div></form>:selected&&<>
         <p>{data.congregations.find(c=>c.id===selected.congregationId)?.name||'Congregación sin indicar'}</p>
-        {privateVisible&&<><dl className="team-contact-list"><div><dt>Teléfono</dt><dd>{selected.phone||'Sin indicar'}</dd></div><div><dt>Correo</dt><dd>{selected.email||'Sin indicar'}</dd></div>{selected.notes&&<div><dt>Notas privadas</dt><dd>{selected.notes}</dd></div>}</dl></>}
+        {privateVisible&&<><ServiceDetails person={selected}/><dl className="team-contact-list"><div><dt>Teléfono</dt><dd>{selected.phone||'Sin indicar'}</dd></div><div><dt>Correo</dt><dd>{selected.email||'Sin indicar'}</dd></div>{selected.notes&&<div><dt>Notas privadas</dt><dd>{selected.notes}</dd></div>}</dl></>}
         <div className="modal-actions">{onShowHistory&&<button className="btn" onClick={()=>onShowHistory(selected.id)}><History size={20} aria-hidden="true"/>Ver trayectoria</button>}{editable&&<button className="btn btn-primary" onClick={()=>edit(selected)}><Pencil size={20} aria-hidden="true"/>Editar ficha</button>}</div>
       </>}
     </Modal>}
