@@ -50,5 +50,5 @@ export function HearingIndicator({status,name}:{status:HearingStatus;name:string
 
 export function ServiceBadge({person,name}:{person:PersonService;name:string}){
  const code=serviceBadge(person);if(!code)return null;
- return <ContactHint label={`Servicio actual de ${name}: ${appointmentLabel(person.appointment)}; precursor regular: ${pioneerLabel(person.regularPioneer)}`} className="person-service-button" hint={<><strong>Condición actual</strong><span>Nombramiento: {appointmentLabel(person.appointment)}</span><span>Precursor regular: {pioneerLabel(person.regularPioneer)}</span></>}><span>{code}</span></ContactHint>;
+ return <ContactHint label={`Servicio actual de ${name}: ${appointmentLabel(person.appointment)}; precursor regular: ${pioneerLabel(person.regularPioneer)}`} className="person-service-button" hint={<><strong>Condición actual</strong><span>Nombramiento: {appointmentLabel(person.appointment)}</span><span>Precursor regular: {pioneerLabel(person.regularPioneer)}</span>{person.appointment==='circuit-overseer'&&<span>Circuito: {person.serviceCircuit||'Sin indicar'}</span>}</>}><span>{code}</span></ContactHint>;
 }

@@ -73,6 +73,7 @@ test("prepara sin fecha, confirma, conserva borrador y recupera al recargar", as
   await record.getByRole("button", { name: "Editar", exact: true }).click();
   dialog = page.getByRole("dialog");
   await dialog.getByLabel("Fecha y hora").fill("2027-03-20T19:00");
+  await dialog.getByLabel("Duración · minutos").fill("60");
   await dialog.getByLabel("Enlace Zoom").fill("https://zoom.us/j/111222333");
   await dialog.getByRole("button", { name: "Revisar convocatoria" }).click();
   await expect(dialog).toContainText("personas convocadas");
@@ -121,6 +122,7 @@ test("orientación aparece en su departamento y bloque; borrador no aparece", as
     .getByRole("combobox", { name: "Tipo", exact: true })
     .selectOption("orientation");
   await dialog.getByLabel("Fecha y hora").fill("2027-04-10T09:00");
+  await dialog.getByLabel("Duración · minutos").fill("15");
   await dialog
     .getByLabel("Lugar / punto de encuentro")
     .fill("Acceso de plataforma");

@@ -82,8 +82,8 @@ interface Ledger { personId: string; day: string; entries: LedgerEntry[]; mutati
 const entry = (shift: Shift): LedgerEntry => ({ id: shift.id, eventId: shift.eventId, departmentId: shift.departmentId, startsAt: shift.startsAt, endsAt: shift.endsAt });
 const reserved = (s?: Shift) => Boolean(s && s.attendance !== 'replaced');
 const ledgerKey = (s: Shift) => `${s.personId}~${s.startsAt.slice(0, 10)}`;
-const operational = (person: Person) => { const { phone: _phone, email: _email, gmail: _gmail, notes: _notes, hearingStatus:_hearingStatus, notificationEmail:_notificationEmail, appointment:_appointment, regularPioneer:_regularPioneer, ...rest } = person; return rest; };
-const privateFields = (person: Person) => ({ phone: person.phone, email: person.email, gmail: person.gmail, notes: person.notes, ...(person.hearingStatus===undefined?{}:{hearingStatus:person.hearingStatus}), ...(person.notificationEmail===undefined?{}:{notificationEmail:person.notificationEmail}), ...(person.appointment===undefined?{}:{appointment:person.appointment}), ...(person.regularPioneer===undefined?{}:{regularPioneer:person.regularPioneer}) });
+const operational = (person: Person) => { const { phone: _phone, email: _email, gmail: _gmail, notes: _notes, hearingStatus:_hearingStatus, notificationEmail:_notificationEmail, appointment:_appointment, regularPioneer:_regularPioneer, serviceCircuit:_serviceCircuit, ...rest } = person; return rest; };
+const privateFields = (person: Person) => ({ phone: person.phone, email: person.email, gmail: person.gmail, notes: person.notes, ...(person.hearingStatus===undefined?{}:{hearingStatus:person.hearingStatus}), ...(person.notificationEmail===undefined?{}:{notificationEmail:person.notificationEmail}), ...(person.appointment===undefined?{}:{appointment:person.appointment}), ...(person.regularPioneer===undefined?{}:{regularPioneer:person.regularPioneer}), ...(person.serviceCircuit===undefined?{}:{serviceCircuit:person.serviceCircuit}) });
 // atServer is server-owned audit metadata, not editable application data.
 // Its SDK Timestamp loses its JSON representation when forms clone AppData.
 const clean = (raw: DocumentData): DocumentData => Object.fromEntries(Object.entries(raw).filter(([key]) => !key.startsWith('_') && key !== 'atServer'));
@@ -352,7 +352,7 @@ function firebaseRepository(): Repository {
               if (!admin && contactCandidate) tx.set(doc(db, 'contactAccess', `${user.email}~${person.id}`), { email: user.email, personId: person.id, eventId: contactCandidate.eventId, departmentId: contactCandidate.departmentId, candidateId: contactCandidate.id });
               const previousHearing=oldPrivate?.exists()?oldPrivate.data().hearingStatus:undefined;
               const previousNotificationEmail=oldPrivate?.exists()?oldPrivate.data().notificationEmail:undefined;
-              const previousService=Object.fromEntries(['appointment','regularPioneer'].flatMap(key=>oldPrivate?.exists()&&oldPrivate.data()[key]!==undefined?[[key,oldPrivate.data()[key]]]:[]));
+              const previousService=Object.fromEntries(['appointment','regularPioneer','serviceCircuit'].flatMap(key=>oldPrivate?.exists()&&oldPrivate.data()[key]!==undefined?[[key,oldPrivate.data()[key]]]:[]));
               tx.set(doc(db, 'personContacts', change.id), { id: change.id, ...(previousHearing===undefined?{}:{hearingStatus:previousHearing}), ...(previousNotificationEmail===undefined?{}:{notificationEmail:previousNotificationEmail}), ...previousService, ...privateFields(person), ...metadata, _scopeEvent: scopeEvent, _scopeDepartment: scopeDepartment });
               const gmail = emailKey(person.gmail), oldGmail = emailKey((change.before as Person | undefined)?.gmail || '');
               if (gmail) {

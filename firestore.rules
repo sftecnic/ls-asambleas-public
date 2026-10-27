@@ -64,8 +64,8 @@ service cloud.firestore {
         && (a.size() < 7 || text(a[6],160) && a[6].size()>0) && (a.size() < 8 || text(a[7],160) && a[7].size()>0)
         && (a.size() < 9 || text(a[8],160) && a[8].size()>0) && (a.size() < 10 || text(a[9],160) && a[9].size()>0);
     }
-    function personSchema(d) { return fields(d, ['id', 'name', 'aliases', 'congregationId', 'source']) && text(d.name, 160) && d.name.size() > 0 && text(d.congregationId, 240) && text(d.get('source', ''), 500) && aliases(d.get('aliases', [])); }
-    function eventSchema(d) { return fields(d, ['id', 'title', 'type', 'startDate', 'endDate', 'venueId', 'section', 'timezone', 'archived']) && text(d.title, 200) && d.type in ['circuit', 'regional', 'pioneers'] && d.startDate.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}') && d.endDate.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}') && d.endDate >= d.startDate && boundedId(d.venueId) && text(d.section, 200) && text(d.timezone, 100) && d.archived is bool; }
+    function personSchema(d) { return fields(d, ['id', 'name', 'aliases', 'congregationId', 'source']) && text(d.name, 160) && d.name.size() > 0 && text(d.congregationId, 240) && text(d.get('source', ''), 500) && aliases(d.get('aliases', [])) && (!existsAfter(/databases/$(database)/documents/personContacts/$(d.id)) || getAfter(/databases/$(database)/documents/personContacts/$(d.id)).data.get('appointment','unknown') != 'circuit-overseer' || d.congregationId == ''); }
+    function eventSchema(d) { return fields(d, ['id', 'title', 'type', 'startDate', 'endDate', 'venueId', 'section', 'timezone', 'archived', 'startsAt', 'endsAt']) && text(d.title, 200) && d.type in ['circuit', 'regional', 'pioneers'] && d.startDate.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}') && d.endDate.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}') && d.endDate >= d.startDate && boundedId(d.venueId) && text(d.section, 200) && text(d.timezone, 100) && d.archived is bool && text(d.get('startsAt',''),24) && text(d.get('endsAt',''),24) && ((d.get('startsAt','') == '' && d.get('endsAt','') == '') || (d.get('startsAt','').matches('[0-9]{4}-[0-9]{2}-[0-9]{2}T.*Z') && d.get('endsAt','') > d.startsAt)); }
     function candidateSchema(d) {
       return fields(d, ['id', 'eventId', 'personId', 'departmentId', 'teamRole', 'committee', 'availability', 'access', 'reserve'])
         && d.get('teamRole','volunteer') in ['responsible','assistant','volunteer','supervisor']
@@ -191,7 +191,7 @@ service cloud.firestore {
       allow get: if eventMember(id);
       allow list: if admin();
       allow create: if admin() && created(request.resource.data) && eventSchema(request.resource.data);
-      allow update: if admin() && updated(request.resource.data) && eventSchema(request.resource.data);
+      allow update: if admin() && updated(request.resource.data) && (!exists(/databases/$(database)/documents/calendarLinks/$('event~' + id)) || get(/databases/$(database)/documents/calendarLinks/$('event~' + id)).data.snapshot.status == 'cancelled') && eventSchema(request.resource.data) && (!('startsAt' in resource.data) || 'startsAt' in request.resource.data) && (!('endsAt' in resource.data) || 'endsAt' in request.resource.data);
     }
     match /persons/{id} {
       allow read: if manager() || (member() && ownPerson(id));
@@ -205,7 +205,9 @@ service cloud.firestore {
       function serviceSchema(d) {
         return d.get('appointment','unknown') in ['unknown','none','ministerial-servant','elder','circuit-overseer']
           && d.get('regularPioneer','unknown') in ['unknown','yes','no','not-applicable']
-          && ((d.get('appointment','unknown') == 'circuit-overseer') == (d.get('regularPioneer','unknown') == 'not-applicable'));
+          && ((d.get('appointment','unknown') == 'circuit-overseer') == (d.get('regularPioneer','unknown') == 'not-applicable'))
+          && text(d.get('serviceCircuit',''),160) && (d.get('appointment','unknown') == 'circuit-overseer' || d.get('serviceCircuit','') == '')
+          && (d.get('appointment','unknown') != 'circuit-overseer' || getAfter(/databases/$(database)/documents/persons/$(id)).data.congregationId == '');
       }
       function scopedWriter(needsServiceEdit) {
         let claim = getAfter(/databases/$(database)/documents/contactAccess/$(email() + '~' + id)).data;
@@ -222,10 +224,10 @@ service cloud.firestore {
       function writer(needsServiceEdit) {
         return admin() || scopedWriter(needsServiceEdit);
       }
-      function schema(d) { return fields(d, ['id', 'phone', 'email', 'gmail', 'notes', 'hearingStatus', 'notificationEmail', 'appointment', 'regularPioneer', '_scopeEvent', '_scopeDepartment']) && d.id == id && text(d.phone, 50) && text(d.email, 254) && text(d.gmail, 254) && text(d.notes, 5000) && text(d.get('notificationEmail',''),254) && (d.get('notificationEmail','') == '' || d.notificationEmail.matches('[^@ ]+@[^@ ]+[.][^@ ]+')) && d.get('hearingStatus','unknown') in ['unknown','deaf','hearing'] && serviceSchema(d) && boundedId(d._scopeEvent) && boundedId(d._scopeDepartment)
+      function schema(d) { return fields(d, ['id', 'phone', 'email', 'gmail', 'notes', 'hearingStatus', 'notificationEmail', 'appointment', 'regularPioneer', 'serviceCircuit', '_scopeEvent', '_scopeDepartment']) && d.id == id && text(d.phone, 50) && text(d.email, 254) && text(d.gmail, 254) && text(d.notes, 5000) && text(d.get('notificationEmail',''),254) && (d.get('notificationEmail','') == '' || d.notificationEmail.matches('[^@ ]+@[^@ ]+[.][^@ ]+')) && d.get('hearingStatus','unknown') in ['unknown','deaf','hearing'] && serviceSchema(d) && boundedId(d._scopeEvent) && boundedId(d._scopeDepartment)
         && (d._deleted || d.gmail == '' || (getAfter(/databases/$(database)/documents/gmailOwners/$(d.gmail.lower())).data.active && getAfter(/databases/$(database)/documents/gmailOwners/$(d.gmail.lower())).data.personId == id)); }
-      allow create: if writer(request.resource.data.keys().hasAny(['appointment','regularPioneer'])) && created(request.resource.data) && schema(request.resource.data);
-      allow update: if writer(request.resource.data.diff(resource.data).affectedKeys().hasAny(['appointment','regularPioneer'])) && updated(request.resource.data) && schema(request.resource.data) && (!('hearingStatus' in resource.data) || 'hearingStatus' in request.resource.data) && (!('notificationEmail' in resource.data) || 'notificationEmail' in request.resource.data) && (!('appointment' in resource.data) || 'appointment' in request.resource.data) && (!('regularPioneer' in resource.data) || 'regularPioneer' in request.resource.data) && request.resource.data._scopeEvent == resource.data._scopeEvent && request.resource.data._scopeDepartment == resource.data._scopeDepartment;
+      allow create: if writer(request.resource.data.keys().hasAny(['appointment','regularPioneer','serviceCircuit'])) && created(request.resource.data) && schema(request.resource.data);
+      allow update: if writer(request.resource.data.diff(resource.data).affectedKeys().hasAny(['appointment','regularPioneer','serviceCircuit'])) && updated(request.resource.data) && schema(request.resource.data) && (!('hearingStatus' in resource.data) || 'hearingStatus' in request.resource.data) && (!('notificationEmail' in resource.data) || 'notificationEmail' in request.resource.data) && (!('appointment' in resource.data) || 'appointment' in request.resource.data) && (!('regularPioneer' in resource.data) || 'regularPioneer' in request.resource.data) && (!('serviceCircuit' in resource.data) || 'serviceCircuit' in request.resource.data) && request.resource.data._scopeEvent == resource.data._scopeEvent && request.resource.data._scopeDepartment == resource.data._scopeDepartment;
     }
     match /contactAccess/{key} {
       allow get: if signed() && key.split('~')[0] == email();
@@ -335,8 +337,8 @@ service cloud.firestore {
     }
     match /congregations/{id} {
       allow read: if member();
-      allow create: if admin() && created(request.resource.data) && fields(request.resource.data, ['id', 'name']) && text(request.resource.data.name, 160);
-      allow update: if admin() && updated(request.resource.data) && fields(request.resource.data, ['id', 'name']) && text(request.resource.data.name, 160);
+      allow create: if admin() && created(request.resource.data) && fields(request.resource.data, ['id', 'name', 'circuit']) && text(request.resource.data.name, 160) && text(request.resource.data.get('circuit',''),160);
+      allow update: if admin() && updated(request.resource.data) && fields(request.resource.data, ['id', 'name', 'circuit']) && text(request.resource.data.name, 160) && text(request.resource.data.get('circuit',''),160) && (!('circuit' in resource.data) || 'circuit' in request.resource.data);
     }
     match /templates/{id} {
       allow read: if manager();

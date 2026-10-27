@@ -33,6 +33,10 @@ La importación lee localmente y valida toda la selección, luego guarda por dep
 
 ## Pruebas
 
+Calendar añade `calendarLinks` (versiones, correspondencia Google, audiencia/respuestas), `calendarDrafts` (cambios de asamblea aún no confirmados), `calendarSystem` (conexión cifrada y cuotas) y `calendarResponseHistory` (instante de detección). Son documentos exclusivos del servidor. Los endpoints proyectan solo las respuestas autorizadas y comprueban versiones y capacidades. `worker/calendar.ts` controla publicación, conflictos, deduplicación y sincronización; `calendarGoogle.ts` transporta solicitudes únicamente al calendario principal propio. La cola reparte la consulta cada cinco minutos por convocatoria. Las invitaciones no se crean al importar/restaurar datos. Consulta [CALENDAR.md](CALENDAR.md).
+
+La congregación guarda un circuito operativo opcional. El SC guarda `serviceCircuit` en `personContacts`, con congregación vacía y precursorado No aplica en la misma operación. Las reglas conservan campos de clientes anteriores y bloquean la edición directa de eventos con convocatoria vigente. Publicaciones y consulta offline excluyen el circuito de servicio privado. No son necesarios índices compuestos nuevos.
+
 `npm test` ejecuta las pruebas unitarias; las de Firebase que requieren emulador se omiten si no está configurado y deben ejecutarse antes de modificar reglas. `npm run test:installation` verifica destinos y reanudación local. `npm run check:worker` comprueba tipos del servidor.
 
 Para navegador instala Playwright Chromium (`npx playwright install chromium`), inicia Vite en un puerto libre y establece `PLAYWRIGHT_BASE_URL`. `PLAYWRIGHT_CHANNEL` permite elegir Edge si está instalado. Ejecuta `npm run test:e2e`. Los datos deben ser ficticios. Para reglas, instala Java compatible con el emulador y arráncalo con la configuración local de un proyecto de demostración, nunca con escrituras a producción.

@@ -1,3 +1,5 @@
+import CalendarPanel from './CalendarPanel';
+import {CalendarDays} from 'lucide-react';
 import {useViewState} from './ViewState';
 import HomeFocus from './HomeFocus';
 import {attentionIds,type HomeIntent} from '../domain/homeDashboard';
@@ -13,6 +15,7 @@ import {useUnsavedChanges} from './useUnsavedChanges';
 
 export default function ProgramPanel(props: PanelProps & {initialIntent?:HomeIntent}) {
   const { data, event, user, onChange, online } = props;
+  const [calendarOpen,setCalendarOpen]=useState(false);
   const volunteer = user.role === 'volunteer';
   const editable = props.canEdit && !volunteer && can(user, data, 'edit', event.id, 'platform');
   const [day, setDay] = useViewState('program.day',event.startDate,'dia');
@@ -45,8 +48,8 @@ export default function ProgramPanel(props: PanelProps & {initialIntent?:HomeInt
     return <StageEditor plan={data.plans.find(p => p.id === stage.id) ?? stage} published={published} eventLabel={`${event.title} · ${dateLabel(event.startDate)}`} venueLabel={venue ? `${venue.name} · ${venue.city}` : ''} templates={venue?.stageTemplates} onSaveTemplate={editable && isAdmin(user,data) && venue ? async template => { const next=structuredClone(data); next.venues=next.venues.map(v=>v.id===venue.id?{...v,stageTemplates:[...(v.stageTemplates??[]).filter(t=>t.id!==template.id),template]}:v); await onChange(next,`Guardada plantilla de sede: ${template.name}`); } : undefined} onClose={() => setStage(null)} canEdit={editable} canPublish={props.canPublish} online={online} onSave={async plan => { const next = structuredClone(data); next.plans = [...next.plans.filter(p => p.id !== plan.id), plan]; await onChange(next, `Guardado plano: ${plan.name}`); setStage(plan); }} />;
   }
   return <>
-    <HomeFocus intent={homeIntent} onClear={()=>setHomeIntent(undefined)}/>
-    <div className="page-heading"><div><h1>Programa</h1><p>{focusedIds?'Todos los días':dateLabel(day)}</p></div>{editable && <button className="btn btn-primary no-print" disabled={!online} onClick={() => setEditing('new')}><Plus size={20} />Añadir intervención</button>}</div>
+    {calendarOpen&&<Modal title="Calendar · Asamblea" onClose={()=>setCalendarOpen(false)}><CalendarPanel kind="event" id={event.id} data={data} user={user} online={online}/></Modal>}<HomeFocus intent={homeIntent} onClear={()=>setHomeIntent(undefined)}/>
+    <div className="page-heading"><div><h1>Programa</h1><button className="btn no-print" disabled={!online} onClick={()=>setCalendarOpen(true)}><CalendarDays size={20}/>{volunteer?'Mi invitación':'Convocatoria'}</button><p>{focusedIds?'Todos los días':dateLabel(day)}</p></div>{editable && <button className="btn btn-primary no-print" disabled={!online} onClick={() => setEditing('new')}><Plus size={20} />Añadir intervención</button>}</div>
     {event.startDate !== event.endDate && <div className="toolbar no-print"><label className="field">Día<input type="date" min={event.startDate} max={event.endDate} value={day} onChange={e => {setHomeIntent(undefined);setDay(e.target.value);}} /></label></div>}
     {!program.length ? <Empty>{focusedIds?'No queda material pendiente en esta selección.':volunteer ? 'El programa todavía no está publicado.' : 'Añade la primera intervención del programa.'}</Empty> : <div className="program-list">{program.map(item => <article className={`program-row${item.kind==='break'?' program-break':''}`} key={item.id}>
       <time className="program-time" dateTime={item.startsAt}>{timeLabel(item.startsAt,event.timezone)}</time>

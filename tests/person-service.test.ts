@@ -19,7 +19,7 @@ describe('servicio actual privado de personas',()=>{
  });
  it('el formulario guarda SC y No aplica juntos y al salir de SC pide indicar el precursorado',()=>{
   const before={appointment:'elder' as const,regularPioneer:'yes' as const},patch=selectAppointment(before,'circuit-overseer');
-  expect(patch).toEqual({appointment:'circuit-overseer',regularPioneer:'not-applicable'});expect(before).toEqual({appointment:'elder',regularPioneer:'yes'});
+  expect(patch).toEqual({appointment:'circuit-overseer',regularPioneer:'not-applicable',congregationId:''});expect(before).toEqual({appointment:'elder',regularPioneer:'yes'});
   expect(selectAppointment(patch,'ministerial-servant')).toEqual({appointment:'ministerial-servant',regularPioneer:'unknown'});
   expect(selectAppointment(before,'none')).toEqual({appointment:'none'});
  });
@@ -34,7 +34,7 @@ describe('servicio actual privado de personas',()=>{
   expect(profileMatches(data,data.persons[1],{...emptyProfileFilters,appointment:'unknown'},true)).toBe(true);
  });
  it('no concede permisos, altera cargos ni permite combinaciones inválidas',()=>{
-  const data=createDemoData(),next=structuredClone(data);next.persons[0].appointment='circuit-overseer';next.persons[0].regularPioneer='not-applicable';
+  const data=createDemoData(),next=structuredClone(data);next.persons[0].congregationId='';next.persons[0].appointment='circuit-overseer';next.persons[0].regularPioneer='not-applicable';
   expect(()=>validateData(next)).not.toThrow();expect(can(volunteer,next,'contacts','e1','video')).toBe(false);expect(next.grants).toEqual(data.grants);expect(next.candidates).toEqual(data.candidates);expect(()=>validateChange(data,next,volunteer,'e1')).toThrow();
   next.persons[0].regularPioneer='yes';expect(()=>validateData(next)).toThrow(/No aplica/);
  });

@@ -35,6 +35,13 @@ Anota fecha, versión, proyecto y quién comprueba cada casilla en una copia pri
 - [ ] Los estados Pendiente/Enviado/Error/Sin correo tienen el significado esperado; un resultado incierto no se reenvía automáticamente.
 - [ ] El consumo de Firestore, Workers, Queues y Gmail se mantiene dentro de cuotas.
 
+- [ ] Calendar API habilitada, conexión independiente probada y cuenta organizadora correcta; tokens sin exponer.
+- [ ] Convocatoria ficticia revisada antes de confirmar, sin invitados reales; respuestas Sí/No/Quizás/Sin respuesta y última comprobación visibles con los permisos esperados.
+- [ ] Calendar envía invitación/cambio/cancelación y Gmail solo los recordatorios correspondientes; no hay correo inicial duplicado.
+- [ ] No impide recordatorios futuros, sin modificar turnos ni asistencia; cambios externos de Google producen conflicto revisable.
+- [ ] Eventos de varios días sin horas conservan fecha final incluida y solo recordatorio de víspera; Zoom por número conserva código y ceros.
+- [ ] Circuitos y correos del comité correctos; SC sin congregación ficticia, circuito privado y libros anteriores compatibles.
+
 Para probar horarios reales elige fechas de ensayo que permitan observarlos; no alteres el reloj del servidor ni inventes resultados. Las pruebas unitarias verifican cálculos de horario de verano, pero no la entrega real de Gmail.
 
 ## Operación

@@ -1,3 +1,4 @@
+import {zoomDetails} from './zoom';
 import type { AssemblyEvent, MeetingPublication } from "./types";
 import { meetingLabels, meetingWhen } from "./meetings";
 export type DeliveryReason =
@@ -57,18 +58,19 @@ export function renderMeetingMail(
   reason: DeliveryReason,
   origin: string,
   template = defaultMeetingTemplate,
+  calendarEvent = false,
 ) {
   validateMeetingTemplate(template);
-  const link = `${origin}/?evento=${encodeURIComponent(m.eventId)}&reunion=${encodeURIComponent(m.id)}`;
+  const link = `${origin}/?evento=${encodeURIComponent(m.eventId)}${calendarEvent?'':'&reunion='+encodeURIComponent(m.id)}`;
   const values: Record<string, string> = {
     aviso: reasonLabels[reason],
     nombre: name,
     evento: event.title,
     reunion: m.title || meetingLabels[m.kind],
-    fecha: meetingWhen(m, event.timezone),
+    fecha: calendarEvent&&!event.startsAt?`${event.startDate}${event.endDate!==event.startDate?' — '+event.endDate:''} · Todo el día`:meetingWhen(m, event.timezone),
     lugar:
       m.kind === "zoom"
-        ? "Zoom"
+        ? zoomDetails(m)
         : `${m.location}${m.address ? " · " + m.address : ""}`,
     instrucciones: m.instructions,
     enlace: link,

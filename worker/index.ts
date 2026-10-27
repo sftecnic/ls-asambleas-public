@@ -1,3 +1,5 @@
+import {calendarGoogle} from './calendarGoogle';
+import {calendarTarget,calendarView,previewCalendar,calendarCommand,saveEventDraft,processCalendar,syncCalendar} from './calendar';
 import {
   emptyData,
   type MeetingCommand,
@@ -42,11 +44,15 @@ import {
   type MailEnv,
 } from "./gmail";
 
-type QueueJob = { id: string; kind: "audience" | "task" | "delivery" };
+type QueueJob = { id: string; kind: "audience" | "task" | "delivery" | "calendar" | "calendar-sync" | "calendar-read" };
 interface Queue {
   sendBatch(messages: { body: QueueJob }[]): Promise<void>;
 }
+const senderDocument=(env:{SENDER_DOCUMENT?:string})=>env.SENDER_DOCUMENT==='meetingSystem/institutionalSender'?env.SENDER_DOCUMENT:'meetingSystem/sender';
 interface Env extends MailEnv {
+  SENDER_DOCUMENT?:string;
+  ORGANIZER_EMAIL?:string;
+  PROCESSOR_CUTOVER_REQUIRED?:string;
   FIREBASE_SERVICE_ACCOUNT: string;
   FIREBASE_PROJECT_ID: string;
   APP_ORIGIN: string;
@@ -111,15 +117,16 @@ async function oauthCallback(request: Request, env: Env, store: Store) {
     }),
   });
   const token: any = await r.json();
+  const calendar=saved.purpose==='calendar';
   if (
     !r.ok ||
     !token.refresh_token ||
     !String(token.scope)
       .split(" ")
-      .includes("https://www.googleapis.com/auth/gmail.send")
+      .includes(calendar?"https://www.googleapis.com/auth/calendar.events.owned":"https://www.googleapis.com/auth/gmail.send")
   )
     throw new Error(
-      "No se concedió permiso de envío. Vuelve a conectar Gmail.",
+      calendar ? "No se concedió acceso a Calendar. Vuelve a conectar Calendar." : "No se concedió permiso de envío. Vuelve a conectar Gmail.",
     );
   const infoResponse = await fetch(
     "https://www.googleapis.com/oauth2/v3/userinfo",
@@ -133,13 +140,15 @@ async function oauthCallback(request: Request, env: Env, store: Store) {
     !/^[^\s@]+@gmail\.com$/i.test(info.email)
   )
     throw new Error("Conecta una cuenta de Gmail verificada.");
+  if(saved.expectedEmail&&info.email.toLowerCase()!==saved.expectedEmail)throw new Error("Conecta "+(calendar?"Calendar":"Gmail")+" con "+saved.expectedEmail+".");
   const encryptedToken = await encrypt(
     token.refresh_token,
     env.TOKEN_ENCRYPTION_KEY,
   );
   await store.atomic(async (tx) => {
-    const old = await tx.get("meetingSystem/sender");
-    tx.put("meetingSystem/sender", {
+    const path=calendar?'calendarSystem/connection':senderDocument(env);
+    const old = await tx.get(path);
+    tx.put(path, {
       email: info.email.toLowerCase(),
       encryptedToken,
       enabled: false,
@@ -150,7 +159,7 @@ async function oauthCallback(request: Request, env: Env, store: Store) {
     });
     tx.remove("meetingOAuth/" + state);
   });
-  return Response.redirect(env.APP_ORIGIN + "/?correo=conectado", 303);
+  return Response.redirect(env.APP_ORIGIN + (calendar?"/?calendario=conectado":"/?correo=conectado"), 303);
 }
 export async function handle(request: Request, env: Env, store: Store) {
   const url = new URL(request.url);
@@ -166,6 +175,35 @@ export async function handle(request: Request, env: Env, store: Store) {
     data = { ...emptyData(), grants };
   if(url.pathname==='/tours'||url.pathname.startsWith('/tours/'))return handleTourRequest(request,store,user,grants,env.TOUR_ASSETS);
   if(url.pathname==='/contacts/leadership')return handleLeadershipContacts(request,store,user,grants);
+
+  if(url.pathname.startsWith('/calendar/')){
+    const now=new Date().toISOString();
+    if(url.pathname==='/calendar/view'&&request.method==='GET'){const kind=url.searchParams.get('kind'),id=url.searchParams.get('id');calendarTarget(kind,id);return json(await calendarView(store,user,grants,kind,id!));}
+    if(url.pathname==='/calendar/preview'&&request.method==='POST'){const input=await parse(request);calendarTarget(input.kind,input.id);return json(await previewCalendar(store,user,grants,input.kind,input.id,env.APP_ORIGIN));}
+    if(url.pathname==='/calendar/command'&&request.method==='POST'){await calendarCommand(store,user,await parse(request),env.APP_ORIGIN,now);return json({ok:true});}
+    if(url.pathname==='/calendar/event/save'&&request.method==='POST'){const input=await parse(request);return json(await saveEventDraft(store,user,input.event,now));}
+    if(url.pathname==='/calendar/refresh'&&request.method==='POST'){const input=await parse(request);calendarTarget(input.kind,input.id);await calendarView(store,user,grants,input.kind,input.id);const connection=await store.get('calendarSystem/connection');if(!connection?.enabled)throw Error('Calendar está pendiente de activar.');await store.atomic(async tx=>{const last=await tx.get('calendarSystem/refresh');if(last?.at>new Date(Date.now()-60000).toISOString())throw Error('Espera un minuto antes de actualizar otra vez.');tx.put('calendarSystem/refresh',{at:now});});await env.MEETING_QUEUE.sendBatch([{body:{kind:'calendar-sync',id:'global'}}]);return json({ok:true});}
+    if(!isAdmin(user,data))return json({error:'Administración requerida.'},403);
+    if(url.pathname==='/calendar/event/draft'&&request.method==='GET'){const id=url.searchParams.get('id');calendarTarget('event',id);const draft=await store.get('calendarDrafts/event~'+id);return json({event:draft?{...draft.event,draftRevision:draft.revision}:null});}
+    if(url.pathname==='/calendar/settings'&&request.method==='GET'){const c=await store.get('calendarSystem/connection');return json({email:c?.email||'',connected:!!c?.encryptedToken,enabled:!!c?.enabled,tested:!!c?.tested});}
+    if(url.pathname==='/calendar/connect'&&request.method==='POST'){
+      const sender=await store.get(senderDocument(env)),old=await store.get('calendarSystem/connection'),expectedEmail=env.ORGANIZER_EMAIL||sender?.email||old?.email;
+      if(!expectedEmail)throw Error('Conecta primero el Gmail remitente para identificar la cuenta organizadora.');
+      const state=b64(crypto.getRandomValues(new Uint8Array(32))),verifier=b64(crypto.getRandomValues(new Uint8Array(32)));
+      await store.atomic(async tx=>tx.put('meetingOAuth/'+state,{email:user.email,uid:user.uid,verifier,expires:Date.now()+600000,used:false,purpose:'calendar',expectedEmail}));
+      const target=new URL('https://accounts.google.com/o/oauth2/v2/auth');target.search=new URLSearchParams({client_id:env.GOOGLE_CLIENT_ID,redirect_uri:url.origin+'/oauth/callback',response_type:'code',scope:'openid email https://www.googleapis.com/auth/calendar.events.owned',state,code_challenge:await hash(verifier),code_challenge_method:'S256',access_type:'offline',prompt:'consent select_account',login_hint:expectedEmail}).toString();return json({url:target.toString()});
+    }
+    if(url.pathname==='/calendar/disconnect'&&request.method==='POST'){await store.atomic(async tx=>tx.remove('calendarSystem/connection'));return json({ok:true});}
+    if(url.pathname==='/calendar/test'&&request.method==='POST'){
+      const c=await store.get('calendarSystem/connection');if(!c?.encryptedToken)throw Error('Conecta Calendar.');
+      const api=calendarGoogle(env,store),startsAt=new Date(Date.now()+48*3600000).toISOString(),endsAt=new Date(Date.parse(startsAt)+3600000).toISOString();
+      const test=await api('POST','/calendars/primary/events?sendUpdates=all',{summary:'Prueba LS Asambleas',description:'Datos ficticios. Prueba exclusiva de administración.',start:{dateTime:startsAt},end:{dateTime:endsAt},attendees:user.email===c.email?[]:[{email:user.email}],guestsCanSeeOtherGuests:false,guestsCanInviteOthers:false,guestsCanModify:false,visibility:'private'});
+      await api('GET','/calendars/primary/events/'+test.id);
+      await store.atomic(async tx=>{const live=await tx.get('calendarSystem/connection');if(live?.email!==c.email)throw Error('La cuenta ha cambiado.');tx.put('calendarSystem/connection',{...live,tested:true,testEventId:test.id});});return json({ok:true,recipient:user.email});
+    }
+    if(url.pathname==='/calendar/settings'&&request.method==='POST'){const input=await parse(request);if(input.enabled&&env.PROCESSOR_CUTOVER_REQUIRED==='true'&&(await store.get('meetingSystem/processor'))?.phase!=='active')throw Error('Primero debe completarse el traspaso del procesador institucional.');await store.atomic(async tx=>{const c=await tx.get('calendarSystem/connection');if(!c?.encryptedToken||input.enabled&&!c.tested)throw Error('Conecta Calendar y crea la prueba antes de activar.');tx.put('calendarSystem/connection',{...c,enabled:input.enabled===true});});return json({ok:true});}
+    return json({error:'Ruta no disponible.'},404);
+  }
   if (url.pathname === "/meetings" && request.method === "GET")
     return json(await listMeetings(store, user, grants));
   if (url.pathname === "/meetings/preview" && request.method === "POST") {
@@ -197,7 +235,7 @@ export async function handle(request: Request, env: Env, store: Store) {
           ),
       )
       .map((p) => p?.name || "Persona convocada");
-    const sender = await store.get("meetingSystem/sender");
+    const sender = await store.get(senderDocument(env));
     return json({
       names: people.map((p) => p?.name || "Persona convocada"),
       total: ids.length,
@@ -207,7 +245,7 @@ export async function handle(request: Request, env: Env, store: Store) {
     });
   }
   if (url.pathname === "/meetings/command" && request.method === "POST") {
-    await command(store, user, (await parse(request)) as MeetingCommand);
+    await command(store, user, (await parse(request)) as MeetingCommand,new Date().toISOString(),env.APP_ORIGIN);
     return json({ ok: true });
   }
   if (url.pathname === "/deliveries/review" && request.method === "POST") {
@@ -246,7 +284,7 @@ export async function handle(request: Request, env: Env, store: Store) {
   if (!isAdmin(user, data))
     return json({ error: "Esta acción requiere administración." }, 403);
   if (url.pathname === "/sender" && request.method === "GET")
-    return json(senderPublic(await store.get("meetingSystem/sender")));
+    return json(senderPublic(await store.get(senderDocument(env))));
   if (url.pathname === "/sender/connect" && request.method === "POST") {
     if (
       !env.GOOGLE_CLIENT_ID ||
@@ -261,6 +299,7 @@ export async function handle(request: Request, env: Env, store: Store) {
         email: user.email,
         uid: user.uid,
         verifier,
+        expectedEmail:env.ORGANIZER_EMAIL||'',
         expires: Date.now() + 600000,
         used: false,
       }),
@@ -271,6 +310,7 @@ export async function handle(request: Request, env: Env, store: Store) {
       redirect_uri: url.origin + "/oauth/callback",
       response_type: "code",
       scope: "openid email https://www.googleapis.com/auth/gmail.send",
+      login_hint:env.ORGANIZER_EMAIL||user.email,
       access_type: "offline",
       prompt: "consent select_account",
       state,
@@ -280,7 +320,7 @@ export async function handle(request: Request, env: Env, store: Store) {
     return json({ url: target.href });
   }
   if (url.pathname === "/sender/test" && request.method === "POST") {
-    const saved = await store.get("meetingSystem/sender");
+    const saved = await store.get(senderDocument(env));
     if (!saved?.encryptedToken)
       throw new Error("Conecta primero una cuenta de Gmail.");
     const at = new Date().toISOString();
@@ -307,22 +347,23 @@ export async function handle(request: Request, env: Env, store: Store) {
       saved,
     );
     await store.atomic(async (tx) => {
-      const current = await tx.get("meetingSystem/sender");
+      const current = await tx.get(senderDocument(env));
       if (current?.encryptedToken === saved.encryptedToken)
-        tx.put("meetingSystem/sender", { ...current, tested: true });
+        tx.put(senderDocument(env), { ...current, tested: true });
     });
     return json({ recipient: user.email });
   }
   if (url.pathname === "/sender/settings" && request.method === "POST") {
     const input = await parse(request);
+    if(input.enabled&&env.PROCESSOR_CUTOVER_REQUIRED==='true'&&(await store.get('meetingSystem/processor'))?.phase!=='active')throw Error('El traspaso del procesador está pendiente. La prueba de correo sí está disponible.');
     if (input.template) validateMeetingTemplate(input.template);
     await store.atomic(async (tx) => {
-      const saved = (await tx.get("meetingSystem/sender")) || {};
+      const saved = (await tx.get(senderDocument(env))) || {};
       if (input.enabled && (!saved.encryptedToken || !saved.tested))
         throw new Error(
           "Conecta la cuenta y envía una prueba antes de activar.",
         );
-      tx.put("meetingSystem/sender", {
+      tx.put(senderDocument(env), {
         ...saved,
         ...(input.template ? { template: input.template } : {}),
         ...(typeof input.enabled === "boolean"
@@ -334,8 +375,8 @@ export async function handle(request: Request, env: Env, store: Store) {
   }
   if (url.pathname === "/sender/disconnect" && request.method === "POST") {
     const old = await store.atomic(async (tx) => {
-      const saved = await tx.get("meetingSystem/sender");
-      tx.put("meetingSystem/sender", {
+      const saved = await tx.get(senderDocument(env));
+      tx.put(senderDocument(env), {
         email: "",
         enabled: false,
         tested: false,
@@ -343,14 +384,8 @@ export async function handle(request: Request, env: Env, store: Store) {
       });
       return saved;
     });
-    if (old?.encryptedToken)
-      await fetch("https://oauth2.googleapis.com/revoke", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-          token: await decrypt(old.encryptedToken, env.TOKEN_ENCRYPTION_KEY),
-        }),
-      }).catch(() => {});
+    // Remove only our stored authorization; revoking the Google grant could also revoke Calendar.
+    void old;
     return json({ ok: true });
   }
   return json({ error: "Acción no disponible." }, 404);
@@ -392,6 +427,15 @@ export default {
   async scheduled(_controller: unknown, env: Env) {
     const store: Store = makeStore(env),
       now = new Date().toISOString();
+
+    const calendarConnection=await store.get('calendarSystem/connection');
+    if(calendarConnection?.enabled){
+      const pending=await store.query('calendarLinks',[eq('status','pending')],30);
+      const jobs=pending.filter(l=>l.dueAt<=now&&(!l.leaseUntil||l.leaseUntil<=now)).map(l=>({body:{kind:'calendar' as const,id:l.id}}));
+      if(jobs.length)await env.MEETING_QUEUE.sendBatch(jobs);
+      await store.atomic(async tx=>{const last=await tx.get('calendarSystem/poll');if(!last?.at||last.at<=new Date(Date.parse(now)-300000).toISOString()){tx.put('calendarSystem/poll',{at:now});tx.put('calendarSystem/syncDue',{at:now});}});
+      const due=await store.get('calendarSystem/syncDue');if(due?.at===now){await env.MEETING_QUEUE.sendBatch([{body:{kind:'calendar-sync',id:'global'}}]);}
+    }
     const revision = await store.get("revisions/global"),
       seen = await store.get("meetingSystem/sync"),
       marker = JSON.stringify(revision);
@@ -424,7 +468,7 @@ export default {
       await env.MEETING_QUEUE.sendBatch(
         tasks.map((task) => ({ body: { kind: "task", id: task.id } })),
       );
-    const sender = await store.get("meetingSystem/sender");
+    const sender = await store.get(senderDocument(env));
     for (const status of sender?.enabled
       ? ["pending", "retry", "sending"]
       : ["sending"]) {
@@ -456,7 +500,10 @@ export default {
       try {
         const now = new Date().toISOString(),
           store = makeStore(env);
-        if (message.body.kind === "task")
+        if(message.body.kind==='calendar'||message.body.kind==='calendar-sync'||message.body.kind==='calendar-read'){
+          const c=await store.get('calendarSystem/connection');if(c?.enabled){if(message.body.kind==='calendar')await processCalendar(store,message.body.id,calendarGoogle(env,store),now);else if(message.body.kind==='calendar-read')await syncCalendar(store,calendarGoogle(env,store),env.APP_ORIGIN,now,message.body.id);else {const links=await store.query('calendarLinks',[{field:'snapshot.endDate',op:'GREATER_THAN_OR_EQUAL',value:new Date(Date.now()-7*86400000).toISOString().slice(0,10)}],500);for(let i=0;i<links.length;i+=100){const jobs=links.slice(i,i+100).filter((l:RecordData)=>l.snapshot.status==='confirmed').map((l:RecordData)=>({body:{kind:'calendar-read' as const,id:l.id}}));if(jobs.length)await env.MEETING_QUEUE.sendBatch(jobs);}};}
+        }
+        else if (message.body.kind === "task")
           await dispatchTask(store, message.body.id, now);
         else if (message.body.kind === "audience")
           await syncAudience(store, message.body.id, now);
@@ -466,6 +513,7 @@ export default {
             message.body.id,
             env.APP_ORIGIN,
             gmailSender(env),
+            now,senderDocument(env),
           );
         message.ack();
       } catch {

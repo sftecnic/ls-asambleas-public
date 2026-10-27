@@ -123,28 +123,33 @@
     },
     {
       "path": "docs/ARQUITECTURA.md",
-      "sha256": "6d308d6972f9dfaec5b1002a4d542fc2cf8e36790ae12cedf597b2214ebb4e48",
-      "bytes": 5878
+      "sha256": "6ea6f6fdad6669af0f4027a32bae015921fffc815246245d37591e2fd4b02d19",
+      "bytes": 7023
+    },
+    {
+      "path": "docs/CALENDAR.md",
+      "sha256": "eccb86a76aa4d98c59baadee019d95311694627b187b325727da694ae4d733d9",
+      "bytes": 7665
     },
     {
       "path": "docs/COMPROBACION.md",
-      "sha256": "073c22f4be85850fc9d109b35c5ace70135d408fdc6ef511caeae080aea018d3",
-      "bytes": 4860
+      "sha256": "253187ffcb6b5b09a393d8544d2aa2a5b9e708bc40dedf74522ca2ac6dac8d4f",
+      "bytes": 5701
     },
     {
       "path": "docs/distribution/README.md",
-      "sha256": "a367594ed35d6696f246291d585d4200a578612f503cd08b63f9394fa9288510",
-      "bytes": 4251
+      "sha256": "27dd2a1b72cc211d39493716ae3eea193b039a740480c13467e851dc08cbf9d7",
+      "bytes": 4635
     },
     {
       "path": "docs/IMPORTACION-EXCEL.md",
-      "sha256": "7b52a05789e7c517825d1cc5c8e1e38fff2d9a1385c4b36120e40ab59f4be54e",
-      "bytes": 7257
+      "sha256": "756201e7a3186e51fd3d1f018ee431b0b6b7a18869ace2a200b479c3e0e861f4",
+      "bytes": 7674
     },
     {
       "path": "docs/INSTALACION.md",
-      "sha256": "8be94c31f2ad045a35377b69118cb2c275ac4f48f0351106dcb151c2e0d5c32c",
-      "bytes": 16058
+      "sha256": "9603f15e816e7ff98343ba0e71adb92822a072f3a40d48207eb924b5d4072c0d",
+      "bytes": 17151
     },
     {
       "path": "docs/MANTENIMIENTO.md",
@@ -158,13 +163,13 @@
     },
     {
       "path": "docs/SERVICIO-PERSONAS.md",
-      "sha256": "dcfb3ba308106d194e89f4d339b04fffad5cad84c9f87b402f68b35655028814",
-      "bytes": 4606
+      "sha256": "82ff623baa014cadee3e7a57fa22417a0e5c245161a2ddb76c9f68f76b77e0c2",
+      "bytes": 4976
     },
     {
       "path": "docs/VALIDACION.md",
-      "sha256": "18ef8adbcb34db666c4adac4e65998ec49cbcd89876595b92285c12eac61a22d",
-      "bytes": 9876
+      "sha256": "3a77d1ee507dd0e57a3a8bd72cb10db5eaac54e23279f0b8b556abaf2ef4b8df",
+      "bytes": 12079
     },
     {
       "path": "docs/WHATSAPP.md",
@@ -183,8 +188,8 @@
     },
     {
       "path": "firestore.rules",
-      "sha256": "dd5dc1d33b84d2c690cb730a00fa3c1222def75915edda332357368ef60de5f6",
-      "bytes": 35584
+      "sha256": "18389e660e5a1daf3c7e1711561ba1300648fe5f35c60a491ad3b9edcd403481",
+      "bytes": 37031
     },
     {
       "path": "index.html",
@@ -1813,12 +1818,12 @@
     },
     {
       "path": "package-lock.json",
-      "sha256": "b75af828444ddb95a9724d0083efdd9b5ade99f956dfa2eae1793902653d5241",
+      "sha256": "660112affc2586d3357c8175fb3edf471969731c68d09c41d5937cc12203689c",
       "bytes": 212288
     },
     {
       "path": "package.json",
-      "sha256": "34f044376d61e7f93c9304642d6ce2d95385cb284df48d2a48f4bda607879146",
+      "sha256": "d5e9a69a476ea9fc97f32adee587abfeb46cd46acbd70e64340255849c736ab9",
       "bytes": 1723
     },
     {
@@ -1892,14 +1897,19 @@
       "bytes": 720
     },
     {
+      "path": "public/privacidad.html",
+      "sha256": "4a33b399c6162e710a0b0add52331141c175e998921c33c6faf5dbe550c2ee49",
+      "bytes": 5599
+    },
+    {
       "path": "public/templates/ls-asambleas-ejemplo.xlsx",
-      "sha256": "4c4e345c8da675eb7c9f0e145b34a8596c44cd8c73ada451bc7a52bd5ec8916a",
-      "bytes": 170770
+      "sha256": "c1d5512b4ebda57f0ccd25a1f6d2dacc64f79f0d7baa688ef98431df2373b0cd",
+      "bytes": 174035
     },
     {
       "path": "public/templates/ls-asambleas-plantilla.xlsx",
-      "sha256": "0aed44afa2d6bcfc3b4aba2ad557145c68529ba23a0a310734f0101efa643052",
-      "bytes": 169966
+      "sha256": "d6f3617ee643ac19ad0359d8a0aadc331b0688c225469e88df2e15140aa24fc6",
+      "bytes": 173190
     },
     {
       "path": "public/tour-demo/detail.svg",
@@ -1913,8 +1923,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "a367594ed35d6696f246291d585d4200a578612f503cd08b63f9394fa9288510",
-      "bytes": 4251
+      "sha256": "27dd2a1b72cc211d39493716ae3eea193b039a740480c13467e851dc08cbf9d7",
+      "bytes": 4635
     },
     {
       "path": "scripts/bootstrap-admin.mjs",
@@ -1928,8 +1938,8 @@
     },
     {
       "path": "scripts/check-installation.mjs",
-      "sha256": "b6fae5f790a4ed4e1f8523631a0efa82ca22b674a1d153fcdf576ae4147dd3d8",
-      "bytes": 4942
+      "sha256": "55d313feccd1cff07004d2e1f38174e75dff0c9b27c2023b09af69ecd0b9aa1e",
+      "bytes": 5548
     },
     {
       "path": "scripts/configure-installation.mjs",
@@ -1943,8 +1953,8 @@
     },
     {
       "path": "scripts/prepare-public-release.mjs",
-      "sha256": "e3113c6aebeea895f88bc17ede6f35a1e73315a480b4d4151b46e87d0935e260",
-      "bytes": 7514
+      "sha256": "e9b499149e5e8a86d943a244359e3ff4e419661edf114a0421e5cd991072202d",
+      "bytes": 7562
     },
     {
       "path": "scripts/prepare-tour-assets.py",
@@ -1958,8 +1968,8 @@
     },
     {
       "path": "scripts/provision-installation.mjs",
-      "sha256": "2e8f880d0fccb8d98a22ccfe66a73d3bad9c61a884791a0d48413de8b9dc3eed",
-      "bytes": 6698
+      "sha256": "a56c6c31b314a356318464714f476c560b6e903ae438c828b0b3ae23785c79fa",
+      "bytes": 6765
     },
     {
       "path": "scripts/with-cli-auth.mjs",
@@ -1968,13 +1978,18 @@
     },
     {
       "path": "src/App.tsx",
-      "sha256": "9eacfecde20257f355e03b35840608b25d0197d6bcdc4fcc87ecd9492ec4b001",
-      "bytes": 29727
+      "sha256": "91d1edfe7f949f739a2141ecf001ff85afdb821b828b7e368cb5a826326023bf",
+      "bytes": 29964
     },
     {
       "path": "src/components/AdminPanel.tsx",
-      "sha256": "5e9ee96947cfb34d3352f9fb407c27fc1d769644c7c91f1dd5ca7e79708294a7",
-      "bytes": 31495
+      "sha256": "b82e83cdc87763259be7871f335dc21798e95c6a758b46e5689fa18bdef3b8b6",
+      "bytes": 33711
+    },
+    {
+      "path": "src/components/AffiliationFields.tsx",
+      "sha256": "fc69eec8e5f00d79fe6c0cd3ec4275d486d926e865fd2461ebdd133421aa1240",
+      "bytes": 1362
     },
     {
       "path": "src/components/AttendanceControl.tsx",
@@ -1987,14 +2002,24 @@
       "bytes": 292
     },
     {
+      "path": "src/components/CalendarPanel.tsx",
+      "sha256": "cfbd26a3df4ce482161cb46dacc7e944f846d7fb8cb043260d5fc6ec0d252084",
+      "bytes": 7389
+    },
+    {
+      "path": "src/components/CalendarSettings.tsx",
+      "sha256": "a4cf111dc9b9797c6fa06c2c4bd7bec8dfb8d0233af4dc83dc4f798bab35268a",
+      "bytes": 2552
+    },
+    {
       "path": "src/components/ConductorIcon.tsx",
       "sha256": "87265883f820b2dea143d7e22f60ec1c0fe366461119a59fda90efdae05c4b33",
       "bytes": 464
     },
     {
       "path": "src/components/ContactIcons.tsx",
-      "sha256": "d97e1e20ef3e115c8255062989c178bebc63ad515bf116b714e033021fcf4e48",
-      "bytes": 4600
+      "sha256": "2cdcbfb0c31a7f03d828f1001cdd51fa767634ec243f4ac6ff04499915330195",
+      "bytes": 4704
     },
     {
       "path": "src/components/Correspondence.tsx",
@@ -2008,8 +2033,8 @@
     },
     {
       "path": "src/components/DirectoryPanel.tsx",
-      "sha256": "847457e00e1d408bc1ec6c95b4d3469445c74bef6b94ad943997e1624bd2942a",
-      "bytes": 7100
+      "sha256": "debde8fb1193569beba5f049022e1e42694e0c697a800751e9b69d2a218edf54",
+      "bytes": 7122
     },
     {
       "path": "src/components/ExcelImporter.tsx",
@@ -2038,28 +2063,28 @@
     },
     {
       "path": "src/components/MeetingsPanel.tsx",
-      "sha256": "83ca742affc3dbb0c72a2b81432e49e53c2f44293dbb60420ab1ef8fe520deef",
-      "bytes": 32934
+      "sha256": "6a6490a997f7a797fe32139919608828d456e94d54bf7f3e131fec746eaaf754",
+      "bytes": 33441
     },
     {
       "path": "src/components/PersonContact.tsx",
-      "sha256": "df968d238bf142f68beef24dc8e0919ea37929e1f03838850428b1635feff492",
-      "bytes": 7369
+      "sha256": "a5e6ee1947704712bd937bc2582d3cb238fbefce0467f34f33fca2ef48283946",
+      "bytes": 7406
     },
     {
       "path": "src/components/PersonProfile.tsx",
-      "sha256": "6b9b29796b0ae53ad90d5b41e47d610474ea1038de1873b2a74a73a27bc8020e",
-      "bytes": 6850
+      "sha256": "77f75b586d264c7d6f59d75491acf59e59024cd0d16d1078071a7e828d6906f0",
+      "bytes": 7129
     },
     {
       "path": "src/components/ProgramPanel.tsx",
-      "sha256": "aa06d2af8559a347fc190cb07eb5f3884f344fa0a1b52aa4b6656e64122340c4",
-      "bytes": 13012
+      "sha256": "ec1d614d3685d1469daa3cc7cb2df168ec8a52eedeac7f13fb21f8c305aec54d",
+      "bytes": 13501
     },
     {
       "path": "src/components/SenderSettings.tsx",
-      "sha256": "b3a117df9ba5764e3654553501abd5b8cd3f5efa03d82af19f35d9889541e441",
-      "bytes": 8121
+      "sha256": "1498777b6558a873ba85805d62768b949b9553dac87b4583c09d6c167baf2834",
+      "bytes": 8207
     },
     {
       "path": "src/components/ShiftEditor.tsx",
@@ -2083,8 +2108,8 @@
     },
     {
       "path": "src/components/TeamPanel.tsx",
-      "sha256": "bb7172d62176d57abddf44fd14bbc6bef4d764a5241ba277d7fcc9ff7d65dd66",
-      "bytes": 31751
+      "sha256": "d21f2b1a61d434df8a4a75516fbe1fd940ee817cb58d24f56063684d26b072ef",
+      "bytes": 31714
     },
     {
       "path": "src/components/TourCanvas.tsx",
@@ -2117,6 +2142,11 @@
       "bytes": 1429
     },
     {
+      "path": "src/components/ZoomConnection.tsx",
+      "sha256": "d94bafbf0b0de82374304e5399d25ee79bea58017527185a279f05aa02c1f1f0",
+      "bytes": 1322
+    },
+    {
       "path": "src/data/authDiagnostics.ts",
       "sha256": "130bb9cd3c1368a8edb97b2bad61f2bb3ac5f36a75fbdaae8915e61d3928b5cc",
       "bytes": 2631
@@ -2133,8 +2163,8 @@
     },
     {
       "path": "src/data/repository.ts",
-      "sha256": "481ad4d4288bf9e5362ac74b5ba95d6e942e33d85599d6598d5eecf3c5d3b0f1",
-      "bytes": 37365
+      "sha256": "cc083737cea4b64f2ac59f5d66481edc4fffb13d49be8b93351ff8c4ea21c0cd",
+      "bytes": 37496
     },
     {
       "path": "src/data/tourApi.ts",
@@ -2148,8 +2178,8 @@
     },
     {
       "path": "src/domain/adminImport.ts",
-      "sha256": "c14de118a056809bdfd0a0c667fa82bb58268c81f0b362999dee2576aecd81c0",
-      "bytes": 12578
+      "sha256": "a0bc86f8624cbdfbeeb92b4ec602943cb7aec71567bf31e51db23f50a0925e91",
+      "bytes": 12911
     },
     {
       "path": "src/domain/attendance.ts",
@@ -2165,6 +2195,16 @@
       "path": "src/domain/authRouting.ts",
       "sha256": "7776ff93dbf37b96a59df0fee4ef755046d006fccfde274f29b7533585ab0961",
       "bytes": 520
+    },
+    {
+      "path": "src/domain/calendar.ts",
+      "sha256": "b596727ff2c52445260baa5b57c977e71490723a55e4fd2584e581baa4f983b8",
+      "bytes": 5715
+    },
+    {
+      "path": "src/domain/circuits.ts",
+      "sha256": "c6882ae7bd7a9f8b632d221bf2626502b2d90af83119ebe2710d19619b02d36a",
+      "bytes": 1441
     },
     {
       "path": "src/domain/excel.worker.ts",
@@ -2193,8 +2233,8 @@
     },
     {
       "path": "src/domain/excelSchema.ts",
-      "sha256": "4c34656a030e2ddf7b4547763da8754f0dda1a4233ef74f4f2fa0fe364440f72",
-      "bytes": 5956
+      "sha256": "30ec1e60ecca0529542735d18b788b120fe5d63a8b948e3f2819ccf23a2cfc49",
+      "bytes": 6083
     },
     {
       "path": "src/domain/format.ts",
@@ -2243,23 +2283,23 @@
     },
     {
       "path": "src/domain/meetingMail.ts",
-      "sha256": "29fd8d003ebc57d3af0567b9564bcf6080b4e76e75c008f82d7ed09cfaa68e03",
-      "bytes": 3182
+      "sha256": "204f8be11b30fa61cb49aa0af6d322fe8c70096ff53063ec529d5aa9f1ca3a2d",
+      "bytes": 3398
     },
     {
       "path": "src/domain/meetings.ts",
-      "sha256": "50e16c18b12c93d7e5d7745d4235843fc83c67e4187abcb4072098ab5ad1914f",
-      "bytes": 9033
+      "sha256": "be246f21e5a18342c30947a713fd3100b838184baa812f61e0967ba55042b0de",
+      "bytes": 9918
     },
     {
       "path": "src/domain/personProfile.ts",
-      "sha256": "18ffb817a166087769b1de3e491c335429216ba03a77aa1b83702de18cf57388",
-      "bytes": 2831
+      "sha256": "e55965f1952b0f0d1df9123bc3f61f744984be84377e9997b241a472eddd4312",
+      "bytes": 3189
     },
     {
       "path": "src/domain/personService.ts",
-      "sha256": "8bdc8edce3c8db9bfd2c8255eaae7834c56f3ec17b0ef645c73f222daabce19d",
-      "bytes": 2082
+      "sha256": "4e915fdd69298d841f687c6ebe99407529f6947daef6af44f76f847d368bdc4a",
+      "bytes": 2630
     },
     {
       "path": "src/domain/publication.test.ts",
@@ -2268,13 +2308,13 @@
     },
     {
       "path": "src/domain/publication.ts",
-      "sha256": "c18b06c4d1d1c2deb12bfa31ee19ce323603ded5e8a7292cc84718ff0c4ab0fe",
-      "bytes": 5223
+      "sha256": "5b981d3cf398d89bf8d5594f7c7dc1484b35908760562a4d8058078f43bdef14",
+      "bytes": 5254
     },
     {
       "path": "src/domain/rules.ts",
-      "sha256": "1da3541b31dceeca19fad2eac9833274ed68d3d0fc1aebc5d263e3131aa0bfab",
-      "bytes": 14001
+      "sha256": "290d444d4575d2cd4dcc257750d8276ba04040acd4194631702f92efb08dcc07",
+      "bytes": 14093
     },
     {
       "path": "src/domain/shiftPosts.test.ts",
@@ -2313,13 +2353,18 @@
     },
     {
       "path": "src/domain/types.ts",
-      "sha256": "a2974cfa875ef2fc7b5d92dad41db3da121fd7bf6281da66eb89dc5e97376b0b",
-      "bytes": 5799
+      "sha256": "dc12d0180c65495594c82d838a54f89c071a8d61538aeeea58c7ed5534f57bad",
+      "bytes": 5938
     },
     {
       "path": "src/domain/whatsapp.ts",
       "sha256": "717650e0d7e917c4805061dbd5d4200f5e2f9154f94ba5d39725bc2b7d9bd6a6",
       "bytes": 3763
+    },
+    {
+      "path": "src/domain/zoom.ts",
+      "sha256": "ade7b5c03124682680ac616946e8e146ed3b967b2c9e099e0189ae0c0ff7b58e",
+      "bytes": 266
     },
     {
       "path": "src/main.tsx",
@@ -2352,6 +2397,11 @@
       "bytes": 14882
     },
     {
+      "path": "src/styles/calendar.css",
+      "sha256": "ace213a4540463bb9001b50323795c8fd29e8769217d908334e816718c599377",
+      "bytes": 699
+    },
+    {
       "path": "src/styles/contacts.css",
       "sha256": "2cc4d831f2e14b2c2fddf2b4367bf4ea9db4a477bf5624b2592258407c7478ad",
       "bytes": 2831
@@ -2378,8 +2428,8 @@
     },
     {
       "path": "src/styles/profiles.css",
-      "sha256": "d2aabbdecb651276400d66ea38829c6288917618430c37b98a95a4c2d25acaf7",
-      "bytes": 3435
+      "sha256": "c317a84c92e429a43c1b3f468f1d93987e401830090efd1d1028898d9f2e04f7",
+      "bytes": 3531
     },
     {
       "path": "src/styles/shift-post.css",
@@ -2442,6 +2492,21 @@
       "bytes": 2324
     },
     {
+      "path": "tests/calendar-api.test.ts",
+      "sha256": "7299044c8c14d67255b927286e64afcb1cf03474fd1ab3bd6a96272e7d9e9211",
+      "bytes": 5359
+    },
+    {
+      "path": "tests/calendar.e2e.spec.ts",
+      "sha256": "068f5d4038b9bef320d5b1db9bf2e70dc0dc637fa60f1e7a0876c271c9c718c0",
+      "bytes": 4693
+    },
+    {
+      "path": "tests/calendar.test.ts",
+      "sha256": "df9303424f3243c947bb65781e7b74662f45a929a83c626339515aebefe27782",
+      "bytes": 11178
+    },
+    {
       "path": "tests/contact-api.test.ts",
       "sha256": "e8376c581a47d364600407db8294c7e6e0749ef68799a5b2715dad1f00859b7c",
       "bytes": 1763
@@ -2473,13 +2538,18 @@
     },
     {
       "path": "tests/firestore-security.test.ts",
-      "sha256": "b1e03209e95e4c9a3fe36ca009dec47c8868d6c1b47e44633f5c19317a9137bb",
-      "bytes": 33141
+      "sha256": "749647e6e544fc3f80d37c626c10a290cc93d0d908a2604cbdc2fde711b2c97c",
+      "bytes": 35638
+    },
+    {
+      "path": "tests/fixtures/calendarStore.ts",
+      "sha256": "e8756ad0b933d6571d1eea8b7a26100e37e236b20a6a5443174b82ecaf740c07",
+      "bytes": 1143
     },
     {
       "path": "tests/fixtures/excel-example.json",
-      "sha256": "856a7418db99c391f2d68c46c2bfad16d8bf740fa26f2b3bc9baae5ed34e091e",
-      "bytes": 1876
+      "sha256": "d8df5dde1f24378f2f1df86d09740b476af6e644b93a6bc1115f0d7f6050c795",
+      "bytes": 2680
     },
     {
       "path": "tests/history-team.e2e.spec.ts",
@@ -2508,8 +2578,8 @@
     },
     {
       "path": "tests/meetings.e2e.spec.ts",
-      "sha256": "e1af40a34dd27bf1da3bc8ff03f5eb39ac3d5eeeb00074ddc6393a60995d9a6d",
-      "bytes": 10560
+      "sha256": "162a84ee6e11aab2ec12d89b40e4f43010c1e5798c1f7319129ab8599698b443",
+      "bytes": 10684
     },
     {
       "path": "tests/meetings.test.ts",
@@ -2528,18 +2598,18 @@
     },
     {
       "path": "tests/person-service-excel.test.ts",
-      "sha256": "a2453feb9c4c8ecbfc849bb958c47353e8344784d33dd46dffaf9031ddf7eb78",
-      "bytes": 3207
+      "sha256": "73f249f5a86c6c19ce5c2aa0b1a2cd403096923cb84d36d46bd7e8a89244f2da",
+      "bytes": 3285
     },
     {
       "path": "tests/person-service.e2e.spec.ts",
-      "sha256": "54788bd2f319e1fd9f4ae63f8f6334a25e098f4294480e6af4e3c5952a20b733",
-      "bytes": 11036
+      "sha256": "2f6c3e9472a26f927030e4304f27759530c7d8fd08f3ae3d8b004faf46204394",
+      "bytes": 11185
     },
     {
       "path": "tests/person-service.test.ts",
-      "sha256": "0ba558fee75b157041f86da0a5159b1128d0d74764bda7a01e5b083c10657ee4",
-      "bytes": 6393
+      "sha256": "5845618f8500f3a52069f4a135a5ac33e8a2a94d8c8a1be2090be3b197c97e73",
+      "bytes": 6445
     },
     {
       "path": "tests/shift-departments.e2e.spec.ts",
@@ -2637,6 +2707,16 @@
       "bytes": 2722
     },
     {
+      "path": "worker/calendar.ts",
+      "sha256": "146c58f46fa1488efc1d0ce30ac73a808f64291c1f8a8f736eb6beae4cc7a54f",
+      "bytes": 18052
+    },
+    {
+      "path": "worker/calendarGoogle.ts",
+      "sha256": "6cad58a9b155453b08aff849194a1e0520525b6bac071713d452ab4a0b772e27",
+      "bytes": 2297
+    },
+    {
       "path": "worker/contacts.ts",
       "sha256": "beaa7d43f49c1a4da6ac90e3fe5e2b650398b52bc18d62584a3bc0383072090b",
       "bytes": 2693
@@ -2648,8 +2728,8 @@
     },
     {
       "path": "worker/index.ts",
-      "sha256": "2d75d851912bc79e69829bfbe9946dd81c22cd6fb100f937d696ac1fd4cf59ae",
-      "bytes": 16291
+      "sha256": "54c7f53985b9e70283f6b0c53aadfde1b3552db36b4fc97e4e1324dd9d5e3cfd",
+      "bytes": 24176
     },
     {
       "path": "worker/README.md",
@@ -2658,8 +2738,8 @@
     },
     {
       "path": "worker/service.ts",
-      "sha256": "8dc81c6a3064a8e5dc1763acad7e15341107292c48b5e72eb114e0f8d7028511",
-      "bytes": 17418
+      "sha256": "a86fdc9d3c4e6847aca5e65d201d727fa1d65c52f777f46cdaecbdf7b9f6b673",
+      "bytes": 19196
     },
     {
       "path": "worker/store.ts",

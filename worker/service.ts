@@ -1,3 +1,6 @@
+import {stageCalendar} from './calendar';
+import {calendarSnapshot} from '../src/domain/calendar';
+import {fromLocalInput} from '../src/domain/format';
 import {
   emptyData,
   type AppData,
@@ -130,7 +133,7 @@ export async function noticesAndDeliveries(
       version: pub.version,
       personId,
       reason,
-      status: "pending",
+      status: pub.calendarManaged&&['invitation','changed','cancelled'].includes(reason)?'calendar':'pending',
       dueAt: now,
       attempts: 0,
       createdAt: now,
@@ -160,6 +163,7 @@ export async function command(
   user: AppUser,
   input: MeetingCommand,
   now = new Date().toISOString(),
+  origin = '',
 ) {
   if (
     !input ||
@@ -192,6 +196,9 @@ export async function command(
     tx.put("meetings/" + id, draft);
     if (input.action !== "save") {
       const published = next.meetingPublications[0];
+      const calendar=await tx.get("calendarSystem/connection"),previousCalendar=await tx.get("calendarLinks/meeting~"+id);
+      if(calendar?.enabled||previousCalendar)published.calendarManaged=true;
+      if(published.calendarManaged)await stageCalendar(tx,calendarSnapshot(data,"meeting",id,origin,published),now);
       tx.put("meetingPublications/" + id, published);
       tx.put(`meetingVersions/${id}-v${published.version}`, published);
       await noticesAndDeliveries(
@@ -295,8 +302,8 @@ export async function syncAudience(store: Store, id: string, now: string) {
       )
         tx.put("meetingDeliveries/" + job.id, {
           ...job,
-          status: "pending",
-          dueAt: now,
+      status: pub.calendarManaged?'calendar':'pending',
+      dueAt: now,
           error: "",
         });
     }
@@ -406,6 +413,7 @@ export async function deliver(
   origin: string,
   send: SendMail,
   now = new Date().toISOString(),
+  senderPath = "meetingSystem/sender",
 ) {
   const lease = crypto.randomUUID();
   const prepared = await store.atomic(async (tx) => {
@@ -426,9 +434,8 @@ export async function deliver(
         });
       return null;
     }
-    const pub = (await tx.get(
-      "meetingPublications/" + job.meetingId,
-    )) as MeetingPublication | null;
+    const calendarLink=job.calendarKey?await tx.get('calendarLinks/'+job.calendarKey):null;
+    const pub = (calendarLink?{...calendarLink.snapshot,id:calendarLink.sourceId,eventId:calendarLink.eventId,version:calendarLink.version,status:calendarLink.snapshot.status,recipientIds:calendarLink.snapshot.recipientIds,startsAt:calendarLink.snapshot.startsAt||fromLocalInput(calendarLink.snapshot.startDate+'T23:59',calendarLink.snapshot.timezone),duration:0,kind:'in-person',location:calendarLink.snapshot.location,address:'',instructions:calendarLink.snapshot.description,zoomUrl:'',sessionDate:'',session:'morning',additionalPersonIds:[],publishedAt:calendarLink.updatedAt,publishedBy:'LS Asambleas'}:await tx.get('meetingPublications/'+job.meetingId)) as MeetingPublication | null;
     const event = await tx.get("events/" + job.eventId);
     if (
       !pub ||
@@ -442,6 +449,7 @@ export async function deliver(
       tx.put("meetingDeliveries/" + id, { ...job, status: "obsolete" });
       return null;
     }
+    if(pub.calendarManaged&&["invitation","changed","cancelled"].includes(job.reason)){tx.put("meetingDeliveries/"+id,{...job,status:"calendar"});return null;}
     const data = await context(
       tx,
       pub.eventId,
@@ -452,15 +460,17 @@ export async function deliver(
     const current =
       job.reason === "cancelled"
         ? pub.recipientIds
-        : meetingRecipients(data, pub);
+        : calendarLink?pub.recipientIds:meetingRecipients(data, pub);
     if (!current.includes(job.personId)) {
       tx.put("meetingDeliveries/" + id, { ...job, status: "obsolete" });
       return null;
     }
+    const responseLink=calendarLink||await tx.get("calendarLinks/meeting~"+job.meetingId);
+    if(responseLink?.responses?.[job.personId]?.status==="declined"){tx.put("meetingDeliveries/"+id,{...job,status:"declined",error:"Respondió No a esta convocatoria."});return null;}
     const [person, contact, sender, budget] = await Promise.all([
       tx.get("persons/" + job.personId),
       tx.get("personContacts/" + job.personId),
-      tx.get("meetingSystem/sender"),
+      tx.get(senderPath),
       tx.get("meetingSystem/budget"),
     ]);
     const recipient = notificationEmail({
@@ -531,6 +541,7 @@ export async function deliver(
         job.reason,
         origin,
         sender.template || defaultMeetingTemplate,
+        !!calendarLink,
       ),
     };
   });

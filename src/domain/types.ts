@@ -2,14 +2,14 @@ export type Id = string;
 export interface Row { id:Id; revision?:number }
 export type Capability = 'view'|'edit'|'assign'|'publish'|'manageAccess'|'contacts';
 export interface Department extends Row {name:string;icon:'video'|'platform'|'makeup'|'other';instructions?:string;trainingUrl?:string}
-export interface Congregation extends Row {name:string;committeeEmail:string}
+export interface Congregation extends Row {name:string;committeeEmail:string;circuit?:string}
 export type HearingStatus='unknown'|'deaf'|'hearing';
 export type Appointment='unknown'|'none'|'ministerial-servant'|'elder'|'circuit-overseer';
 export type RegularPioneer='unknown'|'yes'|'no'|'not-applicable';
-export interface Person extends Row {name:string;aliases?:string[];congregationId:string;phone:string;email:string;gmail:string;notificationEmail?:string;notes:string;hearingStatus?:HearingStatus;appointment?:Appointment;regularPioneer?:RegularPioneer;source?:string}
+export interface Person extends Row {name:string;aliases?:string[];congregationId:string;phone:string;email:string;gmail:string;notificationEmail?:string;notes:string;hearingStatus?:HearingStatus;appointment?:Appointment;regularPioneer?:RegularPioneer;serviceCircuit?:string;source?:string}
 export interface VenueTemplate {id:string;name:string;elements:StageElement[]}
 export interface Venue extends Row {name:string;city:string;address:string;stageTemplates?:VenueTemplate[]}
-export interface AssemblyEvent extends Row {title:string;type:'circuit'|'regional'|'pioneers';startDate:string;endDate:string;venueId:string;section:string;timezone:string;archived:boolean}
+export interface AssemblyEvent extends Row {title:string;type:'circuit'|'regional'|'pioneers';startDate:string;endDate:string;venueId:string;section:string;timezone:string;archived:boolean;startsAt?:string;endsAt?:string}
 export type TeamRole = 'responsible'|'assistant'|'volunteer'|'supervisor';
 export interface Candidate extends Row {eventId:string;personId:string;departmentId:string;teamRole?:TeamRole;committee:'proposed'|'pending'|'approved'|'denied';availability:'unknown'|'invited'|'accepted'|'declined';access:'none'|'invited'|'active';reserve:boolean}
 export interface Shift extends Row {eventId:string;departmentId:string;personId:string;role:string;startsAt:string;endsAt:string;meetingPoint:string;status:'draft'|'published';attendance:'planned'|'present'|'absent'|'completed'|'replaced';replacementFor?:string;substituteIds:string[]}
@@ -22,8 +22,8 @@ export interface Communication extends Row {eventId:string;departmentId?:string;
 export interface Grant extends Row {email:string;uid?:string;personId:string;eventId:string;departmentId:string;role:'admin'|'responsible'|'assistant'|'volunteer';capabilities:Capability[];active:boolean}
 export interface Notice extends Row {eventId:string;personId?:string;departmentId?:string;title:string;body:string;createdAt:string;readBy:string[];meetingId?:string;meetingVersion?:number}
 export type MeetingKind='zoom'|'in-person'|'orientation';
-export interface Meeting extends Row {eventId:string;departmentIds:string[];kind:MeetingKind;title:string;startsAt:string;duration:number;location:string;address:string;zoomUrl:string;instructions:string;sessionDate:string;session:'morning'|'afternoon';additionalPersonIds:string[]}
-export interface MeetingPublication extends Meeting {version:number;status:'confirmed'|'cancelled';publishedAt:string;publishedBy:string;recipientIds:string[]}
+export interface Meeting extends Row {eventId:string;departmentIds:string[];kind:MeetingKind;title:string;startsAt:string;duration:number;location:string;address:string;zoomUrl:string;zoomMeetingId?:string;zoomPasscode?:string;instructions:string;sessionDate:string;session:'morning'|'afternoon';additionalPersonIds:string[]}
+export interface MeetingPublication extends Meeting {version:number;status:'confirmed'|'cancelled';publishedAt:string;publishedBy:string;recipientIds:string[];calendarManaged?:boolean}
 export type MeetingCommand={action:'save'|'confirm';meeting:Meeting;expectedVersion:number}|{action:'cancel';meetingId:string;eventId:string;expectedVersion:number};
 export interface AuditEntry extends Row {eventId:string;actor:string;at:string;action:string;collection?:string;entityId?:string}
 export interface PublishedTeamMember {personId:string;name:string;role:TeamRole}

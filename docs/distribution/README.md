@@ -10,6 +10,8 @@ Desde 0.5.0, el icono de WhatsApp es verde y se acompaña de Sorda/Oyente/Sin in
 
 Desde 0.6.0, las fichas privadas permiten [nombramiento y precursorado actuales](docs/SERVICIO-PERSONAS.md), con un distintivo de siglas, filtros y columnas Excel opcionales. No modifican cargos ni permisos y no se comparten con voluntarios. Para actualizar una instalación, despliega primero las reglas compatibles y después Hosting.
 
+Desde 0.7.0 incluye [Calendar, Zoom por número y circuitos](docs/CALENDAR.md): invitaciones desde el calendario del organizador, respuestas dentro de la aplicación y recordatorios de Gmail. Cada instalación conecta sus propias cuentas. Los borradores, importaciones y datos antiguos no envían invitaciones automáticamente. SC se vincula al circuito, sin congregación ficticia.
+
 **Código disponible para uso no comercial**, bajo [PolyForm Noncommercial 1.0.0](LICENSE). Permite usar, modificar y distribuir respetando sus condiciones. Las dependencias conservan sus licencias; consulta [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
 ## Empezar

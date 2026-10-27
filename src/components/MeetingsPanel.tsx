@@ -1,3 +1,6 @@
+import CalendarPanel from './CalendarPanel';
+import ZoomConnection from './ZoomConnection';
+import {zoomDetails} from '../domain/zoom';
 import HomeFocus from './HomeFocus';
 import {attentionIds,type HomeIntent} from '../domain/homeDashboard';
 import { useState } from "react";
@@ -101,7 +104,7 @@ export function MeetingCard({
                 eventTimezone,
               )}
             </p>
-            <p>{meeting.kind === "zoom" ? meeting.zoomUrl : meeting.address}</p>
+            <p>{meeting.kind === "zoom" ? zoomDetails(meeting) : meeting.address}</p>
             <p>{meeting.instructions}</p>
           </div>
         )}
@@ -119,9 +122,13 @@ export function MeetingDetail({
   meeting,
   timezone,
   onClose,
+  data,
+  user,
 }: {
   meeting: MeetingPublication;
   timezone: string;
+  data?:PanelProps["data"];
+  user?:PanelProps["user"];
   onClose: () => void;
 }) {
   const Icon = meetingIcons[meeting.kind];
@@ -154,19 +161,8 @@ export function MeetingDetail({
         {meeting.instructions && (
           <p className="meeting-instructions">{meeting.instructions}</p>
         )}
-        {meeting.status === "confirmed" &&
-          meeting.kind === "zoom" &&
-          safeMeetingUrl(meeting.zoomUrl) && (
-            <a
-              className="btn btn-primary"
-              href={meeting.zoomUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Video size={22} aria-hidden="true" />
-              Entrar en Zoom
-            </a>
-          )}
+        {meeting.status === 'confirmed'&&meeting.kind==='zoom'&&<ZoomConnection meeting={meeting}/>}
+        <CalendarPanel kind="meeting" id={meeting.id} data={data} user={user} online={navigator.onLine}/>
         <p className="small">
           Versión {meeting.version} ·{" "}
           {meetingWhen({ ...meeting, startsAt: meeting.publishedAt }, timezone)}
@@ -232,6 +228,7 @@ export function UpcomingMeetings({
       {detail && (
         <MeetingDetail
           meeting={detail}
+          data={data} user={user}
           timezone={event.timezone}
           onClose={() => setDetail(undefined)}
         />
@@ -461,6 +458,7 @@ export default function MeetingsPanel(props: PanelProps & {initialIntent?:HomeIn
       {detail && (
         <MeetingDetail
           meeting={detail}
+          data={data} user={user}
           timezone={event.timezone}
           onClose={() => setDetail(undefined)}
         />
@@ -496,6 +494,7 @@ export default function MeetingsPanel(props: PanelProps & {initialIntent?:HomeIn
                   {(
                     {
                       sent: "Enviado",
+                      calendar:"Invitación de Calendar",declined:"Respondió No",
                       error: "Error",
                       uncertain: "Revisar envío",
                       "missing-email": "Sin correo",
@@ -839,7 +838,7 @@ function MeetingForm({
                 </label>
               </div>
               {form.kind === "zoom" ? (
-                <label className="field">
+                <><label className="field">
                   Enlace Zoom
                   <input
                     type="url"
@@ -848,7 +847,7 @@ function MeetingForm({
                     maxLength={2000}
                     onChange={(e) => set("zoomUrl", e.target.value)}
                   />
-                </label>
+                </label><label className="field">Número de reunión<input inputMode="numeric" value={form.zoomMeetingId||''} maxLength={30} onChange={e=>set("zoomMeetingId",e.target.value)}/></label><label className="field">Código de acceso<input value={form.zoomPasscode||''} maxLength={100} autoComplete="off" onChange={e=>set("zoomPasscode",e.target.value)}/></label></>
               ) : (
                 <>
                   <label className="field">

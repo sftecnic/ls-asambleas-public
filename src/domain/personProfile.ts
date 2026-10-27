@@ -7,16 +7,18 @@ import type {AppData,AppUser,Person as ProfilePerson} from './types';
 import {can,isAdmin} from './rules';
 import {personMatches} from './team';
 import {appointmentLabel,pioneerLabel} from './personService';
+import {personCircuit,circuitLabel} from './circuits';
 
-export interface ProfileFilters {congregationId:string;hearingStatus:string;query:string;appointment?:string;regularPioneer?:string}
-export const emptyProfileFilters:ProfileFilters={congregationId:'',hearingStatus:'',query:'',appointment:'',regularPioneer:''};
+export interface ProfileFilters {congregationId:string;hearingStatus:string;query:string;appointment?:string;regularPioneer?:string;circuit?:string}
+export const emptyProfileFilters:ProfileFilters={congregationId:'',hearingStatus:'',query:'',appointment:'',regularPioneer:'',circuit:''};
 export function serviceFilterChips(value:ProfileFilters,onChange:(next:ProfileFilters)=>void){
- return [...(value.appointment?[{label:`Nombramiento: ${appointmentLabel(value.appointment as Person['appointment'])}`,clear:()=>onChange({...value,appointment:''})}]:[]),...(value.regularPioneer?[{label:`Precursor regular: ${pioneerLabel(value.regularPioneer as Person['regularPioneer'])}`,clear:()=>onChange({...value,regularPioneer:''})}]:[])];
+ return [...(value.circuit?[{label:`Circuito: ${value.circuit==='__unknown'?'Sin indicar':circuitLabel(value.circuit)}`,clear:()=>onChange({...value,circuit:''})}]:[]),...(value.appointment?[{label:`Nombramiento: ${appointmentLabel(value.appointment as Person['appointment'])}`,clear:()=>onChange({...value,appointment:''})}]:[]),...(value.regularPioneer?[{label:`Precursor regular: ${pioneerLabel(value.regularPioneer as Person['regularPioneer'])}`,clear:()=>onChange({...value,regularPioneer:''})}]:[])];
 }
 export const canReadProfile=(data:AppData,user:AppUser,personId:string)=>isAdmin(user,data)||data.candidates.some(c=>c.personId===personId&&can(user,data,'contacts',c.eventId,c.departmentId));
 export const canEditService=(data:AppData,user:AppUser,personId:string)=>isAdmin(user,data)||data.candidates.some(c=>c.personId===personId&&can(user,data,'contacts',c.eventId,c.departmentId)&&can(user,data,'edit',c.eventId,c.departmentId));
 export function profileMatches(data:AppData,person:ProfilePerson,filters:ProfileFilters,authorized:boolean){
   return (!filters.congregationId||person.congregationId===filters.congregationId)
+    &&(!filters.circuit||personCircuit(data,person,authorized)===(filters.circuit==='__unknown'?'':filters.circuit))
     &&(!filters.hearingStatus||authorized&&(person.hearingStatus??'unknown')===filters.hearingStatus)
     &&(!filters.appointment||authorized&&(person.appointment??'unknown')===filters.appointment)
     &&(!filters.regularPioneer||authorized&&(person.regularPioneer??'unknown')===filters.regularPioneer)

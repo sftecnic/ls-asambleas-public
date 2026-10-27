@@ -1,12 +1,15 @@
 import type {Appointment,Person,RegularPioneer} from './types';
 
-export type PersonService=Pick<Person,'appointment'|'regularPioneer'>;
+export type PersonService=Pick<Person,'appointment'|'regularPioneer'|'serviceCircuit'>&Partial<Pick<Person,'congregationId'>>;
 export const appointmentOptions=[['unknown','Sin indicar'],['none','Ninguno'],['ministerial-servant','Siervo ministerial'],['elder','Anciano'],['circuit-overseer','Superintendente de circuito']] as const;
 export const pioneerOptions=[['unknown','Sin indicar'],['yes','Sí'],['no','No'],['not-applicable','No aplica']] as const;
 export const appointmentLabel=(value?:Appointment)=>appointmentOptions.find(([key])=>key===(value??'unknown'))?.[1]??'Sin indicar';
 export const pioneerLabel=(value?:RegularPioneer)=>pioneerOptions.find(([key])=>key===(value??'unknown'))?.[1]??'Sin indicar';
 
 export function serviceError(person:PersonService):string{
+ if(person.serviceCircuit!==undefined&&(typeof person.serviceCircuit!=='string'||person.serviceCircuit.length>160))return 'Revisa el circuito de servicio.';
+ if(person.appointment==='circuit-overseer'&&person.congregationId)return 'Un SC pertenece al circuito; deja la congregación vacía.';
+ if(person.appointment!=='circuit-overseer'&&person.serviceCircuit)return 'El circuito de servicio se reserva al SC.';
  if(person.appointment!==undefined&&!appointmentOptions.some(([key])=>key===person.appointment))return 'Selecciona un nombramiento válido.';
  if(person.regularPioneer!==undefined&&!pioneerOptions.some(([key])=>key===person.regularPioneer))return 'Selecciona una opción válida de precursor regular.';
  if(person.appointment==='circuit-overseer'&&person.regularPioneer!=='not-applicable')return 'Para un superintendente de circuito, Precursor regular debe ser «No aplica».';
@@ -15,7 +18,7 @@ export function serviceError(person:PersonService):string{
 }
 /** Form action only: import and validation must report conflicts, never repair silently. */
 export function selectAppointment(person:PersonService,appointment:Appointment):PersonService{
- return {appointment,...(appointment==='circuit-overseer'?{regularPioneer:'not-applicable' as const}:person.regularPioneer==='not-applicable'?{regularPioneer:'unknown' as const}:{})};
+ return {appointment,...(appointment==='circuit-overseer'?{regularPioneer:'not-applicable' as const,congregationId:''}:person.regularPioneer==='not-applicable'?{regularPioneer:'unknown' as const,...(person.serviceCircuit===undefined?{}:{serviceCircuit:''})}:{})};
 }
 export function serviceBadge(person:PersonService):string{
  if(person.appointment==='circuit-overseer')return 'SC';

@@ -1,3 +1,4 @@
+import CalendarSettings from './CalendarSettings';
 import { useEffect, useState } from "react";
 import { Mail, Link, Send, Unplug, Save, Check } from "lucide-react";
 import { configured } from "../data/repository";
@@ -259,6 +260,6 @@ export default function SenderSettings({ online }: { online: boolean }) {
         Límite de la aplicación: 400 correos en 24 horas. Cambiar el remitente
         conserva los envíos anteriores.
       </p>
-    </div>
+    <CalendarSettings online={online}/></div>
   );
 }

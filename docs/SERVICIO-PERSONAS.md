@@ -1,5 +1,7 @@
 # Nombramiento y precursorado actuales
 
+En 0.7.0, SC se vincula al **Circuito de servicio** privado y deja Congregación vacía. Ambas condiciones se guardan junto con Precursor regular No aplica. Al dejar SC se solicita congregación y se retira su circuito privado. El circuito de la congregación es un dato independiente, editable desde Congregaciones. Consulta [Calendar, Zoom y circuitos](CALENDAR.md).
+
 Desde 0.6.0 las fichas privadas pueden registrar **Nombramiento** y **Precursor regular**. Son datos actuales de la persona, compartidos entre eventos. No son el cargo de un departamento ni conceden permisos. No se deducen ni se completan fichas anteriores: la ausencia de un dato significa **Sin indicar**.
 
 ## Consultar y editar

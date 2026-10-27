@@ -67,10 +67,11 @@ run('Firestore: autorización real y concurrencia', () => {
   it('servicio privado: creación y actualización validan opciones y exclusividad de SC',async()=>{
     await env.withSecurityRulesDisabled(ctx=>setDoc(doc(ctx.firestore(),'gmailOwners',volunteerEmail),{email:volunteerEmail,personId:'p1',active:true}));
     const db=client('admin',adminEmail);
+    await env.withSecurityRulesDisabled(ctx=>updateDoc(doc(ctx.firestore(),'persons','p1'),{congregationId:''}));
     const valid=[{appointment:'unknown',regularPioneer:'unknown'},{appointment:'none',regularPioneer:'no'},{appointment:'none',regularPioneer:'yes'},{appointment:'ministerial-servant',regularPioneer:'yes'},{appointment:'elder',regularPioneer:'yes'},{appointment:'circuit-overseer',regularPioneer:'not-applicable'}];
     const invalid=[{appointment:'admin',regularPioneer:'no'},{appointment:null,regularPioneer:'no'},{appointment:123,regularPioneer:'no'},{appointment:'elder',regularPioneer:true},{appointment:'elder',regularPioneer:'not-applicable'},{appointment:'circuit-overseer',regularPioneer:'yes'},{appointment:'circuit-overseer',regularPioneer:'no'},{appointment:'circuit-overseer',regularPioneer:'unknown'}];
     for(const [values,allowed] of [...valid.map(v=>[v,true] as const),...invalid.map(v=>[v,false] as const)]){
-      const id=crypto.randomUUID(),create=writeBatch(db);audit(create,db,id);create.set(doc(db,'personContacts',id),{id,email:'',gmail:'',phone:'',notes:'',_scopeEvent:'e1',_scopeDepartment:'video',...values,...meta(id)});
+      const id=crypto.randomUUID(),create=writeBatch(db);audit(create,db,id);create.set(doc(db,'persons',id),{id,name:'Persona de ejemplo',congregationId:'',...meta(id)});create.set(doc(db,'personContacts',id),{id,email:'',gmail:'',phone:'',notes:'',_scopeEvent:'e1',_scopeDepartment:'video',...values,...meta(id)});
       await (allowed?assertSucceeds(create.commit()):assertFails(create.commit()));
       const current=await getDoc(doc(db,'personContacts','p1')),update=writeBatch(db),a=crypto.randomUUID();audit(update,db,a);update.update(doc(db,'personContacts','p1'),{...values,...meta(a,'admin',current.data()!.revision+1)});
       await (allowed?assertSucceeds(update.commit()):assertFails(update.commit()));
@@ -92,6 +93,21 @@ run('Firestore: autorización real y concurrencia', () => {
     await env.withSecurityRulesDisabled(ctx=>updateDoc(doc(ctx.firestore(),'grants',`${managerEmail}~e1~video`),{capabilities:caps}));await assertSucceeds(write());
     const volunteer=client('p1',volunteerEmail);await assertFails(getDoc(doc(volunteer,'personContacts','p1')));const b=writeBatch(volunteer);audit(b,volunteer,'invent-sc','p1');b.update(doc(volunteer,'personContacts','p1'),{appointment:'circuit-overseer',regularPioneer:'not-applicable',...meta('invent-sc','p1',3)});await assertFails(b.commit());
     const other=writeBatch(manager);audit(other,manager,'other-service','manager');other.update(doc(manager,'personContacts','p2'),{appointment:'elder',regularPioneer:'yes',...meta('other-service','manager',2)});await assertFails(other.commit());
+  });
+
+  it('circuitos privados del SC, conservación y colecciones del servidor protegidas',async()=>{
+    const db=client('admin',adminEmail),b=writeBatch(db);audit(b,db,'sc-circuit');
+    b.update(doc(db,'persons','p1'),{congregationId:'',...meta('sc-circuit','admin',2)});
+    b.update(doc(db,'personContacts','p1'),{gmail:'',appointment:'circuit-overseer',regularPioneer:'not-applicable',serviceCircuit:'CIRCUITO-01B',...meta('sc-circuit','admin',2)});await assertSucceeds(b.commit());
+    const leak=writeBatch(db);audit(leak,db,'sc-leak');leak.update(doc(db,'persons','p1'),{serviceCircuit:'CIRCUITO-01B',...meta('sc-leak','admin',3)});await assertFails(leak.commit());
+    const congregation=writeBatch(db);audit(congregation,db,'sc-congregation');congregation.update(doc(db,'persons','p1'),{congregationId:'c1',...meta('sc-congregation','admin',3)});await assertFails(congregation.commit());
+    const saved=(await getDoc(doc(db,'personContacts','p1'))).data()!,{serviceCircuit:_,...old}=saved;const legacy=writeBatch(db);audit(legacy,db,'old-sc');legacy.set(doc(db,'personContacts','p1'),{...old,...meta('old-sc','admin',3)});await assertFails(legacy.commit());
+    for(const collection of ['calendarSystem','calendarLinks','calendarDrafts'])for(const clientDb of [db,client('manager',managerEmail),client('p1',volunteerEmail)]){await assertFails(getDoc(doc(clientDb,collection,'private')));await assertFails(setDoc(doc(clientDb,collection,'fake'),{id:'fake'}));}
+  });
+  it('congregaciones: circuito opcional válido y clientes antiguos no lo borran',async()=>{
+    const db=client('admin',adminEmail),b=writeBatch(db);audit(b,db,'new-circuit');b.set(doc(db,'congregations','circuit-c'),{id:'circuit-c',name:'Congregación ficticia',circuit:'CIRCUITO-01B',...meta('new-circuit')});await assertSucceeds(b.commit());
+    for(const fields of [{circuit:123},{}]){const bad=writeBatch(db),id=crypto.randomUUID();audit(bad,db,id);bad.set(doc(db,'congregations','circuit-c'),{id:'circuit-c',name:'Congregación ficticia',...fields,...meta(id,'admin',2)});await assertFails(bad.commit());}
+    const volunteer=client('p1',volunteerEmail),denied=writeBatch(volunteer);denied.update(doc(volunteer,'congregations','circuit-c'),{circuit:'CIRCUITO-01A'});await assertFails(denied.commit());
   });
   it('valida alias y cargos sin convertirlos en permisos',async()=>{
     const db=client('manager',managerEmail),batch=writeBatch(db);audit(batch,db,'roles','manager');

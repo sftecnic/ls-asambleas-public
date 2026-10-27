@@ -39,7 +39,7 @@ try{
     if(!web?.client_id||!web.client_secret||web.project_id!==c.projectId||!web.redirect_uris?.includes(workerUrl(c)+'/oauth/callback'))throw new Error('El cliente OAuth web debe pertenecer a este proyecto y contener el retorno exacto.');
     await bulk({GOOGLE_CLIENT_ID:web.client_id,GOOGLE_CLIENT_SECRET:web.client_secret});console.log('OAuth guardado en secretos de Cloudflare. No se ha conectado todavía ningún Gmail.');
    }else{
-    await googleApi(`https://serviceusage.googleapis.com/v1/projects/${c.projectId}/services/gmail.googleapis.com:enable`,{method:'POST',body:'{}'});
+    for(const service of ['gmail.googleapis.com','calendar-json.googleapis.com'])await googleApi(`https://serviceusage.googleapis.com/v1/projects/${c.projectId}/services/${service}:enable`,{method:'POST',body:'{}'});
     if(names.has('FIREBASE_SERVICE_ACCOUNT')&&names.has('TOKEN_ENCRYPTION_KEY')){console.log('Secretos del servicio ya presentes. No se rotan ni sobrescriben. Comprueba el servicio en la aplicación.');process.exit(0);}
     if(names.has('FIREBASE_SERVICE_ACCOUNT')||names.has('TOKEN_ENCRYPTION_KEY'))throw new Error('Falta un secreto del servicio. Se detiene para no perder el acceso al Gmail cifrado. Revisa la recuperación en la guía.');
     const id='ls-meetings-worker',email=`${id}@${c.projectId}.iam.gserviceaccount.com`,root=`https://iam.googleapis.com/v1/projects/${c.projectId}`;

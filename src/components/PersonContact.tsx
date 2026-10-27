@@ -48,7 +48,7 @@ export function ContactsProvider({data,user,eventId,online,demo,children}:{data:
    const person=data.persons.find(p=>p.id===personId);
    const privateVisible=!!person&&canReadProfile(data,user,personId);
    const contact=privateVisible?person:contactEvent===eventId?contacts.find(c=>c.personId===personId&&(!departmentId||c.departmentId===departmentId)):undefined;
-   return contact?{href:personId===user.personId?null:whatsappHref(contact.phone),classification:validHearingStatus(contact.hearingStatus)?contact.hearingStatus:'unknown',service:privateVisible&&person?{appointment:person.appointment,regularPioneer:person.regularPioneer}:null}:unavailable;
+   return contact?{href:personId===user.personId?null:whatsappHref(contact.phone),classification:validHearingStatus(contact.hearingStatus)?contact.hearingStatus:'unknown',service:privateVisible&&person?{appointment:person.appointment,regularPioneer:person.regularPioneer,serviceCircuit:person.serviceCircuit}:null}:unavailable;
   }};
  return <Context.Provider value={value}>{children}</Context.Provider>;
 }

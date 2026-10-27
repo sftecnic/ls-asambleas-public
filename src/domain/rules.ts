@@ -1,3 +1,4 @@
+import {validateEventHours} from './calendar';
 import { type AppData, type AppUser, type Capability, type CollectionName, type Grant, type Row, type Shift } from './types';
 import { isPublishedTeamMember } from './team';
 import {serviceError} from './personService';
@@ -139,7 +140,7 @@ export function validateChange(before: AppData, next: AppData, user: AppUser, ev
     if (change.collection === 'persons') {
       assert(next.candidates.some(c => c.personId === row.id && can(user, before, 'contacts', c.eventId, c.departmentId)), 'Esta ficha requiere una candidatura y permiso de contactos en su departamento.');
       const old=change.before as AppData['persons'][number]|undefined,fresh=change.after as AppData['persons'][number]|undefined;
-      if(old?.appointment!==fresh?.appointment||old?.regularPioneer!==fresh?.regularPioneer)assert(next.candidates.some(c=>c.personId===row.id&&can(user,before,'contacts',c.eventId,c.departmentId)&&can(user,before,'edit',c.eventId,c.departmentId)),'Modificar el servicio actual requiere contactos y edición en el mismo departamento.');
+      if(old?.appointment!==fresh?.appointment||old?.regularPioneer!==fresh?.regularPioneer||old?.serviceCircuit!==fresh?.serviceCircuit)assert(next.candidates.some(c=>c.personId===row.id&&can(user,before,'contacts',c.eventId,c.departmentId)&&can(user,before,'edit',c.eventId,c.departmentId)),'Modificar el servicio actual requiere contactos y edición en el mismo departamento.');
       continue;
     }
     const capability: Capability = change.collection === 'shifts' ? 'assign' : 'edit';

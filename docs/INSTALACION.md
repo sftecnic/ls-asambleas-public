@@ -98,7 +98,7 @@ Si una organización impide crear tokens o claves, solicita a su propietario los
 node scripts/with-cli-auth.mjs provision-installation.mjs --action service --apply
 ```
 
-**Resultado:** cuenta de servicio `ls-meetings-worker` en tu proyecto, rol `roles/datastore.user`, Gmail API habilitada y secretos `FIREBASE_SERVICE_ACCOUNT` y `TOKEN_ENCRYPTION_KEY` en el Worker. La clave se transfiere en memoria. No se guarda en el navegador ni en Git.
+**Resultado:** cuenta de servicio `ls-meetings-worker` en tu proyecto, rol `roles/datastore.user`, Gmail API y Google Calendar API habilitadas y secretos `FIREBASE_SERVICE_ACCOUNT` y `TOKEN_ENCRYPTION_KEY` en el Worker. La clave se transfiere en memoria. No se guarda en el navegador ni en Git.
 
 El servidor necesita acceso a Firestore y comprueba por su cuenta identidad, permisos y versiones. El rol de cuenta de servicio evita depender de la sesión de un navegador; no concede acceso a voluntarios.
 
@@ -108,7 +108,7 @@ El servidor necesita acceso a Firestore y comprueba por su cuenta identidad, per
 
 1. En [Google Cloud Console](https://console.cloud.google.com/), selecciona **el mismo proyecto Firebase**. En APIs y servicios comprueba **Gmail API habilitada**.
 2. Abre **Google Auth Platform** (o APIs y servicios → Pantalla de consentimiento). Configura nombre LS Asambleas, correo de soporte, audiencia externa si usas Gmail personal y contacto del desarrollador.
-3. En **Acceso a datos / Scopes**, solicita `https://www.googleapis.com/auth/gmail.send`, además de identidad básica `openid` y correo. No se necesita lectura del buzón. [Ámbitos Gmail](https://developers.google.com/workspace/gmail/api/auth/scopes).
+3. En **Acceso a datos / Scopes**, solicita `https://www.googleapis.com/auth/gmail.send` y `https://www.googleapis.com/auth/calendar.events.owned`, además de identidad básica `openid` y correo. No se necesita lectura del buzón ni acceso a los calendarios de los invitados. [Ámbitos Gmail](https://developers.google.com/workspace/gmail/api/auth/scopes), [Calendar](https://developers.google.com/workspace/calendar/api/auth).
 4. En **Clientes → Crear cliente OAuth → Aplicación web**, añade como URI de redirección **exactamente** el retorno mostrado por setup, terminado en `/oauth/callback`. Sin barra final extra. No confundas este cliente con el de Firebase Authentication.
 5. Descarga el JSON y guárdalo temporalmente en `.tools/cliente-gmail.json`. No pegues su contenido en el chat, Git o variables Vite.
 
@@ -121,6 +121,8 @@ node scripts/with-cli-auth.mjs provision-installation.mjs --action oauth --file 
 **Estado de OAuth:** el modo externo **Pruebas no es una configuración duradera** para gmail.send: sus refresh tokens pueden caducar a los siete días. Añade el Gmail remitente como usuario de prueba durante el ensayo, pasa a **Producción / Publicar aplicación** cuando proceda y vuelve a conectar el remitente. Publicar la pantalla no equivale a que Google la haya verificado. Gmail.send es sensible; Google puede exigir verificación, dominio, política de privacidad y justificación. Para uso personal o pocos usuarios conocidos pueden existir excepciones y advertencias, pero no se garantiza una excepción para una distribución pública. Sigue [OAuth de Google](https://developers.google.com/identity/protocols/oauth2/) y [requisitos y excepciones de verificación](https://developers.google.com/identity/protocols/oauth2/production-readiness/sensitive-scope-verification). No inventes una política ni indiques a usuarios que ignoren avisos de seguridad.
 
 **Errores:** `redirect_uri_mismatch`: compara carácter por carácter el retorno; `access_denied`: revisa usuario de prueba/estado/consentimiento; `invalid_grant`: reconecta desde la app y revisa revocación o expiración. No solicites acceso completo al buzón para resolverlo.
+
+En Información de la marca, usa el correo de asistencia y contacto de tu organización. La página principal es tu dominio canónico y la información de privacidad está en `/privacidad.html`, enlazada desde el acceso. Revisa que describa tu instalación y comunica sus condiciones y contacto propios. Guardar un borrador de marca no garantiza que Google lo publique o verifique inmediatamente; comprueba los estados de Información de la marca y Centro de verificación sin dar por aprobado el proceso.
 
 ## 9. Reglas, índices y Hosting
 
@@ -143,6 +145,8 @@ Ejecuta `node scripts/with-cli-auth.mjs check-installation.mjs` para comprobar p
 2. Elige el Gmail remitente deseado en Google y concede el envío. Confirma el correo mostrado al regresar.
 3. **Enviar prueba**: se dirige exclusivamente al administrador que la solicita. Comprueba llegada, remitente y enlace.
 4. Activa los envíos solo tras esa comprobación. «Enviado» significa aceptado por Gmail, no leído.
+
+5. En el bloque **Google Calendar**, conecta la misma cuenta, crea la prueba exclusiva de administración y comprueba su convocatoria. Activa Calendar después de revisarla. Ambas conexiones tienen tokens separados. Sigue [CALENDAR.md](CALENDAR.md) para respuestas, cambios, cancelaciones y recuperación. No basta con entrar en la aplicación con Google para autorizar Gmail o Calendar.
 
 **Resultado:** cuenta conectada, probada y envíos activos. Los recordatorios funcionarán sin navegador abierto. Se limita a 400 correos/24 horas desde la app y además a los límites efectivos de Gmail. Las cuotas o fallos pueden retrasar la entrega. [Límites de Gmail](https://support.google.com/mail/answer/22839?hl=es).
 

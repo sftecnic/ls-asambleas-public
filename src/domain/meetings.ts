@@ -43,6 +43,8 @@ export function validateMeeting(m: Meeting, confirmed = false) {
     "location",
     "address",
     "zoomUrl",
+    "zoomMeetingId",
+    "zoomPasscode",
     "instructions",
     "sessionDate",
     "session",
@@ -97,6 +99,8 @@ export function validateMeeting(m: Meeting, confirmed = false) {
     throw new Error("Revisa la fecha y hora.");
   if (m.zoomUrl && !safeMeetingUrl(m.zoomUrl))
     throw new Error("Usa un enlace HTTPS para Zoom.");
+  if(m.zoomMeetingId!==undefined&&(typeof m.zoomMeetingId!=='string'||m.zoomMeetingId.length>30||!!m.zoomMeetingId&&!/^\d{9,11}$/.test(m.zoomMeetingId.replace(/[ -]/g,''))))throw new Error('Revisa el número de reunión Zoom: entre 9 y 11 cifras.');
+  if(m.zoomPasscode!==undefined&&(typeof m.zoomPasscode!=='string'||m.zoomPasscode.length>100||/[\r\n]/.test(m.zoomPasscode)))throw new Error('Revisa el código de acceso Zoom.');
   if (!["morning", "afternoon"].includes(m.session))
     throw new Error("Elige mañana o tarde.");
   if (
@@ -108,10 +112,10 @@ export function validateMeeting(m: Meeting, confirmed = false) {
     throw new Error("Elige el día del turno.");
   if (
     confirmed &&
-    (!m.startsAt || (m.kind === "zoom" ? !m.zoomUrl : !m.location.trim()))
+    (!m.startsAt || m.duration<=0 || (m.kind === "zoom" ? !m.zoomUrl&&!m.zoomMeetingId : !m.location.trim()))
   )
     throw new Error(
-      "Completa fecha, hora y lugar o enlace antes de confirmar.",
+      "Completa fecha, hora, duración y lugar o datos de Zoom antes de confirmar.",
     );
 }
 export function publishedShifts(data: AppData, eventId: string) {
@@ -202,6 +206,8 @@ export function meetingDraft(m: Meeting): Meeting {
     location,
     address,
     zoomUrl,
+    zoomMeetingId,
+    zoomPasscode,
     instructions,
     sessionDate,
     session,
@@ -219,6 +225,8 @@ export function meetingDraft(m: Meeting): Meeting {
     location,
     address,
     zoomUrl,
+    ...(zoomMeetingId===undefined?{}:{zoomMeetingId}),
+    ...(zoomPasscode===undefined?{}:{zoomPasscode}),
     instructions,
     sessionDate,
     session,
@@ -268,6 +276,7 @@ export function applyMeetingCommand(
       "Otra persona ha cambiado el borrador. Recarga antes de guardar.",
     );
   const clean = meetingDraft(m);
+  if(command.action!=='cancel'&&old&&(['zoomMeetingId','zoomPasscode'] as const).some(key=>old[key]!==undefined&&m[key]===undefined))throw new Error('Recarga la aplicación para conservar todos los datos de Zoom.');
   validateMeeting(clean, command.action !== "save");
   if (command.action === "confirm" && clean.startsAt <= now)
     throw new Error("Para convocar, elige una fecha futura.");
