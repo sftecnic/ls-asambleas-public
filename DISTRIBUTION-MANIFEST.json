@@ -168,8 +168,8 @@
     },
     {
       "path": "docs/VALIDACION.md",
-      "sha256": "3a77d1ee507dd0e57a3a8bd72cb10db5eaac54e23279f0b8b556abaf2ef4b8df",
-      "bytes": 12079
+      "sha256": "0d17259bf9a1499f72d7bd08de56df44211152863c3bd8b40a12a6c82abc8a3a",
+      "bytes": 13217
     },
     {
       "path": "docs/WHATSAPP.md",
@@ -1818,12 +1818,12 @@
     },
     {
       "path": "package-lock.json",
-      "sha256": "660112affc2586d3357c8175fb3edf471969731c68d09c41d5937cc12203689c",
+      "sha256": "4f891974f81e13f068f07806b8e565794b6ce2a3d1644ece260ce33bd4c2a4d4",
       "bytes": 212288
     },
     {
       "path": "package.json",
-      "sha256": "d5e9a69a476ea9fc97f32adee587abfeb46cd46acbd70e64340255849c736ab9",
+      "sha256": "82173c169db36d8e0decebe90fb8f5e0787194d17997825a75ad7686a971e5d4",
       "bytes": 1723
     },
     {
@@ -2033,8 +2033,8 @@
     },
     {
       "path": "src/components/DirectoryPanel.tsx",
-      "sha256": "debde8fb1193569beba5f049022e1e42694e0c697a800751e9b69d2a218edf54",
-      "bytes": 7122
+      "sha256": "93393dfa46c46b25981589ce4dbf7f5c73e8d650932850b733fcb724c1f23c5a",
+      "bytes": 7195
     },
     {
       "path": "src/components/ExcelImporter.tsx",
@@ -2108,8 +2108,8 @@
     },
     {
       "path": "src/components/TeamPanel.tsx",
-      "sha256": "d21f2b1a61d434df8a4a75516fbe1fd940ee817cb58d24f56063684d26b072ef",
-      "bytes": 31714
+      "sha256": "404f2cd0b2e81bc122a3d817894d9857f78190749d8c6688d80f63aff6e60254",
+      "bytes": 32009
     },
     {
       "path": "src/components/TourCanvas.tsx",
@@ -2163,8 +2163,8 @@
     },
     {
       "path": "src/data/repository.ts",
-      "sha256": "cc083737cea4b64f2ac59f5d66481edc4fffb13d49be8b93351ff8c4ea21c0cd",
-      "bytes": 37496
+      "sha256": "c9838b98ba3b9a801302f1279b53251c8340317610a0610fa5dd91dc3fefc284",
+      "bytes": 37841
     },
     {
       "path": "src/data/tourApi.ts",
@@ -2295,6 +2295,11 @@
       "path": "src/domain/personProfile.ts",
       "sha256": "e55965f1952b0f0d1df9123bc3f61f744984be84377e9997b241a472eddd4312",
       "bytes": 3189
+    },
+    {
+      "path": "src/domain/personRecords.ts",
+      "sha256": "f18ef9de38867099ea895e08513650328b30af9c060dec6e03021b855eef48ff",
+      "bytes": 1825
     },
     {
       "path": "src/domain/personService.ts",
@@ -2537,9 +2542,14 @@
       "bytes": 12852
     },
     {
+      "path": "tests/firebase-private-records.test.ts",
+      "sha256": "3784cee9eda74e82421d2abcd06530032b4adb19dbfcb03418faf1489cb885d8",
+      "bytes": 7489
+    },
+    {
       "path": "tests/firestore-security.test.ts",
-      "sha256": "749647e6e544fc3f80d37c626c10a290cc93d0d908a2604cbdc2fde711b2c97c",
-      "bytes": 35638
+      "sha256": "464b74d742c502c4fb906d4311e10c8ade075d2f3a985a30d2b0bf33dcea217c",
+      "bytes": 37400
     },
     {
       "path": "tests/fixtures/calendarStore.ts",
@@ -2595,6 +2605,11 @@
       "path": "tests/operation-guards.e2e.spec.ts",
       "sha256": "e7cb2851a8008f526091f590eaf81f4ca0372cf3fc2fd61fb7f5a57ecf50e0e9",
       "bytes": 11671
+    },
+    {
+      "path": "tests/person-conflict.e2e.spec.ts",
+      "sha256": "c439a9be2450317ee724e2d3aa6a3f344869611a952857e1ccb2f1cd3b0ad21e",
+      "bytes": 2227
     },
     {
       "path": "tests/person-service-excel.test.ts",

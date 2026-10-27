@@ -2,6 +2,8 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { initializeTestEnvironment, assertFails, assertSucceeds, type RulesTestEnvironment } from '@firebase/rules-unit-testing';
 import { collection, deleteDoc, doc, getDoc, getDocs, query, runTransaction, serverTimestamp, setDoc, setLogLevel, updateDoc, where, writeBatch, type Firestore } from 'firebase/firestore';
+import {mergePersonContact,personContactFields,nextDocumentRevision,assertPersonContactUnchanged} from '../src/domain/personRecords';
+import type {Person} from '../src/domain/types';
 
 const run = process.env.FIRESTORE_EMULATOR_HOST ? describe : describe.skip;
 setLogLevel('silent');
@@ -76,6 +78,19 @@ run('Firestore: autorización real y concurrencia', () => {
       const current=await getDoc(doc(db,'personContacts','p1')),update=writeBatch(db),a=crypto.randomUUID();audit(update,db,a);update.update(doc(db,'personContacts','p1'),{...values,...meta(a,'admin',current.data()!.revision+1)});
       await (allowed?assertSucceeds(update.commit()):assertFails(update.commit()));
     }
+  });
+  it('guarda SM y precursor con versiones distintas en ficha general y contacto privado',async()=>{
+    await env.withSecurityRulesDisabled(async ctx=>{const db=ctx.firestore();await updateDoc(doc(db,'persons','p1'),{revision:3});await updateDoc(doc(db,'personContacts','p1'),{gmail:'',revision:2});});
+    const db=client('admin',adminEmail),auditId='private-independent';
+    await assertSucceeds(runTransaction(db,async tx=>{
+      const publicRef=doc(db,'persons','p1'),privateRef=doc(db,'personContacts','p1'),publicDoc=await tx.get(publicRef),privateDoc=await tx.get(privateRef),before=mergePersonContact(publicDoc.data() as Person,privateDoc.data());
+      expect(before.revision).toBe(3);assertPersonContactUnchanged(before,privateDoc.data());
+      tx.set(publicRef,{...publicDoc.data(),...meta(auditId,'admin',nextDocumentRevision(publicDoc.data()))});
+      tx.set(privateRef,{...privateDoc.data(),...personContactFields({...before,appointment:'ministerial-servant',regularPioneer:'yes'}),...meta(auditId,'admin',nextDocumentRevision(privateDoc.data()))});
+      tx.set(doc(db,'audit',auditId),{id:auditId,eventId:'e1',actor:'Administración ficticia',actorUid:'admin',at:iso,atServer:serverTimestamp(),action:'Servicio actual',changes:['persons/p1','personContacts/p1']});
+    }));
+    expect((await getDoc(doc(db,'persons','p1'))).data()).toMatchObject({revision:4,name:'Persona'});
+    expect((await getDoc(doc(db,'personContacts','p1'))).data()).toMatchObject({revision:3,appointment:'ministerial-servant',regularPioneer:'yes',phone:'000',notes:'Privado'});
   });
   it('clientes antiguos no borran el servicio guardado ni lo filtran al directorio operativo',async()=>{
     const db=client('admin',adminEmail);await env.withSecurityRulesDisabled(async ctx=>{await updateDoc(doc(ctx.firestore(),'personContacts','p1'),{gmail:'',appointment:'elder',regularPioneer:'yes'});});

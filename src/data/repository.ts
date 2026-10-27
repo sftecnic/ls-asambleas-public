@@ -7,6 +7,7 @@ import { collection, doc, getDocFromServer, getDocsFromServer, initializeFiresto
 import { emptyData, type AppData, type AppUser, type CollectionName, type Grant, type Person, type Row, type Shift } from '../domain/types';
 import { can, changesBetween, emailKey, grantId, isAdmin, same, validateChange } from '../domain/rules';
 import { startAuthDiagnostics } from './authDiagnostics';
+import {personContactFields as privateFields,mergePersonContact,nextDocumentRevision,assertPersonContactUnchanged,assertCommitteeContactUnchanged} from '../domain/personRecords';
 
 const env = import.meta.env;
 export const configured = Boolean(env.VITE_FIREBASE_API_KEY && env.VITE_FIREBASE_PROJECT_ID && env.VITE_FIREBASE_APP_ID);
@@ -83,7 +84,6 @@ const entry = (shift: Shift): LedgerEntry => ({ id: shift.id, eventId: shift.eve
 const reserved = (s?: Shift) => Boolean(s && s.attendance !== 'replaced');
 const ledgerKey = (s: Shift) => `${s.personId}~${s.startsAt.slice(0, 10)}`;
 const operational = (person: Person) => { const { phone: _phone, email: _email, gmail: _gmail, notes: _notes, hearingStatus:_hearingStatus, notificationEmail:_notificationEmail, appointment:_appointment, regularPioneer:_regularPioneer, serviceCircuit:_serviceCircuit, ...rest } = person; return rest; };
-const privateFields = (person: Person) => ({ phone: person.phone, email: person.email, gmail: person.gmail, notes: person.notes, ...(person.hearingStatus===undefined?{}:{hearingStatus:person.hearingStatus}), ...(person.notificationEmail===undefined?{}:{notificationEmail:person.notificationEmail}), ...(person.appointment===undefined?{}:{appointment:person.appointment}), ...(person.regularPioneer===undefined?{}:{regularPioneer:person.regularPioneer}), ...(person.serviceCircuit===undefined?{}:{serviceCircuit:person.serviceCircuit}) });
 // atServer is server-owned audit metadata, not editable application data.
 // Its SDK Timestamp loses its JSON representation when forms clone AppData.
 const clean = (raw: DocumentData): DocumentData => Object.fromEntries(Object.entries(raw).filter(([key]) => !key.startsWith('_') && key !== 'atServer'));
@@ -163,7 +163,7 @@ function firebaseRepository(): Repository {
     if (admin) {
       await Promise.all((Object.keys(data) as CollectionName[]).filter(name=>!['meetings','meetingPublications'].includes(name)).map(async name => { applyRows(data, name, await read(name) as Row[]); }));
       const contacts = await read('personContacts');
-      data.persons = data.persons.map(p => ({ ...p, phone: '', email: '', gmail: '', notes: '', ...contacts.find(c => c.id === p.id) } as Person));
+      data.persons = data.persons.map(p => mergePersonContact(p,contacts.find(c => c.id === p.id)));
       const committees = await read('committeeContacts');
       data.congregations = data.congregations.map(c => ({ ...c, committeeEmail: String(committees.find(v => v.id === c.id)?.committeeEmail || '') }));
       return data;
@@ -232,7 +232,7 @@ function firebaseRepository(): Repository {
       const contacts = await Promise.all(permittedPeople.map(personId => readDoc(doc(db, 'personContacts', personId))));
       for (const contact of contacts) if (contact.exists() && !contact.data()._deleted) {
         const index = data.persons.findIndex(p => p.id === contact.id);
-        if (index >= 0) data.persons[index] = { ...data.persons[index], ...clean(contact.data()) } as Person;
+        if (index >= 0) data.persons[index] = mergePersonContact(data.persons[index],clean(contact.data()));
       }
     }
     for (const name of Object.keys(data) as CollectionName[]) applyRows(data, name, [...new Map(rows(data, name).map(r => [r.id, r])).values()]);
@@ -322,6 +322,7 @@ function firebaseRepository(): Repository {
         const ledgerSnapshots = new Map(await Promise.all([...ledgerChanges.keys()].map(async key => [key, await tx.get(doc(db, 'personDays', key))] as const)));
         const contactChanges = changes.filter(c => c.collection === 'persons');
         const contacts = new Map(await Promise.all(contactChanges.map(async c => [c.id, await tx.get(doc(db, 'personContacts', c.id))] as const)));
+        const committees = new Map(await Promise.all(changes.filter(c=>c.collection==='congregations').map(async c=>[c.id,await tx.get(doc(db,'committeeContacts',c.id))] as const)));
         const emails = [...new Set(contactChanges.flatMap(c => [emailKey((c.before as Person | undefined)?.gmail || ''), emailKey((c.after as Person | undefined)?.gmail || '')]).filter(Boolean))];
         const owners = new Map(await Promise.all(emails.map(async email => [email, await tx.get(doc(db, 'gmailOwners', email))] as const)));
         const changedGrants = changes.filter(c => c.collection === 'grants');
@@ -349,11 +350,12 @@ function firebaseRepository(): Repository {
             const scopeDepartment = oldPrivate?.exists() ? oldPrivate.data()._scopeDepartment : '*';
             const contactCandidate = next.candidates.find(c => c.personId === person.id && can(user, before, 'contacts', c.eventId, c.departmentId));
             if (admin || contactCandidate) {
+              assertPersonContactUnchanged(change.before as Person|undefined,oldPrivate?.exists()&&!oldPrivate.data()._deleted?oldPrivate.data():undefined);
               if (!admin && contactCandidate) tx.set(doc(db, 'contactAccess', `${user.email}~${person.id}`), { email: user.email, personId: person.id, eventId: contactCandidate.eventId, departmentId: contactCandidate.departmentId, candidateId: contactCandidate.id });
               const previousHearing=oldPrivate?.exists()?oldPrivate.data().hearingStatus:undefined;
               const previousNotificationEmail=oldPrivate?.exists()?oldPrivate.data().notificationEmail:undefined;
               const previousService=Object.fromEntries(['appointment','regularPioneer','serviceCircuit'].flatMap(key=>oldPrivate?.exists()&&oldPrivate.data()[key]!==undefined?[[key,oldPrivate.data()[key]]]:[]));
-              tx.set(doc(db, 'personContacts', change.id), { id: change.id, ...(previousHearing===undefined?{}:{hearingStatus:previousHearing}), ...(previousNotificationEmail===undefined?{}:{notificationEmail:previousNotificationEmail}), ...previousService, ...privateFields(person), ...metadata, _scopeEvent: scopeEvent, _scopeDepartment: scopeDepartment });
+              tx.set(doc(db, 'personContacts', change.id), { id: change.id, ...(previousHearing===undefined?{}:{hearingStatus:previousHearing}), ...(previousNotificationEmail===undefined?{}:{notificationEmail:previousNotificationEmail}), ...previousService, ...privateFields(person), ...metadata, revision:nextDocumentRevision(oldPrivate?.exists()?oldPrivate.data():undefined), _scopeEvent: scopeEvent, _scopeDepartment: scopeDepartment });
               const gmail = emailKey(person.gmail), oldGmail = emailKey((change.before as Person | undefined)?.gmail || '');
               if (gmail) {
                 const owner = owners.get(gmail);
@@ -365,9 +367,11 @@ function firebaseRepository(): Repository {
           }
           if (change.collection === 'congregations') {
             const congregation = (change.after || change.before) as AppData['congregations'][number];
+            const oldCommittee=committees.get(change.id);
+            assertCommitteeContactUnchanged(change.before as AppData['congregations'][number]|undefined,oldCommittee?.exists()&&!oldCommittee.data()._deleted?oldCommittee.data():undefined);
             const { committeeEmail, ...publicCongregation } = congregation;
             value = { ...publicCongregation, ...metadata };
-            tx.set(doc(db, 'committeeContacts', change.id), { id: change.id, committeeEmail, ...metadata });
+            tx.set(doc(db, 'committeeContacts', change.id), { id: change.id, committeeEmail, ...metadata,revision:nextDocumentRevision(oldCommittee?.exists()?oldCommittee.data():undefined) });
           }
           if (change.collection === 'grants') {
             const grant = (change.after || change.before) as Grant;

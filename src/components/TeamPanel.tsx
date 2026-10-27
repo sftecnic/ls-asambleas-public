@@ -17,6 +17,7 @@ import {HearingField,ProfileFilters,ProfileSummary,ServiceFields,ServiceDetails}
 import {canReadProfile,canEditService,profileMatches,emptyProfileFilters,serviceFilterChips} from '../domain/personProfile';
 import '../styles/team.css';
 import {PersonName,PersonContactActions} from './PersonContact';
+import {personFingerprint} from '../domain/personRecords';
 
 
 const committeeLabels = {proposed:'Sin solicitar',pending:'Pendiente',approved:'Aprobado',denied:'No aprobado'};
@@ -51,6 +52,7 @@ export default function TeamPanel(props:PanelProps&{initialIntent?:HomeIntent;on
   const [busy,setBusy]=useState(false);
   const [gmail,setGmail]=useState('');
   const [editingPerson,setEditingPerson]=useState<Person|null>(null);
+  const editingBaseline=useRef('');
   const [mode,setMode]=useState<'existing'|'new'>('existing');
   const [existingPersonId,setExistingPersonId]=useState('');
   const [departmentId,setDepartmentId]=useState(data.departments[0]?.id||'');
@@ -102,6 +104,7 @@ export default function TeamPanel(props:PanelProps&{initialIntent?:HomeIntent;on
   }
   async function savePerson(){
     if(!editingPerson||!canEditContacts||!canWork)return;
+    if(personFingerprint(person)!==editingBaseline.current){setError('La ficha ha cambiado. Cierra y vuelve a abrirla antes de guardar.');return;}
     if(!editingPerson.name.trim()||editingPerson.appointment!=='circuit-overseer'&&!editingPerson.congregationId){setError('Completa nombre y congregación.');return;}
     if(editingPerson.email&&!isEmail(editingPerson.email)){setError('Revisa el correo de contacto.');return;}
     if(await save({...data,persons:data.persons.map(p=>p.id===editingPerson.id?{...editingPerson,name:editingPerson.name.trim(),aliases:[...new Set((editingPerson.aliases||[]).map(a=>a.trim()).filter(Boolean))],email:editingPerson.email.trim()}:p)},'Actualizó una ficha de contacto'))setEditingPerson(null);
@@ -171,7 +174,7 @@ export default function TeamPanel(props:PanelProps&{initialIntent?:HomeIntent;on
       </section>
       </>}
       {props.onShowHistory&&<button className="team-button" onClick={()=>props.onShowHistory?.(person.id)}><History size={20} aria-hidden="true"/>Ver trayectoria</button>}
-      <section className="team-detail-section"><div className="team-section-title"><ContactRound size={22}/><h3>Ficha</h3>{canEditContacts&&canEdit&&!editingPerson&&<button className="team-copy-button" disabled={!online} onClick={()=>setEditingPerson({...person})}><Pencil size={17}/>Editar</button>}</div>
+      <section className="team-detail-section"><div className="team-section-title"><ContactRound size={22}/><h3>Ficha</h3>{canEditContacts&&canEdit&&!editingPerson&&<button className="team-copy-button" disabled={!online} onClick={()=>{editingBaseline.current=personFingerprint(person);setEditingPerson({...person});}}><Pencil size={17}/>Editar</button>}</div>
         {editingPerson?<><HearingField value={editingPerson.hearingStatus} onChange={hearingStatus=>setEditingPerson({...editingPerson,hearingStatus})}/><ServiceFields value={editingPerson} disabled={!canEditService(data,user,editingPerson.id)} onChange={patch=>setEditingPerson({...editingPerson,...patch})}/><label className="team-field">Nombre<input value={editingPerson.name} onChange={e=>setEditingPerson({...editingPerson,name:e.target.value})} autoComplete="name"/></label><AffiliationFields data={data} person={editingPerson} disabled={!canEditService(data,user,editingPerson.id)} onChange={patch=>setEditingPerson({...editingPerson,...patch})}/><div className="team-field-grid"><label className="team-field">Teléfono<input type="tel" autoComplete="tel" placeholder="+34 600 123 456" value={editingPerson.phone} onChange={e=>setEditingPerson({...editingPerson,phone:e.target.value})}/></label><label className="team-field">Correo de contacto<input type="email" autoComplete="email" value={editingPerson.email} onChange={e=>setEditingPerson({...editingPerson,email:e.target.value})}/></label></div><label className="team-field">Correo para avisos<input type="email" maxLength={254} value={editingPerson.notificationEmail||''} placeholder={editingPerson.gmail||editingPerson.email||'nombre@gmail.com'} onChange={e=>setEditingPerson({...editingPerson,notificationEmail:e.target.value.trim()})}/></label><label className="team-field">Otros nombres (uno por línea)<textarea name="person-aliases" autoComplete="off" rows={2} value={(editingPerson.aliases||[]).join('\n')} onChange={e=>setEditingPerson({...editingPerson,aliases:e.target.value.split('\n')})}/></label><label className="team-field">Notas privadas<textarea rows={3} value={editingPerson.notes} onChange={e=>setEditingPerson({...editingPerson,notes:e.target.value})}/></label><div className="team-action-row"><button className="team-button" onClick={()=>setEditingPerson(null)}>Cancelar</button><button className="team-button team-button-primary" disabled={!canWork} onClick={savePerson}><Check size={19}/>Guardar ficha</button></div></>:<dl className="team-contact-list"><div><dt>Congregación</dt><dd>{congregation?.name||'Sin indicar'}</dd></div>{Boolean(person.aliases?.length)&&<div><dt>Otros nombres</dt><dd>{person.aliases?.join(', ')}</dd></div>}{canContacts&&<><div><dt>Teléfono</dt><dd>{person.phone?<a href={`tel:${person.phone.replace(/[^+\d]/g,'')}`}>{person.phone}</a>:'Sin indicar'}</dd></div><div><dt>Correo</dt><dd>{person.email?<a href={`mailto:${person.email}`}>{person.email}</a>:'Sin indicar'}</dd></div>{person.notes&&<div><dt>Notas privadas</dt><dd>{person.notes}</dd></div>}</>}</dl>}
       </section>
       {!editingPerson&&canContacts&&<ServiceDetails person={person}/>}

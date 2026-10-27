@@ -1,0 +1,11 @@
+import {test,expect} from '@playwright/test';
+import {createDemoData} from '../src/seed';
+for(const view of ['Equipo','Directorio'])test(`conserva lo escrito si llega un cambio privado mientras se edita en ${view}`,async({page})=>{
+ const data=createDemoData();data.persons.find(p=>p.id==='p2')!.revision=3;
+ await page.addInitScript(d=>localStorage.setItem('ls-asambleas:demo:v1',JSON.stringify(d)),data);await page.goto('/');await page.getByRole('navigation',{name:'Principal'}).getByRole('button',{name:'Equipo',exact:true}).click();
+ if(view==='Directorio'){await page.getByRole('button',{name:'Directorio',exact:true}).click();await page.getByRole('button',{name:'Ver ficha de David Romero',exact:true}).click();}else await page.locator('.team-person-card').filter({hasText:'David Romero'}).locator('button[data-team-candidate]').click();
+ const dialog=page.getByRole('dialog');await dialog.getByRole('button',{name:view==='Directorio'?'Editar ficha':'Editar',exact:true}).click();await dialog.getByRole('combobox',{name:'Nombramiento',exact:true}).selectOption('ministerial-servant');await dialog.getByRole('combobox',{name:'Precursor regular',exact:true}).selectOption('yes');
+ await page.evaluate(()=>{const key='ls-asambleas:demo:v1',data=JSON.parse(localStorage.getItem(key)!);data.persons.find((p:any)=>p.id==='p2').notes='Cambio privado recibido';const newValue=JSON.stringify(data);localStorage.setItem(key,newValue);window.dispatchEvent(new StorageEvent('storage',{key,newValue}));});
+ await expect(dialog.getByRole('textbox',{name:'Notas privadas',exact:true})).not.toHaveValue('Cambio privado recibido');await dialog.getByRole('button',{name:'Guardar ficha',exact:true}).click();await expect(dialog).toContainText('La ficha ha cambiado');await expect(dialog.getByRole('combobox',{name:'Nombramiento',exact:true})).toHaveValue('ministerial-servant');await expect(dialog.getByRole('combobox',{name:'Precursor regular',exact:true})).toHaveValue('yes');
+ const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('ls-asambleas:demo:v1')!).persons.find((p:any)=>p.id==='p2'));expect(saved.notes).toBe('Cambio privado recibido');expect(saved.appointment).toBeUndefined();expect(saved.revision).toBe(3);
+});

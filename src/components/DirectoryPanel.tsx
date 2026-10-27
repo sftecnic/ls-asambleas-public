@@ -10,6 +10,7 @@ import {Empty,ErrorMessage,Modal} from './UI';
 import {affiliationLabel} from '../domain/circuits';
 import {PersonFields,ProfileFilters,ProfileSummary,ServiceDetails} from './PersonProfile';
 import {PersonName,PersonContactActions} from './PersonContact';
+import {personFingerprint} from '../domain/personRecords';
 
 export default function DirectoryPanel({data,user,onChange,canEdit,online,onShowHistory}:PanelProps&{onShowHistory?:(id:string)=>void}){
   const [filters,setFilters]=useViewState<Filters>('directory.filters',{...emptyProfileFilters});
@@ -19,14 +20,14 @@ export default function DirectoryPanel({data,user,onChange,canEdit,online,onShow
   const people=data.persons.filter(p=>profileMatches(data,p,filters,authorizedIds.has(p.id))).sort((a,b)=>a.name.localeCompare(b.name,'es')||a.id.localeCompare(b.id));
   const selected=data.persons.find(p=>p.id===selectedId),privateVisible=selected&&authorizedIds.has(selected.id);
   const editable=canEdit&&online&&Boolean(admin||selected&&data.candidates.some(c=>c.personId===selected.id&&can(user,data,'contacts',c.eventId,c.departmentId)));
-  const close=()=>{if(busy)return;if(draft&&JSON.stringify(draft)!==baseline.current&&!window.confirm('¿Descartar los cambios de la ficha?'))return;setDraft(undefined);setSelectedId('');setError('');};
-  useEffect(()=>{const guard=(e:Event)=>{if(busy||draft&&JSON.stringify(draft)!==baseline.current&&!window.confirm('¿Descartar los cambios de la ficha?'))e.preventDefault();};const unload=(e:BeforeUnloadEvent)=>{if(busy||draft&&JSON.stringify(draft)!==baseline.current)e.preventDefault();};window.addEventListener('ls:before-navigate',guard);window.addEventListener('beforeunload',unload);return()=>{window.removeEventListener('ls:before-navigate',guard);window.removeEventListener('beforeunload',unload);};},[draft,busy]);
-  function edit(person:Person){baseline.current=JSON.stringify(person);setDraft({...person});setError('');}
+  const close=()=>{if(busy)return;if(draft&&personFingerprint(draft)!==baseline.current&&!window.confirm('¿Descartar los cambios de la ficha?'))return;setDraft(undefined);setSelectedId('');setError('');};
+  useEffect(()=>{const guard=(e:Event)=>{if(busy||draft&&personFingerprint(draft)!==baseline.current&&!window.confirm('¿Descartar los cambios de la ficha?'))e.preventDefault();};const unload=(e:BeforeUnloadEvent)=>{if(busy||draft&&personFingerprint(draft)!==baseline.current)e.preventDefault();};window.addEventListener('ls:before-navigate',guard);window.addEventListener('beforeunload',unload);return()=>{window.removeEventListener('ls:before-navigate',guard);window.removeEventListener('beforeunload',unload);};},[draft,busy]);
+  function edit(person:Person){baseline.current=personFingerprint(person);setDraft({...person});setError('');}
   async function save(){
     if(!draft||!online||!canEdit||busy||(!admin&&!editable))return;
     if(!draft.name.trim()||draft.appointment!=='circuit-overseer'&&!draft.congregationId){setError('Completa nombre y congregación.');return;}
     if(draft.email&&!isEmail(draft.email)){setError('Revisa el correo de contacto.');return;}
-    if(selected&&(selected.revision??0)!==(draft.revision??0)){setError('La ficha ha cambiado. Cierra y vuelve a abrirla antes de guardar.');return;}
+    if(selected&&personFingerprint(selected)!==baseline.current){setError('La ficha ha cambiado. Cierra y vuelve a abrirla antes de guardar.');return;}
     setBusy(true);setError('');
     try{const person={...draft,name:draft.name.trim(),email:draft.email.trim(),aliases:[...new Set((draft.aliases||[]).map(a=>a.trim()).filter(Boolean))]};await onChange({...data,persons:selected?data.persons.map(p=>p.id===person.id?person:p):[...data.persons,person]},selected?'Actualizó una ficha del directorio':'Añadió una persona al directorio');setDraft(undefined);setSelectedId('');}
     catch(e){setError(e instanceof Error?e.message:'No se pudo guardar.');}finally{setBusy(false);}
