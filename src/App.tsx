@@ -1,8 +1,9 @@
 import Brand from './components/Brand';
 import {ViewStateProvider,clearViewState} from './components/ViewState';
 import MeetingsPanel from './components/MeetingsPanel';
+import {meetingScheduleRows} from './domain/meetingSchedule';
 import {meetingServiceError} from './data/meetingApi';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Bell, CalendarCheck, CalendarDays, Check, ChevronDown, Download, Home, LogIn, LogOut, MapPin, MoreHorizontal, Presentation, Printer, RefreshCw, Send, ShieldCheck, Users, WifiOff, X, Eye, CircleHelp } from 'lucide-react';
 import { createRepository, configured } from './data/repository';
 import { createDemoData } from './seed';
@@ -49,6 +50,8 @@ export default function App() {
   const navIndex=useRef(Number(history.state?.lsIndex)||0);
   const restoringHistory=useRef(false),acceptedLocation=useRef(location.href);
   const [routeRevision,setRouteRevision]=useState(0);
+  const pendingScroll=useRef<number|null>(null);
+  useLayoutEffect(()=>{if(pendingScroll.current!==null){window.scrollTo({top:pendingScroll.current});pendingScroll.current=null;}},[page,eventId,routeRevision]);
   useEffect(()=>{document.documentElement.classList.toggle('large-text',largeText);try{localStorage.setItem('ls-large-text',String(largeText));}catch{}},[largeText]);
   useEffect(()=>{
     const root=document.documentElement;
@@ -74,8 +77,9 @@ export default function App() {
       navIndex.current=index;
       acceptedLocation.current=location.href;
       const query=new URLSearchParams(location.search);
+      pendingScroll.current=ev.state?.scroll||0;
       setPage(routePage(query));setEventId(query.get('evento')||'');setHomeIntent(undefined);setHistoryPersonId('');setOptionsOpen(false);setRouteRevision(v=>v+1);
-      requestAnimationFrame(()=>window.scrollTo({top:ev.state?.scroll||0}));
+
     };
     window.addEventListener('popstate',onPop);return()=>window.removeEventListener('popstate',onPop);
   },[]);
@@ -146,6 +150,7 @@ export default function App() {
   const volunteer = activeUser?.role === 'volunteer' || offline;
   useEffect(()=>{if(volunteer&&['team','more',...(activeUser?.role==='volunteer'?['shifts']:[])].includes(page))setPage('home');},[volunteer,page,activeUser?.role]);
   const readOnly = volunteer || publishedView;
+  const meetingOverview=useMemo(()=>activeUser?meetingScheduleRows(sessionData,activeUser,{publishedOnly:readOnly,offlineEventId:offline?event?.id:undefined}):[],[sessionData,activeUser,readOnly,offline,event?.id]);
   const shown = useMemo(() => {
     if (!activeUser || !event) return sessionData;
     if (offline && offlineCopy) return offlineCopy.data;
@@ -165,13 +170,23 @@ export default function App() {
     navMemory.current.set(key+page,{search:location.search,scroll:window.scrollY});
     history.replaceState({...history.state,scroll:window.scrollY},'',location.href);
     const prior=navMemory.current.get(key+next),url=new URL(location.href);
-    for(const field of ['departamento','dia','reunion','correo'])url.searchParams.delete(field);
-    if(prior&&!intent){const params=new URLSearchParams(prior.search);for(const field of ['departamento','dia'])if(params.has(field))url.searchParams.set(field,params.get(field)!);}
+    for(const field of ['departamento','dia','reunion','correo','ambito'])url.searchParams.delete(field);
+    if(prior&&!intent){const params=new URLSearchParams(prior.search);for(const field of ['departamento','dia','ambito'])if(params.has(field))url.searchParams.set(field,params.get(field)!);}
     if(intent?.departmentIds.length===1)url.searchParams.set('departamento',intent.departmentIds[0]);
     url.searchParams.set('pantalla',next);
     history.pushState({lsIndex:++navIndex.current,scroll:prior?.scroll||0},'',url);
+    pendingScroll.current=intent?0:prior?.scroll||0;
     setPage(next);setHomeIntent(intent);setHistoryPersonId('');setError('');setSuccess('');setOptionsOpen(false);setRouteRevision(v=>v+1);
-    requestAnimationFrame(()=>window.scrollTo({top:intent?0:prior?.scroll||0}));
+
+  };
+  const openMeetingEvent=(id:string)=>{
+    if(!allowNavigation()||!allowedEvents.some(e=>e.id===id))return;
+    navMemory.current.set(`${activeUser?.uid}:${eventId}:${page}`,{search:location.search,scroll:window.scrollY});
+    history.replaceState({...history.state,scroll:window.scrollY},'',location.href);
+    const url=new URL(location.href);url.search='';url.searchParams.set('evento',id);url.searchParams.set('pantalla','meetings');url.searchParams.set('ambito','event');
+    history.pushState({lsIndex:++navIndex.current,scroll:0},'',url);
+    pendingScroll.current=0;
+    setEventId(id);setPage('meetings');setHomeIntent(undefined);setRouteRevision(v=>v+1);setOptionsOpen(false);setError('');setSuccess('');
   };
   const change = async (next: AppData, description: string) => {
     if (!activeUser || !event || !online || !navigator.onLine || readOnly) throw new Error('Conecta a internet y abre la edición para guardar.');
@@ -195,7 +210,7 @@ export default function App() {
   return <ContactsProvider data={sessionData} user={activeUser!} eventId={event?.id||''} online={online} demo={repository.mode==='demo'}><div className="app-shell"><a className="skip-link" href="#main">Saltar al contenido</a><aside className="sidebar"><Brand /><nav className="main-nav" aria-label="Principal">{navigation.map(n => <button key={n.id} className="nav-item" aria-current={page === n.id || page==='meetings'&&n.id==='program' ? 'page' : undefined} onClick={() => navigate(n.id)}><n.icon size={23} /><span>{n.label}</span></button>)}</nav><div className="account"><div className="account-name">{activeUser?.name}</div><small>{volunteer ? 'Voluntario' : activeUser?.role === 'admin' ? 'Administración' : activeUser?.role === 'assistant' ? 'Auxiliar' : 'Responsable'}</small><button className="btn btn-ghost" onClick={() => void signOut()}><LogOut size={20} />Salir</button></div></aside>
     <div className="workspace">{repository.mode === 'demo' && <div className="demo-banner" role="region" aria-label="Demostración"><span>Demostración · Datos ficticios · Guardado en este navegador</span><button className="btn btn-ghost" onClick={() => { if (!allowNavigation()) return; setPreviewVolunteer(!previewVolunteer); setPublishedView(false); setPage('home'); }}><Eye size={17} />{previewVolunteer ? 'Ver responsable' : 'Ver voluntario'}</button></div>}
       <header className="event-context"><div className="event-main"><div className="context-picker"><CalendarDays size={26} /><label className="field"><span>Evento</span><div className="event-select"><span className="event-select-value" aria-hidden="true">{event?.title||'Elegir evento'}<ChevronDown size={20}/></span><select aria-label="Elegir evento" value={event?.id ?? ''} onChange={e => { if (!allowNavigation()) return; const url=new URL(location.href);url.search='';url.searchParams.set('evento',e.target.value);url.searchParams.set('pantalla','home');history.pushState({lsIndex:++navIndex.current},'',url);setRouteRevision(v=>v+1);setEventId(e.target.value); setHomeIntent(undefined); setPage('home'); setSuccess(''); setError(''); }}>{allowedEvents.map(ev => <option key={ev.id} value={ev.id}>{ev.title} · {dateLabel(ev.startDate,{day:'numeric',month:'long',year:'numeric'})} · {sessionData.venues.find(v => v.id === ev.venueId)?.city ?? ''}</option>)}</select></div></label></div><div className="event-meta">{event && <span className="meta-item"><CalendarCheck size={18} />{dateLabel(event.startDate, { day: 'numeric', month: 'long', year: 'numeric' })}{event.endDate !== event.startDate ? ` – ${dateLabel(event.endDate, { day: 'numeric', month: 'long' })}` : ''}</span>}<span className="meta-item"><MapPin size={19} />{venue?.name} {venue?.city ? `· ${venue.city}` : ''}</span></div></div><div className="context-actions no-print"><button className="btn btn-ghost" onClick={()=>navigate('notices')}><Bell size={21} aria-hidden="true"/>Avisos</button><button className="btn" aria-expanded={optionsOpen} aria-controls="app-options" onClick={()=>setOptionsOpen(!optionsOpen)}><MoreHorizontal size={21} aria-hidden="true"/>Opciones</button></div></header>
-      {optionsOpen&&<div id="app-options" className="app-options no-print"><div className="button-row">{online && <button className="btn" onClick={() => { setOfflineModal(true); setPersonalDevice(false); }}><Download size={20} />Guardar consulta</button>}<button className="btn" disabled={!latestPublications.length && !shown.meetingPublications?.length} onClick={() => { if (!allowNavigation()) return; setPublishedView(true); if (page === 'team' || page === 'more' || page === 'notices') setPage('program'); setTimeout(() => window.print(), 100); }}><Printer size={20} />Imprimir</button>{!volunteer && <button className="btn" aria-pressed={publishedView} onClick={() => { if (!allowNavigation()) return; setPublishedView(!publishedView); if (page === 'team' || page === 'more') setPage('program'); }}><Eye size={20} />{publishedView ? 'Ver borradores' : 'Ver publicado'}</button>}<button className="btn" aria-pressed={largeText} onClick={()=>setLargeText(!largeText)}><span aria-hidden="true" className="text-size-icon">Aa</span>Texto grande</button></div></div>}
+      {optionsOpen&&<div id="app-options" className="app-options no-print"><div className="button-row">{online && <button className="btn" onClick={() => { setOfflineModal(true); setPersonalDevice(false); }}><Download size={20} />Guardar consulta</button>}<button className="btn" disabled={!latestPublications.length && !shown.meetingPublications?.length} onClick={() => { if (!allowNavigation()) return; if(page!=='meetings')setPublishedView(true); if (page === 'team' || page === 'more' || page === 'notices') setPage('program'); setTimeout(() => window.print(), 100); }}><Printer size={20} />Imprimir</button>{!volunteer && <button className="btn" aria-pressed={publishedView} onClick={() => { if (!allowNavigation()) return; setPublishedView(!publishedView); if (page === 'team' || page === 'more') setPage('program'); }}><Eye size={20} />{publishedView ? 'Ver borradores' : 'Ver publicado'}</button>}<button className="btn" aria-pressed={largeText} onClick={()=>setLargeText(!largeText)}><span aria-hidden="true" className="text-size-icon">Aa</span>Texto grande</button></div></div>}
       {offline && <div className="offline-banner"><span className="meta-item"><WifiOff size={22} />Sin conexión · Solo consulta</span>{offlineCopy && <span>Guardado: {dateLabel(offlineCopy.savedAt)} {timeLabel(offlineCopy.savedAt)} · {offlineCopy.version} · Puede estar desactualizado</span>}</div>}
       {publishedView && !volunteer && <div className="demo-banner"><span className="meta-item"><Eye size={20} />Vista publicada · Solo consulta</span><button className="btn" onClick={() => setPublishedView(false)}><PencilIcon />Volver a editar</button></div>}
       <main id="main" className="content" tabIndex={-1}><div className="print-only"><Brand compact/><strong>{event?.title} · {venue?.name} · {venue?.city}</strong><p>{event ? dateLabel(event.startDate) : ''} · Publicación: {publishedAt ? dateLabel(publishedAt) : 'Sin publicar'}</p>{printVersions.map(publication=><p key={publication.id}>{publication.department?.name||shown.departments.find(d=>d.id===publication.departmentId)?.name||'Departamento'} · Versión {publication.version} · {dateLabel(publication.publishedAt)} {timeLabel(publication.publishedAt,event?.timezone)}</p>)}<p>Versión vigente: {location.origin}/?evento={event?.id}</p></div>
@@ -208,7 +223,7 @@ export default function App() {
           {page === 'shifts' && activeUser?.role !== 'volunteer' && <ShiftsPanel publishAction={publishAction} key={`${event.id}:${routeRevision}:${JSON.stringify(homeIntent)}`} initialIntent={homeIntent} {...panelProps} />}
           {(page==='program'||page==='meetings')&&<nav className="program-tabs no-print" aria-label="Agenda"><button className="btn" aria-pressed={page==='program'} onClick={()=>navigate('program')}><Presentation size={21}/>Programa</button><button className="btn" aria-pressed={page==='meetings'} onClick={()=>navigate('meetings')}><CalendarDays size={21}/>Reuniones</button></nav>}
           {page === 'program' && <ProgramPanel publishAction={publishAction} key={`${event.id}:${routeRevision}:${JSON.stringify(homeIntent)}`} initialIntent={homeIntent} {...panelProps} />}
-          {page === 'meetings' && <MeetingsPanel key={`${event.id}:${routeRevision}:${JSON.stringify(homeIntent)}`} initialIntent={homeIntent} {...panelProps} />}
+          {page === 'meetings' && <MeetingsPanel key={`${event.id}:${routeRevision}:${JSON.stringify(homeIntent)}`} initialIntent={homeIntent} {...panelProps} connected={online} scheduleRows={meetingOverview} onOpenEvent={openMeetingEvent}/>}
           {page === 'notices' && <Notices {...panelProps} readonly={offline || publishedView} onRead={async id => { if (!activeUser || !online) return; const next = structuredClone(data); next.notices = next.notices.map(n => n.id === id ? { ...n, readBy: [...new Set([...n.readBy, activeUser.uid])] } : n); const result = await repository.commit(data, next, 'Aviso leído', activeUser, event.id); setData(result); }} />}
 
           {savedCopy && online && <p className="small no-print">Copia guardada: {dateLabel(savedCopy.savedAt)}. {publishedAt && publishedAt > savedCopy.savedAt ? 'Hay cambios nuevos. Actualiza la copia.' : 'Solo contiene información publicada.'}</p>}

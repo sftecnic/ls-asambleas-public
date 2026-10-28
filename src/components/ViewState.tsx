@@ -8,7 +8,7 @@ export function ViewStateProvider({scope,children}:{scope:string;children:ReactN
   if(!scopes.has(scope))scopes.set(scope,new Map());
   return <ViewContext.Provider value={scopes.get(scope)!}>{children}</ViewContext.Provider>;
 }
-export function useViewState<T>(key:string,initial:T|(()=>T),urlKey?:'departamento'|'dia'):[T,Dispatch<SetStateAction<T>>] {
+export function useViewState<T>(key:string,initial:T|(()=>T),urlKey?:'departamento'|'dia'|'ambito'):[T,Dispatch<SetStateAction<T>>] {
   const memory=useContext(ViewContext);
   const [value,setValue]=useState<T>(()=>{
     const param=urlKey?new URLSearchParams(location.search).get(urlKey):null;

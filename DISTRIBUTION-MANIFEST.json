@@ -763,8 +763,8 @@
     },
     {
       "path": "DESIGN.md",
-      "sha256": "e7b0327e943fbe2d997da7fbc4b52c85cff748f4ad50f4b5f526c04f6f108427",
-      "bytes": 12225
+      "sha256": "2d409fd075d7497596c3e33e3b7953d458ee0e7d6537bfcbf1a0b0620e30ace2",
+      "bytes": 12654
     },
     {
       "path": "docs/ARQUITECTURA.md",
@@ -778,8 +778,8 @@
     },
     {
       "path": "docs/COMPROBACION.md",
-      "sha256": "253187ffcb6b5b09a393d8544d2aa2a5b9e708bc40dedf74522ca2ac6dac8d4f",
-      "bytes": 5701
+      "sha256": "ce33aa3d1974b55122e2a048a4a95919b7147230edcb127de58982f8cb2769ce",
+      "bytes": 6093
     },
     {
       "path": "docs/DISENO-080.md",
@@ -788,8 +788,8 @@
     },
     {
       "path": "docs/distribution/README.md",
-      "sha256": "babf78ac78bb9429c98d0ee9672dd1d6ce4f6a4d2ebcb04462ac674b3edbc3c2",
-      "bytes": 5041
+      "sha256": "ed103a2ade7c0a7087e56b0149c469e3420ce8d397d5c0935140319e66742353",
+      "bytes": 5282
     },
     {
       "path": "docs/IMPORTACION-EXCEL.md",
@@ -810,6 +810,11 @@
       "path": "docs/RECORRIDOS.md",
       "sha256": "bd75cf6850221ee8704cc2c974157344bb4ebb49665b73c52f0b167d2d40e373",
       "bytes": 10442
+    },
+    {
+      "path": "docs/REUNIONES-VISTAS.md",
+      "sha256": "7b53add76aa14e7e7c5bb5d96b47e370eb2bde4bedb4ee059433a01c6c9034a1",
+      "bytes": 6090
     },
     {
       "path": "docs/SERVICIO-PERSONAS.md",
@@ -2473,12 +2478,12 @@
     },
     {
       "path": "package-lock.json",
-      "sha256": "e98f53a6418f4f04d712967db2b8643a2b72d6a4952b9cdfc9fc963286efa81c",
+      "sha256": "f4c1d3130828757616ba59cb963d692635a60c3c41fe6131b2ca9828f04d7814",
       "bytes": 212288
     },
     {
       "path": "package.json",
-      "sha256": "c72edcc711bb8322d04f3973b16c3e519fb7f8d9e203ac4ae40e192c8e67adba",
+      "sha256": "a17854ebf148e16dff0804d33679c2910fbae6437eeb4ce3b5faab62cf892758",
       "bytes": 1934
     },
     {
@@ -2582,14 +2587,59 @@
       "bytes": 828
     },
     {
+      "path": "qa/meeting-schedule/all-1440.png",
+      "sha256": "0885839692227d37808d2bd1311b2e2ee592da62185e69e92d885c4f6b3f35b2",
+      "bytes": 304739
+    },
+    {
+      "path": "qa/meeting-schedule/list-1440.png",
+      "sha256": "ac5e2eb84fa82beee90d7519e92489588467f7263c628c2be263bc15bd24811e",
+      "bytes": 191043
+    },
+    {
+      "path": "qa/meeting-schedule/list-320.png",
+      "sha256": "60e49c6fc8d1e8ce99169bef8d1953d59c55c632f8b219b8a50339322bcc5cde",
+      "bytes": 168424
+    },
+    {
+      "path": "qa/meeting-schedule/list-390.png",
+      "sha256": "6d7e2a8fbbe05c1b90a1a431e9b80bf9d1245a898b0130b589098af309e86f67",
+      "bytes": 169601
+    },
+    {
+      "path": "qa/meeting-schedule/list-820.png",
+      "sha256": "077bf7d47201049a1e13324994194e8a92b31ab319433aa5d2dc4b444dfd76c0",
+      "bytes": 180498
+    },
+    {
+      "path": "qa/meeting-schedule/month-1440.png",
+      "sha256": "910fa778d2467a6f484f4d8b4745411b66dc0c9e09a4bcf5e877ad5ab3f20a45",
+      "bytes": 242576
+    },
+    {
+      "path": "qa/meeting-schedule/month-320.png",
+      "sha256": "1218e218be7d85207fe1b325a876dc9bdc3d7803bd3104da0c66e4257b1205f3",
+      "bytes": 194606
+    },
+    {
+      "path": "qa/meeting-schedule/month-390.png",
+      "sha256": "eaf8a3aada70e4f4d4af6acacf627a676eb7a60b4e6887081efebd1e758b0b82",
+      "bytes": 197495
+    },
+    {
+      "path": "qa/meeting-schedule/month-820.png",
+      "sha256": "a74478d54e4e5c2126d48c38a9dfd8cf583581e9c2654cf0272d1bd457a61c4a",
+      "bytes": 207275
+    },
+    {
       "path": "qa/visual-080/prototype.html",
       "sha256": "cf65ac32fb12a7ebf9c4f84c15315e6f81fb9b8f1fa6dca2ae110d5acdc518a3",
       "bytes": 10401
     },
     {
       "path": "README.md",
-      "sha256": "babf78ac78bb9429c98d0ee9672dd1d6ce4f6a4d2ebcb04462ac674b3edbc3c2",
-      "bytes": 5041
+      "sha256": "ed103a2ade7c0a7087e56b0149c469e3420ce8d397d5c0935140319e66742353",
+      "bytes": 5282
     },
     {
       "path": "scripts/bootstrap-admin.mjs",
@@ -2623,8 +2673,8 @@
     },
     {
       "path": "scripts/prepare-public-release.mjs",
-      "sha256": "c704a0c66fb7d45a90c53569e1ce54326a9fb06cc155a0b9f2fa01d6e65c8290",
-      "bytes": 7804
+      "sha256": "9eed3c22b14493b9add73493a2bb6fe7928ca62e8ab4453fd7423c13ef7886c6",
+      "bytes": 7983
     },
     {
       "path": "scripts/prepare-tour-assets.py",
@@ -2653,8 +2703,8 @@
     },
     {
       "path": "src/App.tsx",
-      "sha256": "7205463f9f389e525b73bb5343d39d05b34b86e15202d13f5168a20fb606b071",
-      "bytes": 29983
+      "sha256": "60cf6f6a8e74bed2e101a1ea0ba9eafb668ff1a3f015e56a786680a9ccf8a08d",
+      "bytes": 31275
     },
     {
       "path": "src/components/AdminPanel.tsx",
@@ -2678,8 +2728,8 @@
     },
     {
       "path": "src/components/CalendarPanel.tsx",
-      "sha256": "31b09a25a4e8261d8656d679ab727edf5b5a39a435005f6a01a4883bc8d0c6b9",
-      "bytes": 8143
+      "sha256": "9921aad1915dbe8cce5f39c1ef6ce557984177f988743660f9fd90944ce678d7",
+      "bytes": 8318
     },
     {
       "path": "src/components/CalendarSettings.tsx",
@@ -2737,9 +2787,14 @@
       "bytes": 19748
     },
     {
+      "path": "src/components/MeetingSchedule.tsx",
+      "sha256": "0d5c2a025342e2dcf2200990d3fb4c1b474eee8b677aa1b571b8f2ab693955bb",
+      "bytes": 7678
+    },
+    {
       "path": "src/components/MeetingsPanel.tsx",
-      "sha256": "f3bf174d6d2371ebd6ee65ae76095b31dfcb1b1f79281a0d2c6b29dfcfb10ae9",
-      "bytes": 33534
+      "sha256": "a112f6b65516ea1aa3db7527065f6cf1763347b25d0258997a994b2f2ca0b1f7",
+      "bytes": 36965
     },
     {
       "path": "src/components/PersonContact.tsx",
@@ -2813,8 +2868,8 @@
     },
     {
       "path": "src/components/ViewState.tsx",
-      "sha256": "4bdd4c12ec30d1363d4f12006813cfceaea2867906e8079f34ee15a94d05bee5",
-      "bytes": 1429
+      "sha256": "d0606b10a72c6e2c5860d76a33d5097f4b18ef4d8b6e392fafdbad47702babb2",
+      "bytes": 1438
     },
     {
       "path": "src/components/ZoomConnection.tsx",
@@ -2967,6 +3022,11 @@
       "bytes": 9918
     },
     {
+      "path": "src/domain/meetingSchedule.ts",
+      "sha256": "a1274d4fa8d4ef1223f149577e024a761cf20530282362d1cfb8d1b2d95ac884",
+      "bytes": 3854
+    },
+    {
       "path": "src/domain/personProfile.ts",
       "sha256": "e55965f1952b0f0d1df9123bc3f61f744984be84377e9997b241a472eddd4312",
       "bytes": 3189
@@ -3102,6 +3162,11 @@
       "bytes": 4818
     },
     {
+      "path": "src/styles/meeting-schedule.css",
+      "sha256": "234c3619b5b45297a7e22b1dd982f38d93fd7c4bd00732c9583cbaa2ec3a0001",
+      "bytes": 5954
+    },
+    {
       "path": "src/styles/meetings.css",
       "sha256": "c01f293a74db45cb0f3a6d4ff3e03c1d81eb77aa6c32bc1250cc9eb46d5f2279",
       "bytes": 3791
@@ -3143,8 +3208,8 @@
     },
     {
       "path": "src/styles/visual-system.css",
-      "sha256": "55512344306d117ea94d8ff7b2464d5784473aaa7cbebbfaf0e51cea393e8baf",
-      "bytes": 22074
+      "sha256": "259d66562621baf9cb9041bf73428468a658a2a1def5977aed3cd51e42edd80f",
+      "bytes": 22114
     },
     {
       "path": "tests/accessibility.e2e.spec.ts",
@@ -3257,14 +3322,24 @@
       "bytes": 5593
     },
     {
+      "path": "tests/meeting-schedule.e2e.spec.ts",
+      "sha256": "eebf0209e8579b1d7945648b27f2531e856ad426a2b6ec729fe634ce5e109019",
+      "bytes": 12539
+    },
+    {
+      "path": "tests/meeting-schedule.test.ts",
+      "sha256": "25aa943d594901823adc571ad2e3e34ee44a44286bd0d3e70962858d3172c051",
+      "bytes": 5200
+    },
+    {
       "path": "tests/meeting-store.test.ts",
       "sha256": "b5fc62817530476cc613cc1d06ee907581b242149dea865f78253808d279659c",
       "bytes": 2215
     },
     {
       "path": "tests/meetings.e2e.spec.ts",
-      "sha256": "484695ce8a747054fffcf6ae36adecd4b2120d4d1ded152c8f7c3d3de27cc3d1",
-      "bytes": 10668
+      "sha256": "c9cdc77b84c2198f1e84369e944c25b85dbdf3b22675131052a7a8224d81cba4",
+      "bytes": 10738
     },
     {
       "path": "tests/meetings.test.ts",

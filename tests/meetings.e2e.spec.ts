@@ -56,6 +56,7 @@ async function meetings(page: import("@playwright/test").Page) {
     .getByRole("navigation", { name: "Agenda" })
     .getByRole("button", { name: "Reuniones", exact: true })
     .click();
+  await page.getByRole("button", {name:"Lista", exact:true}).click();
 }
 test("prepara sin fecha, confirma, conserva borrador y recupera al recargar", async ({
   page,

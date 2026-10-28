@@ -1,0 +1,54 @@
+.meeting-schedule-filters{display:flex;flex-wrap:wrap;gap:16px;align-items:end;margin-bottom:18px}
+.meeting-schedule-filters .field{flex:1;min-width:min(100%,220px);max-width:440px;margin:0}
+.meeting-view-toggle{display:flex;gap:8px;margin-bottom:20px}
+.meeting-view-toggle .btn[aria-pressed=true]{color:var(--blue);background:var(--selected);border:2px solid var(--blue)}
+.meeting-month{container-type:inline-size;container-name:meeting-month;min-width:0}
+.meeting-month-toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.meeting-month-toolbar h2{text-transform:none;margin:0}
+.meeting-month-toolbar .actions{gap:8px;flex-wrap:wrap}
+.meeting-month-grid{width:100%;table-layout:fixed;border-collapse:collapse;background:var(--surface);font-variant-numeric:tabular-nums}
+.meeting-month-grid th{font-weight:600;text-align:center;padding:12px 0;color:var(--muted);font-size:.89rem}
+.meeting-month-grid abbr{text-decoration:none}
+.meeting-month-grid td{border:1px solid var(--line);padding:0;vertical-align:top}
+.meeting-month-grid .meeting-day-empty{background:var(--canvas)}
+.meeting-day-select,.meeting-day-summary{align-items:center;justify-content:space-between;gap:2px;width:100%;min-height:48px;padding:6px;font-size:1rem;color:var(--ink);font-weight:600;background:transparent;border:0}
+.meeting-day-select{display:none;cursor:pointer;min-width:48px}
+.meeting-day-summary{display:flex;flex-direction:column;justify-content:center}
+.meeting-day-select:hover{background:var(--control-hover)}
+.meeting-day-today .meeting-day-select>span:first-child,.meeting-day-today .meeting-day-summary>span:first-child{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:2px}
+.meeting-day-selected .meeting-day-select{background:var(--selected);box-shadow:inset 0 0 0 2px var(--blue);color:var(--blue)}
+.meeting-day-count{font-size:.89rem;font-weight:600;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 4px;background:var(--canvas)}
+.meeting-day-items{display:none}
+.meeting-month-entry{display:grid;gap:5px;width:100%;min-height:48px;min-width:0;text-align:left;background:var(--surface);color:var(--ink);border:0;border-top:1px solid var(--line);padding:10px 8px;cursor:pointer;font-family:inherit;font-size:.89rem;overflow-wrap:anywhere}
+.meeting-month-entry:hover{background:var(--control-hover)}
+.meeting-month-entry>span{display:flex;align-items:center;flex-wrap:wrap;gap:5px;font-variant-numeric:tabular-nums}
+.meeting-month-entry strong{font-size:inherit}
+.meeting-month-entry small{font-size:inherit;color:var(--muted)}
+.meeting-day-more{padding:8px;min-height:48px;width:100%;background:var(--selected);border:0;color:var(--blue);font:inherit;font-size:.89rem;cursor:pointer}
+.meeting-month-list-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:24px 0 16px;flex-wrap:wrap}
+.meeting-month-list-heading h2{margin:0}
+.meeting-date-group{margin:0 0 28px;scroll-margin-top:calc(var(--context-height,0px) + 24px)}
+.meeting-date-group>h2,.meeting-undated>h2{display:flex;gap:10px;align-items:center;font-size:1.15rem;margin:0 0 12px;text-transform:none}
+.meeting-date-group>h2 svg,.meeting-undated>h2 svg{flex-shrink:0}
+.meeting-browser .meeting-list{gap:12px}
+.meeting-browser .meeting-record{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow-wrap:anywhere}
+.meeting-browser .meeting-card{border:0;border-radius:0;background:transparent;gap:12px;padding:16px}
+.meeting-browser .meeting-type-icon{width:40px;height:40px;background:transparent}
+.meeting-browser .meeting-card-heading :is(h2,h3,h4){font-size:1.15rem}
+.meeting-browser .meeting-card p{margin:6px 0}
+.meeting-browser .meeting-when{font-size:1.2rem;font-variant-numeric:tabular-nums}
+.meeting-browser .meeting-actions{padding:0 16px 14px;margin:0}
+.meeting-schedule-event{padding:12px 16px 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center;color:var(--muted)}
+.meeting-schedule-event svg{flex-shrink:0}
+.meeting-schedule-context{margin:0 0 18px;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.meeting-undated{padding-top:20px;border-top:1px solid var(--line);margin-top:24px}
+.meeting-detail-event{background:var(--canvas);padding:14px;border-radius:8px}
+.meeting-detail-event p{margin:6px 0}
+@container meeting-month (min-width:338px){.meeting-day-select{display:flex}.meeting-day-summary{display:none}}
+@media(min-width:1100px){.meeting-day-items{display:block}.meeting-month-grid td{height:115px}.meeting-browser .meeting-card{align-items:center}.meeting-browser .meeting-card-copy{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:20px}.meeting-browser .meeting-card-heading,.meeting-browser .meeting-card-copy>p{grid-column:1}.meeting-browser .meeting-card-copy>button{grid-column:2;grid-row:1/5;align-self:center}}
+@media(max-width:760px){.meeting-month-toolbar .actions{width:100%;justify-content:space-between}.meeting-month-toolbar .btn{padding:9px 10px;gap:3px}.meeting-schedule-filters{gap:12px}.meeting-browser .meeting-card{gap:6px;padding:12px}.meeting-browser .meeting-type-icon{width:28px}.meeting-browser .meeting-card-heading{gap:8px}.meeting-browser .meeting-actions{padding:0 12px 12px}.meeting-schedule-event{padding:12px 12px 0}.meeting-month-entry{font-size:.89rem}}
+@media print{.meeting-print-list{display:block!important}.meeting-print-list .meeting-print-record{break-inside:avoid}.meeting-print-list .meeting-card{border:0;padding:8px 0}.meeting-print-list .meeting-card-heading :is(h2,h3,h4){font-size:18px}.meeting-print-list .meeting-schedule-event{padding:8px 0}.meeting-print-list .meeting-actions{display:none!important}}
+
+.meeting-browser .meeting-actions>.btn{flex:0 1 auto;overflow-wrap:normal;word-break:normal}
+.meeting-month-entry .meeting-month-confirmed{color:var(--green)}
+.meeting-month-toolbar h2::first-letter{text-transform:uppercase}

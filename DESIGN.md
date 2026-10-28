@@ -251,3 +251,5 @@ Marca de interfaz: `Brand.tsx` muestra `public/brand/symbol.svg` decorativo junt
 ## Organización de las pantallas
 
 Ficha: Datos, Equipo y Acceso, conservando formularios al cambiar de pestaña. Las tarjetas abren siempre «Ver ficha». Un enlace desde pendientes abre Equipo. Agenda contiene Programa y Reuniones; el plano abre ampliado. Publicar se sitúa junto a Añadir turno/intervención y conserva la revisión de alcance. Calendar separa Invitación de Respuestas; una invitación sin enviar no presenta recuentos como si se hubiera convocado. Histórico permite plegar eventos sin ocultarlos al imprimir. Los recorridos usan miniaturas protegidas y no persisten imágenes en offline.
+
+Reuniones alterna Mes y Lista, con ámbito por asamblea o conjunto autorizado. Mes usa lunes a domingo y acciones táctiles de 48 px; cuando no caben siete, la cuadrícula es informativa y la lista mantiene las acciones. Las fechas confirmadas prevalecen sobre borradores. La consulta conjunta identifica asamblea, localidad y zona horaria; para gestionar se abre la asamblea. Impresión siempre por días y solo publicaciones.

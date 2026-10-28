@@ -57,6 +57,8 @@ Para probar horarios reales elige fechas de ensayo que permitan observarlos; no 
 
 - [ ] Turnos: asignar, filtrar, marcar/corregir asistencia y sustituir conserva histórico.
 - [ ] Programa y planos publicados son consultables sin permisos de edición.
+- [ ] Reuniones: Mes y Lista muestran las mismas convocatorias; las fechas publicadas se conservan mientras hay borradores. La consulta conjunta identifica asamblea y zona horaria y solo permite gestionar al abrir el evento correspondiente.
+- [ ] Reuniones: filtros y posición se conservan al volver; sin conexión solo está disponible la copia guardada y la impresión excluye borradores.
 - [ ] Descargar consulta, desconectar y consultar muestra fecha/versión; no permite editar.
 - [ ] Impresión contiene evento, actualización y referencia a la versión vigente.
 - [ ] Existe copia privada y se ha ensayado recuperación en un entorno ficticio.

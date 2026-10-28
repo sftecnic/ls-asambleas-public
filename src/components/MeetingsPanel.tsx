@@ -1,4 +1,7 @@
 import CalendarPanel from './CalendarPanel';
+import MeetingSchedule from './MeetingSchedule';
+import {useViewState} from './ViewState';
+import {meetingScheduleRows,meetingInProgress,type MeetingScheduleRow} from '../domain/meetingSchedule';
 import ZoomConnection from './ZoomConnection';
 import {zoomDetails} from '../domain/zoom';
 import HomeFocus from './HomeFocus';
@@ -20,7 +23,7 @@ import {
   Mail,
   XCircle,
 } from "lucide-react";
-import type { Meeting, MeetingPublication, PanelProps } from "../domain/types";
+import type { AssemblyEvent, Meeting, MeetingPublication, PanelProps } from "../domain/types";
 import { can } from "../domain/rules";
 import { reasonLabels } from "../domain/meetingMail";
 import {
@@ -32,7 +35,7 @@ import {
   safeMeetingUrl,
   validateMeeting,
 } from "../domain/meetings";
-import { fromLocalInput, toLocalInput, uid } from "../domain/format";
+import { dateLabel, timeLabel, fromLocalInput, toLocalInput, uid } from "../domain/format";
 import { configured } from "../data/repository";
 import { meetingRequest, meetingServiceUrl } from "../data/meetingApi";
 import { Empty, ErrorMessage, Modal, Status } from "./UI";
@@ -50,12 +53,16 @@ export function MeetingCard({
   departmentNames,
   onOpen,
   headingLevel = 2,
+  compact = false,
+  inProgress = false,
 }: {
   meeting: Meeting | MeetingPublication;
   eventTimezone: string;
   departmentNames: string;
   onOpen?: () => void;
   headingLevel?: 2 | 3 | 4;
+  compact?:boolean;
+  inProgress?:boolean;
 }) {
   const Icon = meetingIcons[meeting.kind],
     published = "version" in meeting,
@@ -68,6 +75,7 @@ export function MeetingCard({
       <div className="meeting-card-copy">
         <div className="meeting-card-heading">
           <Heading>{meeting.title}</Heading>
+          {inProgress&&<Status kind="good">En curso</Status>}
           <Status
             kind={
               !published
@@ -87,7 +95,7 @@ export function MeetingCard({
         <p>{departmentNames}</p>
         <p className="meeting-when">
           <CalendarClock size={20} aria-hidden="true" />
-          {meetingWhen(meeting, eventTimezone)}
+          {compact&&meeting.startsAt?`${timeLabel(meeting.startsAt,eventTimezone)}${meeting.duration>0?' – '+timeLabel(new Date(Date.parse(meeting.startsAt)+meeting.duration*60000).toISOString(),eventTimezone):''}`:meetingWhen(meeting, eventTimezone)}
         </p>
         <p className="meeting-place">
           <MapPin size={18} aria-hidden="true" />
@@ -124,17 +132,28 @@ export function MeetingDetail({
   onClose,
   data,
   user,
+  eventInfo,
+  city,
+  readOnly=false,
+  connected=navigator.onLine,
+  onOpenEvent,
 }: {
   meeting: MeetingPublication;
   timezone: string;
   data?:PanelProps["data"];
   user?:PanelProps["user"];
+  eventInfo?:AssemblyEvent;
+  city?:string;
+  readOnly?:boolean;
+  connected?:boolean;
+  onOpenEvent?:()=>void;
   onClose: () => void;
 }) {
   const Icon = meetingIcons[meeting.kind];
   return (
     <Modal title={meeting.title} onClose={onClose}>
       <div className="stack">
+        {eventInfo&&<div className="meeting-detail-event"><strong>{eventInfo.title}</strong><p>{dateLabel(eventInfo.startDate)}{city?` · ${city}`:''}</p>{onOpenEvent&&<button className="btn" onClick={onOpenEvent}><ExternalLink size={20} aria-hidden="true"/>Abrir asamblea</button>}</div>}
         <section className="meeting-summary stack" aria-label="Reunión">
         <Status kind={meeting.status === "cancelled" ? "draft" : "good"}>
           {meeting.status === "cancelled" ? "Cancelada" : "Confirmada"}
@@ -164,7 +183,7 @@ export function MeetingDetail({
         )}
         {meeting.status === 'confirmed'&&meeting.kind==='zoom'&&<ZoomConnection meeting={meeting}/>}
         </section>
-        <CalendarPanel kind="meeting" id={meeting.id} data={data} user={user} online={navigator.onLine}/>
+        <CalendarPanel kind="meeting" id={meeting.id} eventId={meeting.eventId} data={data} user={user} online={connected} readOnly={readOnly}/>
         <p className="small">
           Versión {meeting.version} ·{" "}
           {meetingWhen({ ...meeting, startsAt: meeting.publishedAt }, timezone)}
@@ -238,7 +257,7 @@ export function UpcomingMeetings({
     </section>
   );
 }
-export default function MeetingsPanel(props: PanelProps & {initialIntent?:HomeIntent}) {
+export default function MeetingsPanel(props: PanelProps & {initialIntent?:HomeIntent;scheduleRows?:MeetingScheduleRow[];connected?:boolean;onOpenEvent?:(eventId:string)=>void}) {
   const { data, event, user, online } = props;
   const [editing, setEditing] = useState<Meeting>(),
     [detail, setDetail] = useState<MeetingPublication | undefined>(() =>
@@ -250,34 +269,24 @@ export default function MeetingsPanel(props: PanelProps & {initialIntent?:HomeIn
     ),
     [deliveries, setDeliveries] = useState<any[]>(),
     [error, setError] = useState(""),
-    [busy, setBusy] = useState(false),
-    [filter, setFilter] = useState(props.initialIntent?.departmentIds.length===1?props.initialIntent.departmentIds[0]:"");
+    [busy, setBusy] = useState(false);
+  const [filter,setFilter]=useViewState('meetings.department',props.initialIntent?.departmentIds.length===1?props.initialIntent.departmentIds[0]:"",'departamento');
+  const [savedScope,setScope]=useViewState<'event'|'all'>('meetings.scope','event','ambito');
   const [homeIntent,setHomeIntent]=useState(props.initialIntent);
+  const connected=props.connected??navigator.onLine,scope=connected&&!homeIntent&&savedScope==='all'?'all':'event';
   const focusedIds=homeIntent?.filter?new Set(attentionIds(data,event.id,homeIntent)):null;
   const allowed = data.departments.filter(
     (d) =>
       can(user, data, "edit", event.id, d.id) ||
       can(user, data, "publish", event.id, d.id),
   );
-  const pubs = (data.meetingPublications || []).filter(
-      (m) => m.eventId === event.id,
-    ),
-    drafts = (data.meetings || []).filter((m) => m.eventId === event.id);
-  const ids = [...new Set([...pubs, ...drafts].map((m) => m.id))];
-  const rows = ids
-    .map((id) => ({
-      draft: drafts.find((m) => m.id === id),
-      pub: pubs.find((m) => m.id === id),
-    }))
-    .filter(
-      ({ draft, pub }) =>
-        (!filter || (draft || pub)!.departmentIds.includes(filter))&&(!homeIntent||(draft||pub)!.departmentIds.some(id=>homeIntent.departmentIds.includes(id)))&&(!focusedIds||focusedIds.has((draft||pub)!.id)),
-    )
-    .sort((a, b) =>
-      ((a.pub || a.draft)!.startsAt || "9999").localeCompare(
-        (b.pub || b.draft)!.startsAt || "9999",
-      ),
-    );
+  const overview=props.scheduleRows??meetingScheduleRows(data,user,{publishedOnly:!online,offlineEventId:!connected?event.id:undefined});
+  const rows=overview.filter(row=>(scope==='all'||row.event.id===event.id)&&(!filter||row.meeting.departmentIds.includes(filter))&&(!homeIntent||row.meeting.departmentIds.some(id=>homeIntent.departmentIds.includes(id)))&&(!focusedIds||focusedIds.has(row.meeting.id)));
+  const pubs=overview.filter(row=>row.event.id===event.id&&row.pub).map(row=>row.pub!);
+  const detailRow=detail?overview.find(row=>row.event.id===detail.eventId&&row.meeting.id===detail.id):undefined;
+  const departmentIds=new Set(overview.filter(row=>scope==='all'||row.event.id===event.id).flatMap(row=>row.meeting.departmentIds));
+  const availableDepartments=data.departments.filter(d=>departmentIds.has(d.id)||can(user,data,'view',event.id,d.id));
+  const openRow=(row:MeetingScheduleRow)=>{if(row.pub)setDetail(row.pub);else if(scope==='event'&&online)setEditing(meetingDraft(row.draft!));else props.onOpenEvent?.(row.event.id);};
   async function cancel(m: MeetingPublication) {
     if (
       !window.confirm(
@@ -300,78 +309,31 @@ export default function MeetingsPanel(props: PanelProps & {initialIntent?:HomeIn
       setBusy(false);
     }
   }
-  return (
-    <section>
-      <HomeFocus intent={homeIntent} onClear={()=>setHomeIntent(undefined)}/>
-      <div className="page-heading">
-        <div>
-          <h1>Reuniones</h1>
-        </div>
-        {online && allowed.length > 0 && (
-          <button
-            className="btn btn-primary"
-            disabled={configured && !meetingServiceUrl}
-            onClick={() =>
-              setEditing({
-                id: uid(),
-                eventId: event.id,
-                departmentIds: [allowed[0].id],
-                kind: "zoom",
-                title: meetingLabels.zoom,
-                startsAt: "",
-                duration: 0,
-                location: "",
-                address: "",
-                zoomUrl: "",
-                instructions: "",
-                sessionDate: event.startDate,
-                session: "morning",
-                additionalPersonIds: [],
-              })
-            }
-          >
-            <Plus size={21} aria-hidden="true" />
-            Añadir reunión
-          </button>
-        )}
-      </div>
-      <ErrorMessage message={error} />
-      {configured && !meetingServiceUrl && (
-        <div className="message info">
-          El servicio de reuniones está pendiente de conectar.
-        </div>
-      )}
-      <label className="field meeting-filter no-print">
-        Departamento
-        <select value={filter} onChange={(e) => {setHomeIntent(undefined);setFilter(e.target.value);}}>
-          <option value="">Todos los departamentos</option>
-          {data.departments.map((d) => (
-            <option key={d.id} value={d.id}>
-              {d.name}
-            </option>
-          ))}
-        </select>
-      </label>
-      <div className="meeting-list">
-        {rows.map(({ draft, pub }) => {
-          const m = pub || draft!,
+  const renderRow=(row:MeetingScheduleRow,now:number,printing=false)=>{
+          const {draft,pub}=row;
+          const m = row.meeting,
             editable =
-              online &&
+              scope==='event'&&!printing&&online &&
               m.departmentIds.every(
                 (d) =>
                   can(user, data, "edit", event.id, d) ||
                   can(user, data, "publish", event.id, d),
               );
           return (
-            <div key={m.id} className="meeting-record">
+            <div key={row.key} className={printing?"meeting-print-record":"meeting-record"}>
+              {scope==='all'&&<div className="meeting-schedule-event"><CalendarClock size={19} aria-hidden="true"/><strong>{row.event.title}</strong><span>{row.venue?.city||''}</span></div>}
               <MeetingCard
+                headingLevel={3}
+                compact
+                inProgress={meetingInProgress(m,now)}
                 meeting={m}
                 eventTimezone={event.timezone}
                 departmentNames={m.departmentIds
                   .map((id) => data.departments.find((d) => d.id === id)?.name)
                   .join(", ")}
-                onOpen={pub ? () => setDetail(pub) : undefined}
+                onOpen={pub&&!printing ? () => setDetail(pub) : undefined}
               />
+              {scope==='all'&&!printing&&props.onOpenEvent&&<div className="meeting-actions no-print"><button className="btn" onClick={()=>props.onOpenEvent?.(row.event.id)}><ExternalLink size={20} aria-hidden="true"/>Abrir asamblea</button></div>}
               {editable && (
                 <div className="meeting-actions no-print">
                   <button
@@ -442,13 +404,65 @@ export default function MeetingsPanel(props: PanelProps & {initialIntent?:HomeIn
               )}
             </div>
           );
-        })}
+  };
+  return (
+    <section>
+      <HomeFocus intent={homeIntent} onClear={()=>setHomeIntent(undefined)}/>
+      <div className="page-heading">
+        <div>
+          <h1>Reuniones</h1>
+        </div>
+        {scope==='event'&&online && allowed.length > 0 && (
+          <button
+            className="btn btn-primary"
+            disabled={configured && !meetingServiceUrl}
+            onClick={() =>
+              setEditing({
+                id: uid(),
+                eventId: event.id,
+                departmentIds: [allowed[0].id],
+                kind: "zoom",
+                title: meetingLabels.zoom,
+                startsAt: "",
+                duration: 0,
+                location: "",
+                address: "",
+                zoomUrl: "",
+                instructions: "",
+                sessionDate: event.startDate,
+                session: "morning",
+                additionalPersonIds: [],
+              })
+            }
+          >
+            <Plus size={21} aria-hidden="true" />
+            Añadir reunión
+          </button>
+        )}
       </div>
-      {!rows.length && (
-        <Empty>
-          Aún no hay reuniones{filter ? " en este departamento" : ""}.
-        </Empty>
+      <ErrorMessage message={error} />
+      {configured && !meetingServiceUrl && (
+        <div className="message info">
+          El servicio de reuniones está pendiente de conectar.
+        </div>
       )}
+      <div className="meeting-schedule-filters no-print">
+      <label className="field">Reuniones de<select aria-label="Reuniones de" value={scope} onChange={e=>{setHomeIntent(undefined);setScope(e.target.value as 'event'|'all');}}><option value="event">Esta asamblea</option><option value="all" disabled={!connected}>Todas las asambleas</option></select></label>
+      <label className="field meeting-filter">
+        Departamento
+        <select aria-label="Departamento" value={filter} onChange={(e) => {setHomeIntent(undefined);setFilter(e.target.value);}}>
+          <option value="">Todos los departamentos</option>
+          {availableDepartments.map((d) => (
+            <option key={d.id} value={d.id}>
+              {d.name}
+            </option>
+          ))}
+        </select>
+      </label>
+      </div>
+      {scope==='all'&&<p className="meeting-schedule-context"><CalendarClock size={21} aria-hidden="true"/><strong>Todas las asambleas</strong><span>Hora: {event.timezone}</span><span className="small no-print">Solo consulta</span></p>}
+      {!connected&&<p className="message info">Consulta guardada · {event.title}</p>}
+      <MeetingSchedule rows={rows} timezone={event.timezone} fallbackDate={event.startDate} showEvent={scope==='all'} scopeKey={scope+':'+filter+':'+(homeIntent?.filter||'')} onOpen={openRow} renderRow={renderRow}/>
       {editing && (
         <MeetingForm
           {...props}
@@ -461,6 +475,11 @@ export default function MeetingsPanel(props: PanelProps & {initialIntent?:HomeIn
         <MeetingDetail
           meeting={detail}
           data={data} user={user}
+          eventInfo={detailRow?.event}
+          city={detailRow?.venue?.city}
+          connected={connected}
+          readOnly={scope==='all'||!online}
+          onOpenEvent={scope==='all'&&props.onOpenEvent?()=>props.onOpenEvent!(detail.eventId):undefined}
           timezone={event.timezone}
           onClose={() => setDetail(undefined)}
         />

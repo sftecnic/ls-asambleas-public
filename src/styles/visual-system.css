@@ -235,4 +235,5 @@ html.stage-expanded{scroll-padding-top:calc(var(--stage-header-height,100px) + 1
 @media print{.history-event-content[hidden]{display:block!important}.history-event-toggle svg{display:none}.section-tabs,.page-actions,.tour-entries{display:none!important}}
 
 .meeting-summary{padding-bottom:1rem;border-bottom:1px solid var(--line)}
+.sidebar :is(button,a){scroll-margin:0}
 @media(max-width:760px){.section-tabs{gap:.25rem}.section-tabs button{flex-direction:column;gap:.2rem}.team-dialog-heading .team-heading-icon{display:none}.team-dialog-heading{padding:.75rem}.team-dialog-content{padding:.75rem}.profile-summary dl{font-size:.89rem;gap:.3rem .75rem}.event-select-value{font-size:1rem}.context-actions .btn{padding-inline:.45rem}}

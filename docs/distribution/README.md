@@ -14,6 +14,8 @@ Desde 0.7.0 incluye [Calendar, Zoom por número y circuitos](docs/CALENDAR.md): 
 
 Desde 0.8.0, **Agenda** reúne Programa y Reuniones; las fichas separan **Datos, Equipo y Acceso**, y el plano abre ampliado. Consulta el [rediseño y su validación](docs/DISENO-080.md). El repositorio incluye cuatro [skills de diseño completas y versionadas](docs/SKILLS.md), con licencias, referencias y comandos de comprobación y recuperación.
 
+Desde 0.9.0, **Agenda → Reuniones** permite alternar **Mes · Lista** y consultar una o todas las asambleas autorizadas. Consulta [uso, impresión y modo offline](docs/REUNIONES-VISTAS.md). Actualizar esta versión solo requiere Hosting.
+
 **Código disponible para uso no comercial**, bajo [PolyForm Noncommercial 1.0.0](LICENSE). Permite usar, modificar y distribuir respetando sus condiciones. Las dependencias conservan sus licencias; consulta [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
 ## Empezar
