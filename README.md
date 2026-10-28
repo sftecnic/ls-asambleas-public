@@ -12,6 +12,8 @@ Desde 0.6.0, las fichas privadas permiten [nombramiento y precursorado actuales]
 
 Desde 0.7.0 incluye [Calendar, Zoom por número y circuitos](docs/CALENDAR.md): invitaciones desde el calendario del organizador, respuestas dentro de la aplicación y recordatorios de Gmail. Cada instalación conecta sus propias cuentas. Los borradores, importaciones y datos antiguos no envían invitaciones automáticamente. SC se vincula al circuito, sin congregación ficticia.
 
+Desde 0.8.0, **Agenda** reúne Programa y Reuniones; las fichas separan **Datos, Equipo y Acceso**, y el plano abre ampliado. Consulta el [rediseño y su validación](docs/DISENO-080.md). El repositorio incluye cuatro [skills de diseño completas y versionadas](docs/SKILLS.md), con licencias, referencias y comandos de comprobación y recuperación.
+
 **Código disponible para uso no comercial**, bajo [PolyForm Noncommercial 1.0.0](LICENSE). Permite usar, modificar y distribuir respetando sus condiciones. Las dependencias conservan sus licencias; consulta [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
 ## Empezar
@@ -22,7 +24,7 @@ Desde 0.7.0 incluye [Calendar, Zoom por número y circuitos](docs/CALENDAR.md): 
 
 ```powershell
 npm.cmd ci
-npm.cmd run dev
+npm.cmd run dev:demo
 ```
 
 Abre la dirección local que muestra Vite. Debe aparecer **Datos ficticios**. La demostración funciona sin cuentas cloud y guarda cambios solo en tu navegador. No introduzcas información real.
@@ -56,6 +58,8 @@ Importar no envía correos ni publica turnos. Dar acceso es una selección poste
 
 ```powershell
 npm.cmd test
+npm.cmd run skills:check
+npm.cmd run test:skills
 npm.cmd run test:installation
 npm.cmd run check:worker
 npm.cmd run build

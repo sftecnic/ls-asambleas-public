@@ -71,7 +71,7 @@ test('móvil, escritorio, teclado, texto grande y ausencia de enlaces en Program
  const link=page.getByRole('link',{name:'Abrir WhatsApp con David Romero',exact:true});await link.focus();await expect(link).toBeFocused();
  const popup=page.waitForEvent('popup');await page.keyboard.press('Enter');await(await popup).close();
  await page.setViewportSize({width:720,height:1000});await page.addStyleTag({content:':root{font-size:36px!important}'});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
- await nav(page,'Programa').click();await expect(page.locator('.person-whatsapp')).toHaveCount(0);
+ await nav(page,'Agenda').click();await expect(page.locator('.person-whatsapp')).toHaveCount(0);
 });
 
 test('editar teléfono y retirar un cargo actualiza los contactos sin conceder otros permisos',async({page})=>{
@@ -83,8 +83,8 @@ test('editar teléfono y retirar un cargo actualiza los contactos sin conceder o
  await page.getByRole('button',{name:'Ver voluntario',exact:true}).click();await expect(page.getByRole('link',{name:'Abrir WhatsApp con David Romero',exact:true})).toHaveAttribute('href','https://wa.me/34622333444');
  await expect(page.getByRole('button',{name:'Clasificación de David Romero: Oyente',exact:true})).toBeVisible();
  await page.getByRole('button',{name:'Ver responsable',exact:true}).click();await nav(page,'Equipo').click();await page.getByRole('button',{name:'Equipo del evento',exact:true}).click();
- const card=page.locator('.team-person-list article').filter({has:page.getByRole('heading',{name:'David Romero',exact:true})});await card.getByRole('button',{name:'Preparar acceso',exact:true}).click();
- const detail=page.getByRole('dialog',{name:'David Romero',exact:true});await detail.getByLabel('Cargo en este departamento').selectOption('volunteer');await expect(detail.getByLabel('Cargo en este departamento')).toBeEnabled();await detail.getByRole('button',{name:'Cerrar ficha',exact:true}).click();
+ const card=page.locator('.team-person-list article').filter({has:page.getByRole('heading',{name:'David Romero',exact:true})});await card.getByRole('button',{name:'Ver ficha de David Romero',exact:true}).click();
+ const detail=page.getByRole('dialog',{name:'David Romero',exact:true});await detail.getByRole('tab',{name:'Equipo',exact:true}).click();await detail.getByLabel('Cargo en este departamento').selectOption('volunteer');await expect(detail.getByLabel('Cargo en este departamento')).toBeEnabled();await detail.getByRole('button',{name:'Cerrar ficha',exact:true}).click();
  await page.getByRole('button',{name:'Ver voluntario',exact:true}).click();await expect(page.getByRole('region',{name:'Contactos de tus departamentos'}).getByRole('link')).toHaveCount(1);await expect(page.getByRole('link',{name:'Abrir WhatsApp con David Romero',exact:true})).toHaveCount(0);
  await expect(page.getByRole('button',{name:/Clasificación de David Romero/})).toHaveCount(0);
 });

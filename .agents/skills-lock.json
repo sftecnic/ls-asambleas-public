@@ -1,0 +1,653 @@
+{
+  "format": 1,
+  "skills": [
+    {
+      "name": "frontend-design",
+      "repository": "anthropics/skills",
+      "commit": "dbd4588f9e1033efb41dad4bef2f7947c8993d44",
+      "sourcePath": "skills/frontend-design",
+      "license": "Apache-2.0",
+      "licenseFile": "LICENSE.txt",
+      "required": [],
+      "files": {
+        "LICENSE.txt": {
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+          "url": "https://raw.githubusercontent.com/anthropics/skills/dbd4588f9e1033efb41dad4bef2f7947c8993d44/skills/frontend-design/LICENSE.txt"
+        },
+        "SKILL.md": {
+          "sha256": "d91970639e9f5c37682ac7ab60094d35f1c7c1f38d731bd56396563aee10c1d3",
+          "url": "https://raw.githubusercontent.com/anthropics/skills/dbd4588f9e1033efb41dad4bef2f7947c8993d44/skills/frontend-design/SKILL.md"
+        }
+      }
+    },
+    {
+      "name": "web-design-guidelines",
+      "repository": "vercel-labs/agent-skills",
+      "commit": "063bee94c3f4df8453406c830b0a7df0f2860278",
+      "sourcePath": "skills/web-design-guidelines",
+      "license": "MIT",
+      "licenseFile": "LICENSE",
+      "required": [
+        "references/guidelines.md"
+      ],
+      "files": {
+        "LICENSE": {
+          "sha256": "6cd1609c9c12233507cdd2ce0d32e9a721e3c27494951be06b90090deeeb7af2",
+          "url": "https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/434b7f91364665f2f733b310ec54809bf8f37937/LICENSE"
+        },
+        "references/guidelines.md": {
+          "sha256": "d246b026f4f29b5823a9cc857f9edf3d2507002e055e32040cadeaf3b38e0234",
+          "url": "https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/434b7f91364665f2f733b310ec54809bf8f37937/command.md"
+        },
+        "references/upstream-readme.md": {
+          "sha256": "7c02f64b08fc6c4eef03c01d64f3e2ed478193ccfcbd14edba379abe23304651",
+          "url": "https://raw.githubusercontent.com/vercel-labs/agent-skills/063bee94c3f4df8453406c830b0a7df0f2860278/README.md"
+        },
+        "SKILL.md": {
+          "sha256": "7c082fa182b176247b5cdf0da1136d97c745dd471ac099b24e01c6d2109f4fe9",
+          "url": "https://raw.githubusercontent.com/vercel-labs/agent-skills/063bee94c3f4df8453406c830b0a7df0f2860278/skills/web-design-guidelines/SKILL.md",
+          "replacements": [
+            {
+              "from": "Fetch fresh guidelines before each review:",
+              "to": "Use the pinned local copy at references/guidelines.md for reproducible and offline reviews. Check the current upstream version when network access is available; record differences without updating the pinned copy silently. Upstream source:"
+            },
+            {
+              "from": "1. Fetch the latest guidelines from the source URL below",
+              "to": "1. Read references/guidelines.md; compare with the source URL below when online"
+            },
+            {
+              "from": "1. Fetch guidelines from the source URL above",
+              "to": "1. Read references/guidelines.md; compare with the source URL above when online"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "impeccable",
+      "repository": "pbakaus/impeccable",
+      "commit": "5cb95eea9c96479f57afe0732a45470d30183326",
+      "sourcePath": ".agents/skills/impeccable",
+      "license": "Apache-2.0",
+      "licenseFile": "LICENSE",
+      "required": [
+        "scripts/impeccable",
+        "scripts/impeccable.cmd",
+        "reference/craft-floor.md"
+      ],
+      "files": {
+        "agents/impeccable_asset_producer.toml": {
+          "sha256": "4dbdb0cfdc2466961da6b22d200f3ec7bf8bb47c27448a2e6e3c03cdbf589831",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/agents/impeccable_asset_producer.toml"
+        },
+        "agents/impeccable_documenter.toml": {
+          "sha256": "2feb3768125ba6469c92a50d516727e6d42f44579165ddfd33409948e2a3803d",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/agents/impeccable_documenter.toml"
+        },
+        "agents/impeccable_finish_reviewer.toml": {
+          "sha256": "1b80232e22d52b06a7278b9ca1f24f871a181c62cd91f4b18728807e7cf49dbd",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/agents/impeccable_finish_reviewer.toml"
+        },
+        "agents/impeccable_manual_edit_applier.toml": {
+          "sha256": "6c9ce3e27ec4520ead001da3aad2a2ebba481c4e5cd22873db8890259ee579fe",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/agents/impeccable_manual_edit_applier.toml"
+        },
+        "agents/openai.yaml": {
+          "sha256": "ce9967ad70f99cf04456f3347c266723c2fbbb600267d10a822b7cd20562c321",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/agents/openai.yaml"
+        },
+        "LICENSE": {
+          "sha256": "02bb8c3b4e70190e3986c0404ad2fd8d639b4f534252d82379cc1b502b6d1812",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/LICENSE"
+        },
+        "reference/adapt.md": {
+          "sha256": "9807cdc112b8bcbdeff9cd2516cda4d07129f1d47f29df4d57645344f34950c1",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/adapt.md"
+        },
+        "reference/adapt.native.md": {
+          "sha256": "2455a2613e1fa29b986521c73cbad9424ccda70ef6cbe505779dbca5e16272a2",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/adapt.native.md"
+        },
+        "reference/android.md": {
+          "sha256": "058f81f256134841875fd3183e06b37a023de0c877fd2b9eecd97011640791fe",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/android.md"
+        },
+        "reference/animate.md": {
+          "sha256": "d658c48ffbe0031e8e3b318996cad6ceafe29e40aa50d5bb25e4bf1d6839dc7c",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/animate.md"
+        },
+        "reference/audit.md": {
+          "sha256": "4b726d8f13ca1dbb82ca8179cbfefca8c53c13766fef4d7b8870f5d4324da2d6",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/audit.md"
+        },
+        "reference/audit.native.md": {
+          "sha256": "2898eff507738f9102107809e671df3e69f889dee30073030fe96fb2483d8ea3",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/audit.native.md"
+        },
+        "reference/bolder.md": {
+          "sha256": "05b78fb0595e4d5afbf5f17470c84e89cf82f205fea3a6e9b6d8d779b7c4aab1",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/bolder.md"
+        },
+        "reference/clarify.md": {
+          "sha256": "173dd66abe65633910dcb04a51f40d6ff2a793f87088f022a02fc4cad24dd133",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/clarify.md"
+        },
+        "reference/colorize.md": {
+          "sha256": "bc5f71f1129d0f2c310d913d07c8dc609a1d25644121bd78c308f42d52a0b9e9",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/colorize.md"
+        },
+        "reference/component-review.md": {
+          "sha256": "10489e5265e49a4ef2737cd0e674c149ed41e1f703efe922e53ea3c91e833427",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/component-review.md"
+        },
+        "reference/craft-floor.md": {
+          "sha256": "52b523e92b76daff71be2ec8c732c374c670f8d03e1296388738e581479ec1bb",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/craft-floor.md"
+        },
+        "reference/craft.md": {
+          "sha256": "9205e222bc6565b37fb504ceec93233c2d2a456802b69d16e6b1c44723907c4c",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/craft.md"
+        },
+        "reference/critique.md": {
+          "sha256": "c210c9506877c6c8d88880a337fddd95d4315daf70ed6bc631ee6520481f1a0c",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/critique.md"
+        },
+        "reference/degraded/asset-producer.md": {
+          "sha256": "877d274f41500c780bad25b2bca7fa95eff1a32a7b95397dd388c72848e86a6c",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/degraded/asset-producer.md"
+        },
+        "reference/degraded/documenter.md": {
+          "sha256": "bcc05ea92faebb5c74037a9d4263a5ce9a56f5ab07c8ab3c59ee704d8cade745",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/degraded/documenter.md"
+        },
+        "reference/degraded/finish-reviewer.md": {
+          "sha256": "c33c4cfa7f0ce0bedde80d4fc3b595e747d0e9b43a77f06cacb8e899802f709d",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/degraded/finish-reviewer.md"
+        },
+        "reference/degraded/manual-edit-applier.md": {
+          "sha256": "5fae7f8a2fc3ddd49ad0a413446dc44daedef5b6b7de5eb935bd2fbfad646d58",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/degraded/manual-edit-applier.md"
+        },
+        "reference/delight.md": {
+          "sha256": "098a891028ce59c212b747d3c70468dd750aff7053a703d1336045ed31e0da7c",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/delight.md"
+        },
+        "reference/distill.md": {
+          "sha256": "56ca75d680eb8b61ca3a298d18e895cd4a0dcc520c31d7938a4807ff8dcf18ea",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/distill.md"
+        },
+        "reference/doctor.md": {
+          "sha256": "3dbef3fe606de4de0f1b5cab5f19902799e05cf566eb8223e9aa1632eeb04698",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/doctor.md"
+        },
+        "reference/document.md": {
+          "sha256": "531d2b6c8c9affc7b794de7904905ff9b73962b986968fd1e90273eb26930b6e",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/document.md"
+        },
+        "reference/extract.md": {
+          "sha256": "5477ae97189e5c1236cee71a25a5ae50014429a5a2e6da28355c8021a6cdeddd",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/extract.md"
+        },
+        "reference/generate.md": {
+          "sha256": "11385badfb532196cec249e73bac2b7f58ada033ed8c4b02b9f0d64ddb46f0dc",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/generate.md"
+        },
+        "reference/harden.md": {
+          "sha256": "4167eb7fc456cdfe09ff0ac2dbcb5e59cee57e590137aab6cc8ec08aafb6d775",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/harden.md"
+        },
+        "reference/hooks.md": {
+          "sha256": "4a19b53425643c01332a2f83ae71d58f267f4a1fb72e07378a5310f69c34108e",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/hooks.md"
+        },
+        "reference/init.md": {
+          "sha256": "51349b3a32c7f907102dd680d8e2df9da27082caf46ee15c673be7ce14a5363b",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/init.md"
+        },
+        "reference/ios.md": {
+          "sha256": "40c87038b5f75147a5952a96237acf312a327bf70c1bcd8e0a5f064625ae9668",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/ios.md"
+        },
+        "reference/layout.md": {
+          "sha256": "0bc7d7971b3edf2acd0580e847458dc6d84129d90715b452799ace3bed815c7c",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/layout.md"
+        },
+        "reference/live-setup.md": {
+          "sha256": "2b5b2fbf5f658f34ea1997fb1aeebe01604d05187f75c6a4f1f55a5bc78520a4",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/live-setup.md"
+        },
+        "reference/live.md": {
+          "sha256": "7caeecefe54d68bc915a7f2978cba5e88eda69a239cb09dcce78c6d94e93df84",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/live.md"
+        },
+        "reference/mode-operate.md": {
+          "sha256": "7a52dd7a94ee75f6ae89542c86a1b6e1d306812b16e0d9dbf12d4acad44d148b",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/mode-operate.md"
+        },
+        "reference/mode-persuade.md": {
+          "sha256": "21e78c8a77badb3f83290cd4577ed3b24bd4dd3b57136d7da75733d4f3ee9ac0",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/mode-persuade.md"
+        },
+        "reference/mode-read.md": {
+          "sha256": "a569989e6a3d6453b4c45e9474e162a15cc54e11732ac6baa7990a6e7cccc0b5",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/mode-read.md"
+        },
+        "reference/new-work.md": {
+          "sha256": "2ecb8674f239b5386faf955a52f9cc58c7a064a27d7c91bfc871b63d6a9c9c15",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/new-work.md"
+        },
+        "reference/onboard.md": {
+          "sha256": "a2b8fd01ea12139b39b3285393f805bb8c326e11b2234dbff4c26c17b4e9c280",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/onboard.md"
+        },
+        "reference/operate.md": {
+          "sha256": "a9d2203acd45ca33a13d5c68b02b23ed512425ac15f0e8438318ed124b43729d",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/operate.md"
+        },
+        "reference/optimize.md": {
+          "sha256": "89d679ec08e55fe7661d54addc950c2ff77cf574aa97e593ec6da089fd1efedf",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/optimize.md"
+        },
+        "reference/overdrive.md": {
+          "sha256": "0a0d4ae6eea720c6d6e1c073fc77192d7c2100f78a44d9a8d262ddf22270cf4d",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/overdrive.md"
+        },
+        "reference/polish.md": {
+          "sha256": "81666fc7f783b4e3514db6554e713dc0479bd9cdedb06e93d15f8b579aae869a",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/polish.md"
+        },
+        "reference/quieter.md": {
+          "sha256": "9e03b55c6bbdd4acba28cfa9c3b74ba1a4448cdbd35a7200990ab460c6eecaa0",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/quieter.md"
+        },
+        "reference/region-map.md": {
+          "sha256": "778cedc9199b407d3e23fa1041e38d548b00b1101a33517aa2a2eb299f9d0edc",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/region-map.md"
+        },
+        "reference/routing.md": {
+          "sha256": "77ae09542fbc10aa4e8b119d6fd19359908a47c13c30068d6a150bfdb50e3e10",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/routing.md"
+        },
+        "reference/shape.md": {
+          "sha256": "a55f016c046cb6a27c55bd7f346375aeb506a755c4fbca19a5f92dbd42309c23",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/shape.md"
+        },
+        "reference/typeset.md": {
+          "sha256": "c26c5b4524f3ccb650ed0680c10c25fd18083f8ebfd00a54c4d983c4747aab70",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/typeset.md"
+        },
+        "reference/visualize.md": {
+          "sha256": "1c81a831f9dd28b908306fa06e2f2944ca4595ff3df6570750c10bf806465f00",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/reference/visualize.md"
+        },
+        "scripts/command-metadata.json": {
+          "sha256": "e8720f3aa41135211cc58cc299a39eeda86c75651f4279cc1ede8db10dcc0584",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/scripts/command-metadata.json"
+        },
+        "scripts/data/font-index-failures.json": {
+          "sha256": "835f19a0a3812f3652dd6979a2ce5597f654fd01f26e1b420b92d5f42b997ce4",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/scripts/data/font-index-failures.json"
+        },
+        "scripts/data/font-index.json": {
+          "sha256": "47edbdfaf27073c47033d1ac7dfee881be49e2dcbda7671d1157300481dde6da",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/scripts/data/font-index.json"
+        },
+        "scripts/impeccable": {
+          "sha256": "f5d9fcd37559ed6af782306f71b7688ad1ec5e1a4f8ae1ef4d3168f42523b1b1",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/scripts/impeccable",
+          "executable": true
+        },
+        "scripts/impeccable.cmd": {
+          "sha256": "e0dcc4cd739c8a6ac9e8ce637c216cf8bd4ddae36a8bac458345bdb5a5d7e252",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/scripts/impeccable.cmd"
+        },
+        "scripts/live-browser-dom.js": {
+          "sha256": "4b379aff87ce0f485008a2b6a0dc711d00a869f5cf0ec2459279d6364fbf0c9e",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/scripts/live-browser-dom.js"
+        },
+        "scripts/live-browser-ignores.js": {
+          "sha256": "c1cb6877ca99a0c1b38ba0c7d59f32702d3022f6821d8045f7133f7c40b6362f",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/scripts/live-browser-ignores.js"
+        },
+        "scripts/live-browser-session.js": {
+          "sha256": "2b45c12bef4e25d40b673044c9f124d1da6dfa72ef3f0c09ff30fdb419048e5d",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/scripts/live-browser-session.js"
+        },
+        "scripts/live-browser.js": {
+          "sha256": "8f26a309ae1af52d2413a39a886908721e78c55b468025054e06e8faffe90cf0",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/scripts/live-browser.js"
+        },
+        "scripts/modern-screenshot.umd.js": {
+          "sha256": "bb36665889124a0b6e15f16045265737449c3bdcf2712cdb08af3cfa01563e2b",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/scripts/modern-screenshot.umd.js"
+        },
+        "scripts/VERSION": {
+          "sha256": "7470694a0b5af87394b523c1a640e2ad099efbe0e6d9e6d2f7a70703e4d04457",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/scripts/VERSION"
+        },
+        "SKILL.md": {
+          "sha256": "88e9a46a91b6ddd1059f03f578bd0f9bbe6d212d6a395124379b9bb5c97c5cf2",
+          "url": "https://raw.githubusercontent.com/pbakaus/impeccable/5cb95eea9c96479f57afe0732a45470d30183326/.agents/skills/impeccable/SKILL.md"
+        }
+      }
+    },
+    {
+      "name": "ui-ux-pro-max",
+      "repository": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "commit": "28b3b8dee8c976df4fa3e94aed4e092ad43fcb03",
+      "sourcePath": ".claude/skills/ui-ux-pro-max",
+      "license": "MIT",
+      "licenseFile": "LICENSE",
+      "required": [
+        "scripts/search.py",
+        "scripts/core.py",
+        "data/ux-guidelines.csv",
+        "references/quick-reference.md"
+      ],
+      "files": {
+        "data/app-interface.csv": {
+          "sha256": "331e7cf2c0b222d80c566c5f255c63cb339f65bfd02e471a720f28e4864a9f08",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/app-interface.csv"
+        },
+        "data/catalog-summary.json": {
+          "sha256": "6638da97231c07fb5cef3cd9d3ce483ca7b2f9748980f8c27490eb03968d8894",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/catalog-summary.json"
+        },
+        "data/charts.csv": {
+          "sha256": "4115cf1120680f2cedef0676cb648f30c7ef4699e2a947535d4113e71ed3b12a",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/charts.csv"
+        },
+        "data/colors.csv": {
+          "sha256": "8162429222bce22df62b564085946a30d07cc9722c58d0a3a494bd0d1d00841c",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/colors.csv"
+        },
+        "data/data-provenance.json": {
+          "sha256": "e82fb33ed49375a300e93d9c11ccd1c1493c999e84ee7ee295e527634786e2e0",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/data-provenance.json"
+        },
+        "data/google-font-licenses.json": {
+          "sha256": "35688523f2955795caa1a47c53b83099e60c1708461476f9cc3a050cf3b0148a",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/google-font-licenses.json"
+        },
+        "data/google-fonts.csv": {
+          "sha256": "1c8c3b2ea1faf6a1012da463756def8b3889db33f2226f0343bb4daa80307d03",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/google-fonts.csv"
+        },
+        "data/icons.csv": {
+          "sha256": "50816c6012030178195a16ee481ebf58b47bd985d70e8ec58886cc83f6eddafc",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/icons.csv"
+        },
+        "data/landing.csv": {
+          "sha256": "9a2edd3bb676c2a58f00ade7a062e285222d4297bfd847c8d5b056f0dbbf52d0",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/landing.csv"
+        },
+        "data/motion.csv": {
+          "sha256": "381affe8df8ea1f66fbbda2598827f9f54299107bbe6a1b4e9b68f6b62091ceb",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/motion.csv"
+        },
+        "data/phosphor-icons-upstream.json": {
+          "sha256": "2399325233b277b5c97a80e6a5e8941154f5d057beee4e7613db87c87d700236",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/phosphor-icons-upstream.json"
+        },
+        "data/products.csv": {
+          "sha256": "42473f75e8dde5987bdf89ce55d8c168091b80a356cae691dd60247d80720b70",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/products.csv"
+        },
+        "data/react-performance.csv": {
+          "sha256": "3d925802539abac5afeb63ae8aa1960b7229ad271b3a47caed40ab2d97ad0734",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/react-performance.csv"
+        },
+        "data/stacks/angular.csv": {
+          "sha256": "704be83f2bad30c7e6de01afb113ffa01e0c458762f48b7102f31ba2367b5553",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/angular.csv"
+        },
+        "data/stacks/astro.csv": {
+          "sha256": "2c2f55fadaafc05e04cc321c8194a1a28b656e6757fe2ba316f41b16428299c6",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/astro.csv"
+        },
+        "data/stacks/avalonia.csv": {
+          "sha256": "442fca14675a020683473e7e49f08abb27b9df0765c80efe54aef61f1a4ac258",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/avalonia.csv"
+        },
+        "data/stacks/flutter.csv": {
+          "sha256": "64dba0ac17349f28bce517a0f5f48c54d9ed2e487ec0c0258303463b382f41a0",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/flutter.csv"
+        },
+        "data/stacks/html-tailwind.csv": {
+          "sha256": "d05a581d20af57b8ca0104a6d31d90a07c437d500662a96c3029fc2f9a4678ee",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/html-tailwind.csv"
+        },
+        "data/stacks/javafx.csv": {
+          "sha256": "2e819b8d5abdd23ad4dae0991650fdb57af497aabd68b37463aa9c442944c869",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/javafx.csv"
+        },
+        "data/stacks/jetpack-compose.csv": {
+          "sha256": "699de218b286948eaec7d15767b6e1350ee299167e49bf476d82e3ff58724e0a",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/jetpack-compose.csv"
+        },
+        "data/stacks/laravel.csv": {
+          "sha256": "854ea4daa5fc61292d22235ad33b49ba3fe22423c3de8d3cb03758ffed3b59f9",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/laravel.csv"
+        },
+        "data/stacks/nextjs.csv": {
+          "sha256": "ecd2c27b2ea0127d203ae726060efcdd7335b5e83f96b99e4f3befbbfeebd5a4",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/nextjs.csv"
+        },
+        "data/stacks/nuxt-ui.csv": {
+          "sha256": "fce682a338cfcdbf35d318d20e5befbe7b5d81b05abc37f87677a6d9cde84dc6",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/nuxt-ui.csv"
+        },
+        "data/stacks/nuxtjs.csv": {
+          "sha256": "3d9b54ed2d151bd9c86e9e5609b8a6f88a00c4c52fa601a30af96c49b2c4d176",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/nuxtjs.csv"
+        },
+        "data/stacks/react-native.csv": {
+          "sha256": "ba31dd9c0c04da6bc02a74448bf121f9c0728ae5ba3b4d47b487778b0a1135b5",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/react-native.csv"
+        },
+        "data/stacks/react.csv": {
+          "sha256": "4dd176a9787e5c6306b5df94158d75955adcdc6edab41ce5286641a5842303c1",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/react.csv"
+        },
+        "data/stacks/shadcn.csv": {
+          "sha256": "e56cfde5b74907836ac3582a4779d5b7f3d206a702ab81b8669a1b668c3eeb51",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/shadcn.csv"
+        },
+        "data/stacks/svelte.csv": {
+          "sha256": "f6e379ba802941ba26b01d4ffbe3cd39120f2587659a1d93851c707f66bc13db",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/svelte.csv"
+        },
+        "data/stacks/swiftui.csv": {
+          "sha256": "bdd9231ff3ad658f4e7c063e1eb49df2fd09ac8d90631a86df899b39833b9623",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/swiftui.csv"
+        },
+        "data/stacks/threejs.csv": {
+          "sha256": "155d583b9c64da0df4b6c6cb060c02eab222505e0734d6353da02c9e2b5d982b",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/threejs.csv"
+        },
+        "data/stacks/uno.csv": {
+          "sha256": "a0474363e4225b5367214d5675fd3e075f137026f9500f0d04357882ef4f6d48",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/uno.csv"
+        },
+        "data/stacks/uwp.csv": {
+          "sha256": "c409f08c1fbba1f1029f1acaa554e7b4471cc85517a5751c9f2e62465badcd5c",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/uwp.csv"
+        },
+        "data/stacks/vue.csv": {
+          "sha256": "b655f1ebb9dff2652d15981f31b1784c8a6d4759efd2815a14f3088257569f95",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/vue.csv"
+        },
+        "data/stacks/winui.csv": {
+          "sha256": "e676dc1c13ee6c205c40b0746f1335150a346c7a49a0616d2545bc3d2c930c85",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/winui.csv"
+        },
+        "data/stacks/wpf.csv": {
+          "sha256": "9781a9950b20333637b30a02e498b7efca21b618a3eeb8665836f3ac6e974da7",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/stacks/wpf.csv"
+        },
+        "data/styles.csv": {
+          "sha256": "a93a4d9d7025856575d7b7583bda020be9043013432c5af7c58af9dbdfb206b7",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/styles.csv"
+        },
+        "data/typography.csv": {
+          "sha256": "321fc446e89024488ebae96dda93efc4d2307bd8bddb240857ad51364f6782c8",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/typography.csv"
+        },
+        "data/ui-reasoning.csv": {
+          "sha256": "f0774dd741cecdad5eec842034bd6d5e9ea50e9f220a1910069748daa0bb8e9a",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/ui-reasoning.csv"
+        },
+        "data/ux-guidelines.csv": {
+          "sha256": "ff81ec613f70ba9fc3fcce52dbe4ae35d44b2079dbe6dc066d2d6e38c28facd5",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/data/ux-guidelines.csv"
+        },
+        "LICENSE": {
+          "sha256": "738f69dfa83db5c347c678fb9d90e560877059f0de93a327c39001bff92dc014",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/LICENSE"
+        },
+        "references/pro-rules.md": {
+          "sha256": "d28442d61c310b49c054a4ea736f89fb3008beebdbbc38c4b3a540b8f7fadf23",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/references/pro-rules.md"
+        },
+        "references/quick-reference.md": {
+          "sha256": "0609bc7c89dacb40472465d8fc14257b56b2c43439660fc8d6fa3b8c022e1876",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/references/quick-reference.md"
+        },
+        "scripts/core.py": {
+          "sha256": "dfb34cbca66a704a5bfae48c1ab5f82d2a6573b9509c5accceb3d248715a18f6",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/core.py"
+        },
+        "scripts/design_system.py": {
+          "sha256": "e7d1c94c4b2eada17c5551157668362659ccf9626d34dbd58e68142410f90103",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/design_system.py"
+        },
+        "scripts/reasoning_contract.py": {
+          "sha256": "b8bac1af82aa280d3e06f00aabaeac4337e632996b07fed874e2b6ee6e9c5913",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/reasoning_contract.py"
+        },
+        "scripts/search.py": {
+          "sha256": "d54e648fe0ec2932cac66684220cc17be4bd4b4eba1d23d3195d509d398db374",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/search.py"
+        },
+        "scripts/tests/fixtures/catalogs/google-api.json": {
+          "sha256": "22d8dc81a7d6827b7e8b64b53e7d184210fb9759e8e294e0d5133c81cc460176",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-api.json"
+        },
+        "scripts/tests/fixtures/catalogs/google-catalog.json": {
+          "sha256": "c608ad5c4084ebc50a4bbbfb69ea2456c01fd5519c457e18410fffd250ae948f",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-catalog.json"
+        },
+        "scripts/tests/fixtures/catalogs/google-existing.csv": {
+          "sha256": "4e0761b839dc6b2187a370e82eddc0aed8a7ff10c09e28dd814bb3656dac595b",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-existing.csv"
+        },
+        "scripts/tests/fixtures/catalogs/google-metadata.json": {
+          "sha256": "30bffc29ae348416a2de2f9c6c418e768e4578f136b0f4bac5d2f70124f2e9ba",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-metadata.json"
+        },
+        "scripts/tests/fixtures/catalogs/google-overrides.json": {
+          "sha256": "6243a48a4619986768c4628e2d0c98ff195beba71ba9be5df8f0c52fc6d90c0b",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-overrides.json"
+        },
+        "scripts/tests/fixtures/catalogs/icons-curated.csv": {
+          "sha256": "68362c9a700c13b96f000784a0198c1c7e117a7088a01c85744e44233038fe9d",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/icons-curated.csv"
+        },
+        "scripts/tests/fixtures/catalogs/phosphor-core.json": {
+          "sha256": "ae4d0bb076240824e1b643c2270d1f8cc0952a69502ec1e622b7dedd85b930bb",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/phosphor-core.json"
+        },
+        "scripts/tests/fixtures/catalogs/phosphor-package.json": {
+          "sha256": "500588c757d6de03e3d7e69b27a8b8b1f88ccf6bb0333e4c1e9b0d6a4f112475",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/phosphor-package.json"
+        },
+        "scripts/tests/fixtures/catalogs/phosphor-react-exports.json": {
+          "sha256": "d79f2ee0afdbc2f87776733e145df3538a16a25d7c2fba0056bb48295dad0ded",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/phosphor-react-exports.json"
+        },
+        "scripts/tests/fixtures/catalogs/phosphor-react-package.json": {
+          "sha256": "1c57a1d76bcc0cdd3632d4c18b9c0e79576b4591df39831c9607e5d0eb4f2cec",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/phosphor-react-package.json"
+        },
+        "scripts/tests/fixtures/relevance-baseline.json": {
+          "sha256": "0df200fc54c1cb97a52d6775e7f501509163cea8f8b73fd7268429bc1f835afe",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/relevance-baseline.json"
+        },
+        "scripts/tests/fixtures/relevance-cases.json": {
+          "sha256": "e77d36eebbf6ddc2860946a02cdb659351da6c09f2688f1ed30939a418099646",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/relevance-cases.json"
+        },
+        "scripts/tests/fixtures/relevance-thresholds.json": {
+          "sha256": "1fbe8623fe3e49c8d828139bca9df69043746e488e8bf09d93dfb9cbc31f5cef",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/relevance-thresholds.json"
+        },
+        "scripts/tests/test_catalog_refresh.py": {
+          "sha256": "3e2ca5d12702318f641ae62d0c14f22a3bcc84d84e79b863c0e947d475604adb",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/test_catalog_refresh.py"
+        },
+        "scripts/tests/test_catalog_summary_line_endings.py": {
+          "sha256": "fa6ff09f0ec2c99013588c77397f5082dddebe8f467e94c5f8378ec9595f4989",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/test_catalog_summary_line_endings.py"
+        },
+        "scripts/tests/test_core.py": {
+          "sha256": "3527fe2f4b852f69f07c17ddc0d615d9a6e025c924e45a33985579a94a8d2118",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py"
+        },
+        "scripts/tests/test_core_data_quality.py": {
+          "sha256": "3ffc6b4905c9ea26d7ac4527ab154d153584231aee71b2ae4bd017977fa09cc5",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/test_core_data_quality.py"
+        },
+        "scripts/tests/test_data_contracts.py": {
+          "sha256": "0360d6e10080c0bca214f2b0bbad582ba50702a542ce21013351aca54938df3a",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/test_data_contracts.py"
+        },
+        "scripts/tests/test_design_system_mode.py": {
+          "sha256": "95ad2c154349f7021f55a558f8dcdd71df1a24fcf531a4364a8e49526a0865ef",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/test_design_system_mode.py"
+        },
+        "scripts/tests/test_design_system_stack.py": {
+          "sha256": "83d09ffe8cfbf7b265f362129f061dfe8e5e167ce5db43adaead197cabc9ca38",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/test_design_system_stack.py"
+        },
+        "scripts/tests/test_native_desktop_stack_freshness.py": {
+          "sha256": "3942845712b9a829323cd3568511483135f2a8c7cd79ccf61679da4b0f624dbb",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/test_native_desktop_stack_freshness.py"
+        },
+        "scripts/tests/test_relevance_evaluator.py": {
+          "sha256": "2fe56a4d6fe5fff15ff592274b0eeaba925146cefea6c0fa29d8f1b77c9aca1f",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/test_relevance_evaluator.py"
+        },
+        "scripts/tests/test_skill_script_paths.py": {
+          "sha256": "7cec24b94be771bc60bc84f8993e614bb16d4047930e1dd3d3bed91628311d44",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/test_skill_script_paths.py"
+        },
+        "scripts/tests/test_style_taxonomy.py": {
+          "sha256": "cd14d0092e8a454d213aa104b53e4e70ba698491fa00fde9fdec5ca8a3d70011",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/test_style_taxonomy.py"
+        },
+        "scripts/tests/test_text_layout_resilience.py": {
+          "sha256": "b51d32ee8a15505b87cb81957fb2d1b385e041e8beb4463c311d236bfd29ebd4",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/test_text_layout_resilience.py"
+        },
+        "scripts/tests/test_web_stack_freshness.py": {
+          "sha256": "cba3dd79b3bd7ed9479e8cd0e7efb0594d998160bc712f9865fb0ab6e29dda5a",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/tests/test_web_stack_freshness.py"
+        },
+        "scripts/validate_data.py": {
+          "sha256": "a599aa256049cf30954d1f164721b99e453eb7e4cb8241bcab2d5573e6cf58b8",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/scripts/validate_data.py"
+        },
+        "SKILL.md": {
+          "sha256": "c79ea861d67679ef5f777de9163a8ecdb4f59260d4a96d33ce7d0b3cddf88a7b",
+          "url": "https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/.claude/skills/ui-ux-pro-max/SKILL.md",
+          "replacements": [
+            {
+              "from": "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max",
+              "to": "<skill-base-dir>"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

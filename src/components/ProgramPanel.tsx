@@ -1,3 +1,4 @@
+import type {ReactNode} from 'react';
 import CalendarPanel from './CalendarPanel';
 import {CalendarDays} from 'lucide-react';
 import {useViewState} from './ViewState';
@@ -13,7 +14,7 @@ import StageEditor from './StageEditor';
 import Correspondence from './Correspondence';
 import {useUnsavedChanges} from './useUnsavedChanges';
 
-export default function ProgramPanel(props: PanelProps & {initialIntent?:HomeIntent}) {
+export default function ProgramPanel(props: PanelProps & {initialIntent?:HomeIntent;publishAction?:ReactNode}) {
   const { data, event, user, onChange, online } = props;
   const [calendarOpen,setCalendarOpen]=useState(false);
   const volunteer = user.role === 'volunteer';
@@ -49,7 +50,7 @@ export default function ProgramPanel(props: PanelProps & {initialIntent?:HomeInt
   }
   return <>
     {calendarOpen&&<Modal title="Calendar · Asamblea" onClose={()=>setCalendarOpen(false)}><CalendarPanel kind="event" id={event.id} data={data} user={user} online={online}/></Modal>}<HomeFocus intent={homeIntent} onClear={()=>setHomeIntent(undefined)}/>
-    <div className="page-heading"><div><h1>Programa</h1><button className="btn no-print" disabled={!online} onClick={()=>setCalendarOpen(true)}><CalendarDays size={20}/>{volunteer?'Mi invitación':'Convocatoria'}</button><p>{focusedIds?'Todos los días':dateLabel(day)}</p></div>{editable && <button className="btn btn-primary no-print" disabled={!online} onClick={() => setEditing('new')}><Plus size={20} />Añadir intervención</button>}</div>
+    <div className="page-heading"><div><h1>Programa</h1><button className="btn no-print" disabled={!online} onClick={()=>setCalendarOpen(true)}><CalendarDays size={20}/>{volunteer?'Mi invitación':'Convocatoria'}</button><p>{focusedIds?'Todos los días':dateLabel(day)}</p></div><div className="page-actions">{props.publishAction}{editable && <button className="btn btn-primary no-print" disabled={!online} onClick={() => setEditing('new')}><Plus size={20} />Añadir intervención</button>}</div></div>
     {event.startDate !== event.endDate && <div className="toolbar no-print"><label className="field">Día<input type="date" min={event.startDate} max={event.endDate} value={day} onChange={e => {setHomeIntent(undefined);setDay(e.target.value);}} /></label></div>}
     {!program.length ? <Empty>{focusedIds?'No queda material pendiente en esta selección.':volunteer ? 'El programa todavía no está publicado.' : 'Añade la primera intervención del programa.'}</Empty> : <div className="program-list">{program.map(item => <article className={`program-row${item.kind==='break'?' program-break':''}`} key={item.id}>
       <time className="program-time" dateTime={item.startsAt}>{timeLabel(item.startsAt,event.timezone)}</time>

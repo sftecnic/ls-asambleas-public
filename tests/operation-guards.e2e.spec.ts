@@ -23,7 +23,7 @@ test('Cerrar y Escape conservan los cambios hasta confirmar la salida',async({pa
   page.once('dialog',message=>message.dismiss());await shift.getByRole('button',{name:'Cerrar',exact:true}).click();
   await expect(shift.getByLabel('Puesto',{exact:true})).toHaveValue('Puesto sin guardar');
   page.once('dialog',message=>message.accept());await page.keyboard.press('Escape');await expect(shift).toHaveCount(0);
-  await page.getByRole('navigation',{name:'Principal'}).getByRole('button',{name:'Programa',exact:true}).click();
+  await page.getByRole('navigation',{name:'Principal'}).getByRole('button',{name:'Agenda',exact:true}).click();
   await page.getByRole('button',{name:'Añadir intervención'}).click();const program=page.getByRole('dialog',{name:'Añadir intervención'});
   await program.getByLabel('Título',{exact:true}).fill('Participación sin guardar');
   page.once('dialog',message=>message.dismiss());await page.keyboard.press('Escape');
@@ -133,5 +133,5 @@ test('Mis turnos omite el turno terminado y no muestra un borrador ajeno',async(
   await page.getByRole('button',{name:'Ver voluntario',exact:true}).click();
   await expect(page.locator('.home-personal')).not.toContainText('Cámara');
   await expect(page.locator('.home-personal')).not.toContainText('Vídeo');
-  await expect(page.locator('.home-personal')).toContainText('No tienes reuniones ni turnos publicados pendientes');
+  await expect(page.locator('.home-personal')).toContainText('Sin próximos compromisos publicados');
 });

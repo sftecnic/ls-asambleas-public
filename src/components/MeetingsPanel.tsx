@@ -135,6 +135,7 @@ export function MeetingDetail({
   return (
     <Modal title={meeting.title} onClose={onClose}>
       <div className="stack">
+        <section className="meeting-summary stack" aria-label="Reunión">
         <Status kind={meeting.status === "cancelled" ? "draft" : "good"}>
           {meeting.status === "cancelled" ? "Cancelada" : "Confirmada"}
         </Status>
@@ -162,6 +163,7 @@ export function MeetingDetail({
           <p className="meeting-instructions">{meeting.instructions}</p>
         )}
         {meeting.status === 'confirmed'&&meeting.kind==='zoom'&&<ZoomConnection meeting={meeting}/>}
+        </section>
         <CalendarPanel kind="meeting" id={meeting.id} data={data} user={user} online={navigator.onLine}/>
         <p className="small">
           Versión {meeting.version} ·{" "}

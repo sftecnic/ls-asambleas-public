@@ -7,7 +7,7 @@ const options=async(page:Page)=>{const button=page.getByRole('button',{name:'Opc
 const dataKey='ls-asambleas:demo:v1';
 
 test('Atrás cancelado conserva un borrador y solo pregunta una vez, también tras recargar',async({page})=>{
-  await page.goto('/');await nav(page,'Programa');
+  await page.goto('/');await nav(page,'Agenda');
   for(const reload of [false,true]){
     if(reload)await page.reload();
     await page.locator('.program-row').filter({has:page.getByRole('heading',{name:'Aprendamos juntos',exact:true})}).getByRole('button',{name:'Ver plano'}).click();
@@ -27,9 +27,9 @@ test('Atrás cancelado conserva un borrador y solo pregunta una vez, también tr
 test('controles de 48 px, contexto ampliado, rehacer y anchura del plano',async({page})=>{
   test.setTimeout(120000);await page.goto('/');
   for(const width of [320,360,390,820,1440]){
-    await page.setViewportSize({width,height:1000});await nav(page,'Programa');
+    await page.setViewportSize({width,height:1000});await nav(page,'Agenda');
     const navigation=page.getByRole('navigation',{name:'Principal'});
-    const label=navigation.getByRole('button',{name:'Programa',exact:true}).locator('span');
+    const label=navigation.getByRole('button',{name:'Agenda',exact:true}).locator('span');
     expect(await label.evaluate(el=>{const range=document.createRange();range.selectNodeContents(el);return range.getClientRects().length;})).toBe(1);
     await page.locator('.program-row').filter({has:page.getByRole('heading',{name:'Aprendamos juntos',exact:true})}).getByRole('button',{name:'Ver plano'}).click();
     await page.locator('.stage-canvas-panel').getByRole('button',{name:'Andrés, de pie',exact:true}).click();
@@ -40,14 +40,14 @@ test('controles de 48 px, contexto ampliado, rehacer y anchura del plano',async(
     await page.locator('.stage-canvas-panel').getByRole('button',{name:'Andrés, sentado',exact:true}).click();
     await expect(page.getByRole('button',{name:'Dejar de seleccionar',exact:true})).toBeVisible();
     for(const expanded of [false,true]){
-      if(expanded)await page.getByRole('button',{name:'Ampliar',exact:true}).click();
+      await page.getByRole('button',{name:expanded?'Ampliar':'Reducir',exact:true}).click();
       const short=await page.locator('.stage-editor button,.stage-editor input,.stage-editor select,.stage-editor textarea').evaluateAll(elements=>elements.filter(el=>{const r=el.getBoundingClientRect();return r.width>0&&r.height>0&&(r.height<47.5||r.width<47.5);}).map(el=>({name:el.textContent||el.getAttribute('aria-label'),width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height})));
       expect(short).toEqual([]);
       if(expanded)await expect(page.locator('.stage-event-context')).toContainText('Salón del Norte · Oviedo');
       if(width===820)expect(await page.locator('.stage-canvas-panel').evaluate(el=>el.getBoundingClientRect().width/el.parentElement!.getBoundingClientRect().width)).toBeGreaterThan(.85);
       expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
       await page.evaluate(()=>window.scrollTo(0,0));
-      await page.screenshot({path:`qa/visual-redesign/after/stage-selected-${expanded?'expanded':'normal'}-${width}.png`,fullPage:true});
+      await page.screenshot({path:`qa/visual-080/after/stage-selected-${expanded?'expanded':'normal'}-${width}.png`,fullPage:true});
     }
     page.once('dialog',dialog=>dialog.accept());await page.getByRole('button',{name:'Volver',exact:true}).click();
   }
@@ -68,7 +68,7 @@ test('nombres largos, departamento nuevo, sesenta fichas y estado vacío caben e
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
   await page.getByLabel('Buscar persona o congregación').fill('Persona inexistente');
   await expect(page.locator('.team-person-card')).toHaveCount(0);
-  await page.screenshot({path:'qa/visual-redesign/after/empty-long-320.png',fullPage:true});
+  await page.screenshot({path:'qa/visual-080/after/empty-long-320.png',fullPage:true});
 });
 
 test('filtros privados quedan en memoria; volver conserva consulta y el evento sigue separado',async({page})=>{
@@ -95,7 +95,7 @@ test('filtros privados quedan en memoria; volver conserva consulta y el evento s
 });
 
 test('estados explícitos del programa: no cambia al desplegar ni al repetir; descansos sin correo ni plano',async({page})=>{
-  await page.goto('/');await nav(page,'Programa');
+  await page.goto('/');await nav(page,'Agenda');
   const row=page.locator('.program-row').filter({has:page.getByRole('heading',{name:'Aprendamos juntos',exact:true})});
   const before=await page.evaluate(key=>localStorage.getItem(key),dataKey);
   await row.locator('summary').click();
@@ -128,9 +128,9 @@ test('Más agrupa; texto grande persiste en este dispositivo; iconos instalables
 });
 
 test('plano ampliado, teclado, controles visuales y deshacer conservan los datos',async({page})=>{
-  await page.goto('/');await nav(page,'Programa');
+  await page.goto('/');await nav(page,'Agenda');
   await page.locator('.program-row').filter({has:page.getByRole('heading',{name:'Aprendamos juntos',exact:true})}).getByRole('button',{name:'Ver plano'}).click();
-  await page.getByRole('button',{name:'Ampliar',exact:true}).click();await expect(page.locator('html')).toHaveClass('stage-expanded');
+  await expect(page.locator('html')).toHaveClass('stage-expanded');
   await expect(page.getByRole('navigation',{name:'Principal'})).not.toBeVisible();
   await page.keyboard.press('Escape');await expect(page.getByRole('button',{name:'Ampliar',exact:true})).toBeFocused();
   const person=page.locator('.stage-canvas-panel').getByRole('button',{name:'Andrés, de pie',exact:true});
@@ -141,22 +141,22 @@ test('plano ampliado, teclado, controles visuales y deshacer conservan los datos
   await expect(page.getByText('Borrador guardado. Los voluntarios aún ven la versión publicada.')).toBeVisible();
 });
 
-test('capturas y accesibilidad en 360, 390, 820 y 1440; reajuste a 320 y texto al 200 %',async({page})=>{
+test('capturas y accesibilidad en 320, 360, 390, 820 y 1440; texto al 200 %',async({page})=>{
   test.setTimeout(150000);
   const data=createDemoData();
   data.candidates.push({...data.candidates[0],id:'admin-team',personId:'p-admin',teamRole:'assistant'});
   await page.addInitScript(data=>{if(!localStorage.getItem('ls-asambleas:demo:v1'))localStorage.setItem('ls-asambleas:demo:v1',JSON.stringify(data));},data);
   await page.goto('/');
-  for(const width of [360,390,820,1440]){
+  for(const width of [320,360,390,820,1440]){
     await page.setViewportSize({width,height:1000});
-    for(const [label,file] of [['Inicio','home'],['Equipo','team'],['Turnos','shifts'],['Programa','program'],['Más','more']]){
+    for(const [label,file] of [['Inicio','home'],['Equipo','team'],['Turnos','shifts'],['Agenda','program'],['Más','more']]){
       await nav(page,label);await page.evaluate(()=>window.scrollTo(0,0));
       expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`${label} ${width}`).toBe(true);
-      await page.screenshot({path:`qa/visual-redesign/after/${file}-${width}.png`,fullPage:true});
+      await page.screenshot({path:`qa/visual-080/after/${file}-${width}.png`,fullPage:true});
     }
-    await nav(page,'Programa');await page.locator('.program-row').filter({has:page.getByRole('heading',{name:'Aprendamos juntos',exact:true})}).getByRole('button',{name:'Ver plano'}).click();
-    await page.getByRole('button',{name:'Ampliar',exact:true}).click();
-    await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:`qa/visual-redesign/after/stage-${width}.png`,fullPage:true});
+    await nav(page,'Agenda');await page.locator('.program-row').filter({has:page.getByRole('heading',{name:'Aprendamos juntos',exact:true})}).getByRole('button',{name:'Ver plano'}).click();
+    await expect(page.locator('html')).toHaveClass('stage-expanded');
+    await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:`qa/visual-080/after/stage-${width}.png`,fullPage:true});
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`plano ${width}`).toBe(true);
     const result=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
     expect(result.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)}))).toEqual([]);
@@ -164,7 +164,7 @@ test('capturas y accesibilidad en 360, 390, 820 y 1440; reajuste a 320 y texto a
   }
   for(const [width,font] of [[320,18],[720,36]]){
     await page.setViewportSize({width,height:1000});await page.addStyleTag({content:`:root{font-size:${font}px!important}`});
-    for(const label of ['Inicio','Equipo','Turnos','Programa','Más']){
+    for(const label of ['Inicio','Equipo','Turnos','Agenda','Más']){
       await nav(page,label);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`${label} ${width} font ${font}`).toBe(true);
     }
   }

@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 
 test('contraste, nombres y estructura accesible en pantallas principales',async({page})=>{
   await page.goto('/');
-  for(const title of ['Inicio','Equipo','Turnos','Programa','Más']){
+  for(const title of ['Inicio','Equipo','Turnos','Agenda','Más']){
     await page.getByRole('navigation',{name:'Principal'}).getByRole('button',{name:title,exact:true}).click();
     const result=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
     expect(result.violations.map(v=>({id:v.id,description:v.description,nodes:v.nodes.map(n=>n.target)})),title).toEqual([]);

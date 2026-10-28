@@ -1,7 +1,7 @@
 import Filters from './Filters';
 import {useViewState} from './ViewState';
 import {useEffect,useState} from 'react';
-import {CalendarDays,History,MapPin,Search,UserRound,Users,X} from 'lucide-react';
+import {CalendarDays,ChevronDown,History,MapPin,Search,UserRound,Users,X} from 'lucide-react';
 import type {PanelProps} from '../domain/types';
 import {eventPeriod,eventYear,historyChanges,historyEvents,historyScope,personExperience,type HistoryFilters} from '../domain/history';
 import {teamRole,teamRoleLabels} from '../domain/team';
@@ -15,6 +15,7 @@ import {PersonName} from './PersonContact';
 const emptyFilters:HistoryFilters={year:'',eventId:'',departmentId:'',personId:'',query:''};
 export default function HistoryPanel({data,user,initialPersonId=''}:Pick<PanelProps,'data'|'user'>&{initialPersonId?:string}){
   const [filters,setFilters]=useViewState<HistoryFilters>('history.filters',{...emptyFilters,personId:initialPersonId});
+  const [expanded,setExpanded]=useViewState<Record<string,boolean>>('history.expanded',{});
   const [view,setView]=useViewState<'services'|'changes'>('history.view','services'),[limit,setLimit]=useState(8);
   useEffect(()=>{if(initialPersonId){setView('services');setFilters({...emptyFilters,personId:initialPersonId});}},[initialPersonId]);
   useEffect(()=>setLimit(view==='services'?8:40),[filters,view]);
@@ -55,15 +56,16 @@ export default function HistoryPanel({data,user,initialPersonId=''}:Pick<PanelPr
       <p className="small history-results" role="status">{groups.length} {groups.length===1?'evento':'eventos'} · {new Set(groups.flatMap(group=>group.departments.flatMap(department=>department.people.map(person=>person.personId)))).size} personas</p>
       {visibleYears.map(year=><section className="history-year" key={year} aria-labelledby={`history-year-${year}`}><h3 id={`history-year-${year}`}>{year}</h3>{visible.filter(group=>group.year===year).map(group=>{
         const venue=data.venues.find(venue=>venue.id===group.event.venueId);
+        const open=expanded[group.event.id]??(Boolean(filters.personId||filters.eventId)||visible[0]?.event.id===group.event.id);
         return <section className="history-event" key={group.event.id} aria-labelledby={`history-event-${group.event.id}`}>
-          <header className="history-event-heading"><div><h4 id={`history-event-${group.event.id}`}>{group.event.title}</h4><p><CalendarDays size={18} aria-hidden="true"/>{dateLabel(group.event.startDate)}{group.event.endDate!==group.event.startDate?`–${dateLabel(group.event.endDate)}`:''}</p>{venue&&<p><MapPin size={18} aria-hidden="true"/>{venue.name} · {venue.city}</p>}</div><span className="history-period">{eventPeriod(group.event)}{group.event.archived?' · Archivado':''}</span></header>
-          {group.departments.map(department=><section className="history-department" key={department.id}><h5><DepartmentIcon department={data.departments.find(d=>d.id===department.id)} size={22}/>{data.departments.find(d=>d.id===department.id)?.name||'Departamento no disponible'}</h5>
+          <header className="history-event-heading"><div><h4 id={`history-event-${group.event.id}`}><button className="history-event-toggle" aria-expanded={open} aria-controls={`history-content-${group.event.id}`} onClick={()=>setExpanded(current=>({...current,[group.event.id]:!open}))}><ChevronDown size={22} aria-hidden="true"/>{group.event.title}</button></h4><p><CalendarDays size={18} aria-hidden="true"/>{dateLabel(group.event.startDate)}{group.event.endDate!==group.event.startDate?`–${dateLabel(group.event.endDate)}`:''}</p>{venue&&<p><MapPin size={18} aria-hidden="true"/>{venue.name} · {venue.city}</p>}</div><span className="history-period">{eventPeriod(group.event)}{group.event.archived?' · Archivado':''}</span></header>
+          <div className="history-event-content" id={`history-content-${group.event.id}`} hidden={!open}>{group.departments.map(department=><section className="history-department" key={department.id}><h5><DepartmentIcon department={data.departments.find(d=>d.id===department.id)} size={22}/>{data.departments.find(d=>d.id===department.id)?.name||'Departamento no disponible'}</h5>
             {department.people.map(person=><article className="history-person" key={person.personId}><div className="history-person-heading"><PersonName as="h6" personId={person.personId} name={person.person?.name||'Persona no disponible'} eventId={group.event.id} departmentId={department.id}/>{!filters.personId&&<button className="btn btn-ghost no-print" aria-label={`Ver trayectoria de ${person.person?.name||'esta persona'}`} onClick={()=>setFilters({...emptyFilters,personId:person.personId})}><UserRound size={18} aria-hidden="true"/>Ver trayectoria</button>}</div>
               {person.candidates.length>0&&<p className="small">{[...new Set(person.candidates.map(candidate=>teamRoleLabels[teamRole(candidate)]))].join(' · ')}{person.candidates.some(candidate=>candidate.reserve)?' · Reserva':''}</p>}
               {person.shifts.map(shift=><div className="history-assignment" key={shift.id}><div><ShiftPost departmentId={department.id} department={data.departments.find(d=>d.id===department.id)} role={shift.role}/><p>{dateLabel(shift.startsAt,{day:'numeric',month:'long',timeZone:group.event.timezone})} · {Number(toLocalInput(shift.startsAt,group.event.timezone).slice(11,13))>=13?'Tarde':'Mañana'} · {timeLabel(shift.startsAt,group.event.timezone)}–{timeLabel(shift.endsAt,group.event.timezone)}</p>{shift.replacementFor&&<span className="small">Sustitución</span>}</div><AttendanceSummary value={shift.attendance}/></div>)}
               {!person.shifts.length&&<p className="small">Sin turno asignado</p>}
             </article>)}
-          </section>)}
+          </section>)}</div>
         </section>;
       })}</section>)}
       {!groups.length&&<Empty>No hay participaciones con estos filtros.</Empty>}

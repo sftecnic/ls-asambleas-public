@@ -23,8 +23,8 @@ test('shows unique people, scoped counts and separate supervision; roles do not 
   }
   await team.getByLabel('Departamento del equipo').selectOption('video');
   await team.getByLabel('Buscar persona o congregación').fill('alias de prueba');await expect(cards).toHaveCount(1);
-  await cards.first().getByRole('button',{name:'Preparar acceso',exact:true}).click();
-  const dialog=page.getByRole('dialog');await expect(dialog.getByLabel('Cargo en este departamento')).toHaveValue('assistant');
+  await cards.first().getByRole('button',{name:'Ver ficha de Persona de prueba 2',exact:true}).click();
+  const dialog=page.getByRole('dialog');await dialog.getByRole('tab',{name:'Equipo',exact:true}).click();await expect(dialog.getByLabel('Cargo en este departamento')).toHaveValue('assistant');
   const before=await page.evaluate(()=>JSON.parse(localStorage.getItem('ls-asambleas:demo:v1')!).grants);
   await dialog.getByLabel('Cargo en este departamento').selectOption('responsible');
   await expect.poll(async()=>page.evaluate(()=>JSON.parse(localStorage.getItem('ls-asambleas:demo:v1')!).candidates.find((c:{id:string})=>c.id==='candidate-1').teamRole)).toBe('responsible');
@@ -46,8 +46,8 @@ test('keeps multiple departments on one card and opens the selected participatio
   await page.goto('/');await page.getByRole('navigation',{name:'Principal'}).getByRole('button',{name:'Equipo',exact:true}).click();
   const cards=page.locator('.team-panel > .team-person-list > article');await expect(cards).toHaveCount(6);
   const card=cards.filter({has:page.getByRole('heading',{name:'Lucía Martín',exact:true})});await expect(card).toHaveCount(1);
-  await card.getByRole('button',{name:'Ver Plataforma',exact:true}).click();
+  await card.getByRole('button',{name:'Ver ficha de Lucía Martín · Plataforma',exact:true}).click();
   const dialog=page.getByRole('dialog');await expect(dialog.getByLabel('Departamento de esta ficha')).toHaveValue('multi');
   await dialog.getByLabel('Departamento de esta ficha').selectOption('ca1');await expect(dialog.getByLabel('Departamento de esta ficha')).toHaveValue('ca1');
-  await page.keyboard.press('Escape');await expect(card.getByRole('button',{name:'Ver Plataforma',exact:true})).toBeFocused();
+  await page.keyboard.press('Escape');await expect(card.getByRole('button',{name:'Ver ficha de Lucía Martín · Plataforma',exact:true})).toBeFocused();
 });

@@ -12,6 +12,8 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
+      - run: npm run skills:check
+      - run: npm run test:skills
       - run: npm test
       - run: npm run test:installation
       - run: npm run check:worker

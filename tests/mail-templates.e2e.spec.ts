@@ -9,9 +9,13 @@ test('speaker email completes required details, groups talks, copies formatting 
   data.persons.forEach((p,i)=>{p.phone=`600 000 00${i}`;});
   data.program=data.program.map(p=>p.kind==='break'?p:{...p,driveUrl:`https://drive.google.com/drive/folders/demo-${p.id}`});
   await context.grantPermissions(['clipboard-read','clipboard-write']);
+  // Inspect the payload at the browser API boundary without changing the user's system clipboard.
+  await page.addInitScript(()=>{Object.defineProperty(navigator.clipboard,'write',{value:async(items:ClipboardItem[])=>{
+    const item=items[0];(window as any).__mailClipboard={plain:await(await item.getType('text/plain')).text(),html:await(await item.getType('text/html')).text()};
+  }});});
   await page.addInitScript(data=>{localStorage.clear();localStorage.setItem('ls-asambleas:demo:v1',JSON.stringify(data));},data);
   await page.goto('/');
-  await page.getByRole('button',{name:'Programa',exact:true}).click();
+  await page.getByRole('button',{name:'Agenda',exact:true}).click();
   await page.locator('.program-row').filter({has:page.getByRole('heading',{name:'Bienvenida',exact:true})}).locator('summary').click();
   await page.locator('.program-row').filter({has:page.getByRole('heading',{name:'Bienvenida',exact:true})}).getByRole('button',{name:'Correo',exact:true}).click();
   const dialog=page.getByRole('dialog');
@@ -50,10 +54,8 @@ test('speaker email completes required details, groups talks, copies formatting 
   const accessibility=await new AxeBuilder({page}).include('.mail-dialog').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
   expect(accessibility.violations).toEqual([]);
   await dialog.getByRole('button',{name:'Copiar mensaje',exact:true}).click();
-  const clipboard=await page.evaluate(async()=>{
-    const items=await navigator.clipboard.read();const item=items[0];
-    return {plain:await (await item.getType('text/plain')).text(),html:await (await item.getType('text/html')).text()};
-  });
+  await expect.poll(()=>page.evaluate(()=>(window as any).__mailClipboard)).toBeTruthy();
+  const clipboard=await page.evaluate(()=>(window as any).__mailClipboard as {plain:string;html:string});
   expect(clipboard.html).toContain('<strong>');expect(clipboard.html).toContain('href="https://drive.google.com/drive/folders/demo-pr2"');
   expect(clipboard.plain).toContain('8 de abril de 2027');
   expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('ls-asambleas:demo:v1')!).communications.length)).toBe(0);

@@ -2,7 +2,7 @@
 
 El código propio usa PolyForm Noncommercial 1.0.0. Esta licencia no sustituye las de las dependencias ni recursos siguientes. Los textos originales incluidos se encuentran en licenses/dependencies/.
 
-Source Sans 3: SIL OFL-1.1. Lucide: ISC y avisos incluidos. Firebase: Apache-2.0. React y ExcelJS: MIT. Consulta cada paquete para sus términos completos. Las skills frontend-design e Impeccable se conservan con sus archivos Apache-2.0. Web Interface Guidelines se consulta como referencia enlazada; no se redistribuye su texto al no haber localizado una licencia.
+Source Sans 3: SIL OFL-1.1. Lucide: ISC y avisos incluidos. Firebase: Apache-2.0. React y ExcelJS: MIT. Consulta cada paquete para sus términos completos. Las skills frontend-design e Impeccable se conservan con sus archivos Apache-2.0. UI UX Pro Max y web-design-guidelines conservan sus licencias MIT. Fuentes, versiones y adaptaciones en .agents/skills-lock.json y docs/SKILLS.md.
 
 | Paquete | Versión | Licencia declarada |
 |---|---|---|

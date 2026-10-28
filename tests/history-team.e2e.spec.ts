@@ -22,7 +22,7 @@ test('equipo: filtros combinados, recuento único y edición de clasificación',
   await expect(stats.locator('dd').first()).toHaveText('1');
   await page.getByRole('combobox',{name:'Congregación',exact:true}).selectOption('c2');await expect(page.locator('.team-person-card')).toHaveCount(0);
   await page.getByRole('combobox',{name:'Congregación',exact:true}).selectOption('c1');
-  await page.locator('.team-person-card').getByRole('button',{name:'Ver Audio y vídeo'}).click();
+  await page.locator('.team-person-card').getByRole('button',{name:'Ver ficha de Lucía Martín · Audio y vídeo'}).click();
   const dialog=page.getByRole('dialog');await dialog.getByRole('button',{name:'Editar',exact:true}).click();
   await dialog.getByLabel('Sorda u oyente').selectOption('hearing');page.once('dialog',d=>d.dismiss());await dialog.getByRole('button',{name:'Ver trayectoria'}).click();await expect(dialog.getByLabel('Sorda u oyente')).toHaveValue('hearing');await dialog.getByRole('button',{name:'Guardar ficha'}).click();
   await dialog.getByRole('button',{name:'Volver',exact:true}).click();
@@ -51,7 +51,7 @@ test('trayectoria: años, eventos archivados, asistencia y reservas sin turno',a
   await page.getByRole('combobox',{name:'Persona',exact:true}).selectOption('p6');await expect(page.locator('.history-person-summary')).toContainText('Marcos León');
   await page.getByRole('combobox',{name:'Persona',exact:true}).selectOption('p1');await expect(page.locator('.history-person-summary')).toContainText('1 evento anterior con turno · 1 con presencia registrada');
   await page.getByRole('button',{name:'Volver',exact:true}).click();await page.getByRole('button',{name:'Departamentos',exact:true}).click();
-  await nav(page,'Equipo');await page.locator('.team-person-card').filter({has:page.getByRole('heading',{name:'Lucía Martín',exact:true})}).getByRole('button',{name:'Ver Audio y vídeo'}).click();
+  await nav(page,'Equipo');await page.locator('.team-person-card').filter({has:page.getByRole('heading',{name:'Lucía Martín',exact:true})}).getByRole('button',{name:'Ver ficha de Lucía Martín · Audio y vídeo'}).click();
   await page.getByRole('dialog').getByRole('button',{name:'Ver trayectoria'}).click();
   await page.getByRole('button',{name:/Filtros del histórico/}).click();
   await expect(page.getByRole('combobox',{name:'Persona',exact:true})).toHaveValue('p1');await expect(page.locator('.history-event')).toHaveCount(2);

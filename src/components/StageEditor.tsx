@@ -74,7 +74,7 @@ export function StageEditor({plan,onSave,onClose,canEdit,online,published,eventL
   const [error,setError]=useState('');
   const [message,setMessage]=useState('');
   const [zoom,setZoom]=useState(1);
-  const [expanded,setExpanded]=useState(false);
+  const [expanded,setExpanded]=useState(true);
   const expandButton=useRef<HTMLButtonElement>(null);
   const mobileActions=useRef<HTMLDivElement>(null);
   const stageHeader=useRef<HTMLElement>(null);

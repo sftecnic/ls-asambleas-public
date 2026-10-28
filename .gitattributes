@@ -5,4 +5,4 @@
 *.woff2 binary
 LICENSE -text
 licenses/** -text
-.design-skills/**/LICENSE* -text
+.agents/skills/**/LICENSE* -text

@@ -36,10 +36,15 @@ export function TourLinks({data,departmentIds}:{data:AppData;departmentIds?:stri
  const ctx=useTours();if(!ctx)return null;
  if(ctx.error)return <div className="tour-entry-error no-print" role="status"><span>{ctx.error}</span><button className="btn" onClick={ctx.retry}><RefreshCw size={20} aria-hidden="true"/>Reintentar recorridos</button></div>;
  const tours=ctx.tours.filter(t=>!departmentIds||departmentIds.includes(t.departmentId));if(!tours.length)return null;
- return <section className="tour-entries no-print" aria-labelledby="tour-entries-title"><h2 id="tour-entries-title"><Compass size={24} aria-hidden="true"/>Conocer departamento</h2><div className="tour-entry-list">{tours.map(t=><button className="tour-entry" key={t.id} onClick={()=>ctx.open(t.id)}><DepartmentIcon department={data.departments.find(d=>d.id===t.departmentId)}/><span><strong>{t.title}</strong><small>Explorar 360°</small></span><Compass size={23} aria-hidden="true"/></button>)}</div></section>;
+ return <section className="tour-entries no-print" aria-labelledby="tour-entries-title"><h2 id="tour-entries-title"><Compass size={24} aria-hidden="true"/>Conocer departamento</h2><div className="tour-entry-list">{tours.map(t=><button className="tour-entry" key={t.id} onClick={()=>ctx.open(t.id)}><TourPreview tour={t} data={data}/><span><strong>{t.title}</strong><small>Explorar 360°</small></span><Compass size={23} aria-hidden="true"/></button>)}</div></section>;
 }
 export function useTourImage(tourId:string,id:string){
  const load=useTours()!.loadImage,[url,setUrl]=useState(''),[blob,setBlob]=useState<Blob>(),[error,setError]=useState(''),[revision,setRevision]=useState(0);
  useEffect(()=>{const abort=new AbortController();let address='';setUrl('');setBlob(undefined);setError('');void load(tourId,id,abort.signal).then(blob=>{if(abort.signal.aborted)return;address=URL.createObjectURL(blob);setBlob(blob);setUrl(address);}).catch(e=>{if(!abort.signal.aborted)setError(e instanceof Error?e.message:'No se pudo cargar la imagen.');});return()=>{abort.abort();if(address)URL.revokeObjectURL(address);};},[tourId,id,revision,load]);
  return {url,blob,error,retry:()=>setRevision(n=>n+1)};
+}
+
+function TourPreview({tour,data}:{tour:DepartmentTour;data:AppData}){
+ const media=useTourImage(tour.id,tour.panorama.thumbnail);
+ return <span className="tour-entry-preview" aria-hidden="true">{media.url?<img src={media.url} alt="" width={160} height={96} loading="lazy"/>:<DepartmentIcon department={data.departments.find(d=>d.id===tour.departmentId)}/>}</span>;
 }

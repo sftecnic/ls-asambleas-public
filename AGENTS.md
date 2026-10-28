@@ -27,6 +27,16 @@ Da un único paso o un bloque corto de comandos, indica en qué carpeta/ventana 
 
 ## Desarrollo y entrega
 
+Para cambios de interfaz, lee primero PRODUCT.md y DESIGN.md. Las skills se encuentran en `.agents/skills/` dentro de este repositorio: esta es la fuente obligatoria para el proyecto, aunque tengas copias personales con el mismo nombre. No se fusionan. Consulta docs/SKILLS.md para comprobar, restaurar o actualizar versiones.
+
+1. Identifica la pantalla y la tarea que la persona debe poder completar.
+2. Carga solo la skill y referencias pertinentes: Impeccable para organización y claridad; frontend-design para composición; UI UX Pro Max para patrones concretos; web-design-guidelines para la revisión final.
+3. Diseña y revisa con datos ficticios antes de conectar o modificar flujos reales.
+4. Reutiliza componentes, tokens y vocabulario; conserva filtros, formularios y foco al volver.
+5. Comprueba funcionamiento, accesibilidad y capturas móviles/escritorio. Una revisión automática no demuestra comprensión sin tutorial.
+
+Ejecuta `npm run skills:check` antes de utilizar las skills y de preparar la distribución. No actualices sus versiones implícitamente. No incluyas los paquetes ni sus herramientas en `public/` o `dist/`. `npm run dev:demo` fuerza datos ficticios aunque exista configuración local de Firebase.
+
 Conserva los componentes visuales: Source Sans 3, Lucide, icono + etiqueta, controles de 48 px, estados reforzados con texto y foco visible. Revisa cambios móviles y de teclado. No cambies reglas o permisos para hacer pasar una importación.
 
 Antes de entregar: `npm ci`, `npm test`, `npm run test:installation`, `npm run check:worker`, `npm run build`; pruebas de navegador si cambias interacción y emulador si cambias reglas. Usa datos ficticios. Indica las comprobaciones no ejecutadas, especialmente Google OAuth real, correo, recordatorios, Excel/LibreOffice y comprensión con participantes.

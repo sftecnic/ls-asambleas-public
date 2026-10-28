@@ -8,8 +8,9 @@ async function openTeam(page:Page) {
   await expect(page.getByRole('heading',{name:'Equipo 6',exact:true})).toBeVisible();
 }
 async function openPerson(page:Page,name:string) {
-  await page.locator('.team-person-card').filter({has:page.getByRole('heading',{name,exact:true})}).getByRole('button').click();
+  await page.locator('.team-person-card').filter({has:page.getByRole('heading',{name,exact:true})}).locator('button[data-team-candidate]').click();
   await expect(page.getByRole('dialog')).toBeVisible();
+  await page.getByRole('tab',{name:'Equipo',exact:true}).click();
 }
 
 test.beforeEach(async({page})=>{
@@ -42,6 +43,7 @@ test('Gmail access needs separate committee approval and volunteer acceptance',a
   await expect(page.getByRole('dialog').getByRole('button',{name:'Consultar disponibilidad',exact:true})).toBeVisible();
   await expect(page.getByLabel('Cuenta de Gmail')).toHaveCount(0);
   await page.getByRole('button',{name:'Acepta',exact:true}).click();
+  await page.getByRole('tab',{name:'Acceso',exact:true}).click();
   await page.getByLabel('Cuenta de Gmail').fill('prueba@example.test');
   await page.getByRole('button',{name:'Dar acceso',exact:true}).click();
   await expect(page.getByRole('alert').filter({hasText:'Gmail válida'})).toBeVisible();
@@ -89,6 +91,7 @@ test('department contacts allow linked person edits and atomic proposals without
     const page=await context.newPage();
     await page.addInitScript(({key,data})=>{localStorage.clear();localStorage.setItem(key,JSON.stringify(data));},{key:DEMO_KEY,data:fixture});
     await openTeam(page);await openPerson(page,'David Romero');
+    await page.getByRole('tab',{name:'Datos',exact:true}).click();
     await page.getByRole('dialog').getByRole('button',{name:'Editar',exact:true}).click();
     await page.getByLabel('Correo de contacto').fill('david.contacto@example.test');
     await page.getByRole('button',{name:'Guardar ficha',exact:true}).click();

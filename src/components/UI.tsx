@@ -2,6 +2,11 @@ import { useEffect, useRef, type ReactNode } from 'react';
 import { AlertTriangle, Check, Clock3, Pencil, X, Video, Presentation, Brush, Users, CircleHelp } from 'lucide-react';
 import type { Department } from '../domain/types';
 
+/** Local navigation: stable labels, keyboard arrows and a single tab stop. */
+export function SectionTabs<T extends string>({id,label,value,items,onChange,disabled=false}:{id:string;label:string;value:T;items:{value:T;label:string;icon?:ReactNode}[];onChange:(value:T)=>void;disabled?:boolean}){
+ return <div className="section-tabs" role="tablist" aria-label={label}>{items.map((item,index)=><button type="button" role="tab" key={item.value} id={`${id}-tab-${item.value}`} aria-controls={`${id}-panel-${item.value}`} aria-selected={value===item.value} tabIndex={value===item.value?0:-1} disabled={disabled} onClick={()=>onChange(item.value)} onKeyDown={event=>{let next=index;if(event.key==='ArrowRight')next=(index+1)%items.length;else if(event.key==='ArrowLeft')next=(index-1+items.length)%items.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=items.length-1;else return;event.preventDefault();onChange(items[next].value);(event.currentTarget.parentElement?.children[next] as HTMLButtonElement)?.focus();}}>{item.icon}{item.label}</button>)}</div>;
+}
+
 export function Status({ kind, children }: { kind: 'good' | 'pending' | 'error' | 'draft' | 'info'; children: ReactNode }) {
   const Icon = { good: Check, pending: Clock3, error: AlertTriangle, draft: Pencil, info: CircleHelp }[kind];
   return <span className={`status status-${kind}`}><Icon size={18} aria-hidden="true" />{children}</span>;

@@ -22,7 +22,8 @@ test('la compilación abre una copia publicada tras recargar sin red',async({pag
   await expect(page.getByText(/Puede estar desactualizado/)).toBeVisible();
   await expect(page.getByRole('button',{name:'Publicar',exact:true})).toHaveCount(0);
   const cachePaths=await page.evaluate(async()=>{const paths:string[]=[];for(const key of await caches.keys()){const cache=await caches.open(key);for(const req of await cache.keys())paths.push(new URL(req.url).pathname);}return paths;});
-  expect(cachePaths.every(path=>path==='/index.html'||path.startsWith('/assets/')||path.startsWith('/brand/')||['/templates/ls-asambleas-plantilla.xlsx','/templates/ls-asambleas-ejemplo.xlsx','/manifest.webmanifest','/icon.svg','/favicon.svg'].includes(path))).toBe(true);
+  const unexpected=cachePaths.filter(path=>!(path==='/index.html'||path.startsWith('/assets/')||path.startsWith('/brand/')||['/templates/ls-asambleas-plantilla.xlsx','/templates/ls-asambleas-ejemplo.xlsx','/manifest.webmanifest','/icon.svg','/favicon.svg','/privacidad.html','/tour-demo/detail.svg','/tour-demo/panorama.svg'].includes(path)));
+  expect(unexpected,'Solo recursos públicos de la compilación, sin contactos, fotografías privadas ni skills').toEqual([]);
   await page.getByRole('button',{name:'Salir',exact:true}).click();
   await expect(page.getByText('Sin conexión. No hay una copia guardada para consultar.')).toBeVisible();
   await page.reload();

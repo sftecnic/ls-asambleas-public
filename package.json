@@ -1,6 +1,6 @@
 {
   "name": "ls-asambleas",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -16,7 +16,11 @@
     "setup:check": "node scripts/check-installation.mjs",
     "setup:resume": "node scripts/check-installation.mjs",
     "test:installation": "node --test tests/installation.test.mjs",
-    "release:prepare": "node scripts/prepare-public-release.mjs"
+    "release:prepare": "node scripts/prepare-public-release.mjs",
+    "dev:demo": "node scripts/dev-demo.mjs",
+    "skills:check": "node scripts/skills.mjs check",
+    "skills:restore": "node scripts/skills.mjs restore",
+    "test:skills": "node --test tests/skills.test.mjs"
   },
   "dependencies": {
     "@fontsource/source-sans-3": "5.3.1",

@@ -50,10 +50,10 @@ test.beforeEach(async ({ page }) => {
 async function meetings(page: import("@playwright/test").Page) {
   await page
     .getByRole("navigation", { name: "Principal" })
-    .getByRole("button", { name: "Programa", exact: true })
+    .getByRole("button", { name: "Agenda", exact: true })
     .click();
   await page
-    .getByRole("navigation", { name: "Programa y reuniones" })
+    .getByRole("navigation", { name: "Agenda" })
     .getByRole("button", { name: "Reuniones", exact: true })
     .click();
 }

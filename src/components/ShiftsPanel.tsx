@@ -1,3 +1,4 @@
+import type {ReactNode} from 'react';
 import {useViewState} from './ViewState';
 import HomeFocus from './HomeFocus';
 import {attentionIds,type HomeIntent} from '../domain/homeDashboard';
@@ -25,7 +26,7 @@ function sharedShift(shifts:Shift[],key:(shift:Shift)=>string):Shift|undefined {
 }
 interface ShiftContext {time?:Shift;point?:string;timeId:string;pointId:string}
 
-export default function ShiftsPanel(props: PanelProps & {initialIntent?:HomeIntent}) {
+export default function ShiftsPanel(props: PanelProps & {initialIntent?:HomeIntent;publishAction?:ReactNode}) {
   const { data, event, user, onChange, online } = props;
   const [day, setDay] = useViewState('shifts.day',event.startDate,'dia');
   const [department, setDepartment] = useViewState('shifts.department',props.initialIntent?.departmentIds.length===1?props.initialIntent.departmentIds[0]:'all','departamento');
@@ -94,7 +95,7 @@ export default function ShiftsPanel(props: PanelProps & {initialIntent?:HomeInte
   };
   return <>
     <HomeFocus intent={homeIntent} onClear={()=>setHomeIntent(undefined)}/>
-    <div className="page-heading"><div><h1>Turnos</h1><p>{focusedIds?'Todos los días':dateLabel(day)}</p></div>{editableDepartments.length > 0 && <button className="btn btn-primary no-print" disabled={!online} onClick={() => setEditing('new')}><Plus size={20} />Añadir turno</button>}</div>
+    <div className="page-heading"><div><h1>Turnos</h1><p>{focusedIds?'Todos los días':dateLabel(day)}</p></div><div className="page-actions">{props.publishAction}{editableDepartments.length > 0 && <button className="btn btn-primary no-print" disabled={!online} onClick={() => setEditing('new')}><Plus size={20} />Añadir turno</button>}</div></div>
     <div className="toolbar shift-toolbar no-print"><div className="button-row"><label className="field"><span>Día</span><input aria-label="Día" name="shift-day" autoComplete="off" type="date" value={focusedIds?'':day} min={event.startDate} max={event.endDate} onChange={e => {setHomeIntent(undefined);setDay(e.target.value||event.startDate);}} /></label><label className="field"><span>Departamento</span><select aria-label="Departamento" name="shift-department" autoComplete="off" value={department} onChange={e => {setHomeIntent(undefined);setDepartment(e.target.value);}}><option value="all">Todos los departamentos</option>{departments.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}</select></label></div><button className="btn" aria-pressed={list} onClick={() => setList(!list)}>{list ? <LayoutGrid size={20} aria-hidden="true" /> : <List size={20} aria-hidden="true" />}{list ? 'Por sesión' : 'Ver lista'}</button></div>
     {!shifts.length ? <Empty>{focusedIds?'No quedan turnos con este pendiente.':department==='all'?'No hay turnos para este día.':`No hay turnos de ${departments.find(d=>d.id===department)?.name||'este departamento'} para este día.`}</Empty> : <div className="shift-departments">{groups.map(group=><section className="shift-department" key={group.id} aria-labelledby={`shift-department-${group.id}`}>
       <header className="shift-department-heading"><div className="shift-department-icon"><DepartmentIcon department={group.department} size={28}/></div><h2 id={`shift-department-${group.id}`}>{group.department.name}{focusedIds&&<span className="small"> · {dateLabel(group.day)}</span>}</h2><span className="shift-department-count">{group.count} {group.count===1?'turno':'turnos'}</span></header>

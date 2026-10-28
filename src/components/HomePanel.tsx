@@ -312,7 +312,7 @@ export default function HomePanel({
         </div>
         {!activities.length && (
           <p className="home-empty">
-            No tienes reuniones ni turnos publicados pendientes en este evento.
+            Sin próximos compromisos publicados.
           </p>
         )}
         {activities.length > 3 && (

@@ -25,8 +25,8 @@ test('keeps leaders in the header and orders both sessions by post regardless of
   const before=await page.evaluate(()=>localStorage.getItem('ls-asambleas:demo:v1'));
   const video=page.getByRole('region',{name:'Audio y vídeo',exact:true}),morning=video.getByRole('region',{name:'Mañana',exact:true});
   await expect(video.locator('.shift-summary-leader dt')).toHaveText(['Responsables','Auxiliar']);
-  await expect(video.locator('.shift-summary-leader dd').first()).toHaveText('Elena VidalSara Gil');
-  await expect(video.locator('.shift-summary-leader dd').nth(1)).toHaveText('Lucía Martín');
+  await expect(video.locator('.shift-summary-leader dd').first().locator('.person-contact-name')).toHaveText(['Elena Vidal','Sara Gil']);
+  await expect(video.locator('.shift-summary-leader dd').nth(1).locator('.person-contact-name')).toHaveText(['Lucía Martín']);
   await expect(video.locator('.shift-summary-leader')).not.toContainText(['David Romero']);
   await expect(video.locator('.shift-card .person-line')).not.toContainText(['Elena Vidal']);
   const order=['Director','Mesa','Vídeo','Cámara'];
@@ -64,7 +64,7 @@ test('preserves published department names and duties after later draft edits',a
   await openOptions(page); await page.getByRole('button',{name:'Ver publicado',exact:true}).click();
   const video=page.getByRole('region',{name:'Audio y vídeo',exact:true}),morning=video.getByRole('region',{name:'Mañana',exact:true});
   await expect(video.locator('.shift-summary-leader dt')).toHaveText(['Responsables','Auxiliar']);
-  await expect(video.locator('.shift-summary-leader dd').first()).toHaveText('Elena VidalSara Gil');
+  await expect(video.locator('.shift-summary-leader dd').first().locator('.person-contact-name')).toHaveText(['Elena Vidal','Sara Gil']);
   await expect(morning.locator('.shift-card h4')).toHaveText(['Director','Mesa','Cámara']);
   await expect(morning.locator('.shift-person-role')).toHaveText(['Voluntario','Responsable','Auxiliar']);
   await expect(morning.locator('.shift-person-copy strong')).toHaveText(['David Romero','Sara Gil','Lucía Martín']);

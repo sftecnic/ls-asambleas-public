@@ -5,7 +5,7 @@ test.beforeEach(async ({page})=>{await page.goto('/'); await expect(page.getByRo
 test('distingue los eventos simultáneos y el acceso de voluntario',async({page})=>{
   await page.getByLabel('Elegir evento').selectOption('e2');
   await expect(page.getByText('Salón del Este · Zaragoza',{exact:true})).toBeVisible();
-  await expect(page.getByText('No tienes reuniones ni turnos publicados pendientes en este evento.')).toBeVisible();
+  await expect(page.getByText('Sin próximos compromisos publicados.')).toBeVisible();
   await page.getByRole('button',{name:'Ver voluntario',exact:true}).click();
   await expect(page.getByRole('heading',{name:'Mis turnos',exact:true})).toBeVisible();
   await expect(page.getByLabel('Elegir evento')).toHaveValue('e1');
@@ -81,7 +81,7 @@ test('las pantallas caben en móvil, tableta y escritorio',async({page},testInfo
     await page.screenshot({path:`qa/equipo-${name}.png`,fullPage:true});
     await page.getByRole('navigation',{name:'Principal'}).getByRole('button',{name:'Turnos',exact:true}).click();
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
-    await page.getByRole('navigation',{name:'Principal'}).getByRole('button',{name:'Programa',exact:true}).click();
+    await page.getByRole('navigation',{name:'Principal'}).getByRole('button',{name:'Agenda',exact:true}).click();
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
     await page.screenshot({path:`qa/programa-${name}.png`,fullPage:true});
   }

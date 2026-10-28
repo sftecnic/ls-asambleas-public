@@ -41,3 +41,7 @@ installation.local.json
 firebase.local.json
 worker/wrangler.local.jsonc
 outputs/
+
+# Herramientas de skills: solo fuentes y referencias en Git.
+.agents/skills/**/bin/
+.agents/skills/**/.cache/

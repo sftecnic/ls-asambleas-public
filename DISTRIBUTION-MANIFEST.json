@@ -2,84 +2,724 @@
   "format": 1,
   "files": [
     {
-      "path": ".design-skills/frontend-design/LICENSE.txt",
+      "path": ".agents/skills-lock.json",
+      "sha256": "89408a00842848abd8c3183e8d86c452e809b9b524ac53966be23221e3806ca1",
+      "bytes": 47729
+    },
+    {
+      "path": ".agents/skills/frontend-design/LICENSE.txt",
       "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
       "bytes": 10174
     },
     {
-      "path": ".design-skills/frontend-design/SKILL.md",
+      "path": ".agents/skills/frontend-design/SKILL.md",
       "sha256": "d91970639e9f5c37682ac7ab60094d35f1c7c1f38d731bd56396563aee10c1d3",
       "bytes": 9390
     },
     {
-      "path": ".design-skills/impeccable/LICENSE",
+      "path": ".agents/skills/impeccable/agents/impeccable_asset_producer.toml",
+      "sha256": "4dbdb0cfdc2466961da6b22d200f3ec7bf8bb47c27448a2e6e3c03cdbf589831",
+      "bytes": 8429
+    },
+    {
+      "path": ".agents/skills/impeccable/agents/impeccable_documenter.toml",
+      "sha256": "2feb3768125ba6469c92a50d516727e6d42f44579165ddfd33409948e2a3803d",
+      "bytes": 3203
+    },
+    {
+      "path": ".agents/skills/impeccable/agents/impeccable_finish_reviewer.toml",
+      "sha256": "1b80232e22d52b06a7278b9ca1f24f871a181c62cd91f4b18728807e7cf49dbd",
+      "bytes": 15703
+    },
+    {
+      "path": ".agents/skills/impeccable/agents/impeccable_manual_edit_applier.toml",
+      "sha256": "6c9ce3e27ec4520ead001da3aad2a2ebba481c4e5cd22873db8890259ee579fe",
+      "bytes": 7032
+    },
+    {
+      "path": ".agents/skills/impeccable/agents/openai.yaml",
+      "sha256": "ce9967ad70f99cf04456f3347c266723c2fbbb600267d10a822b7cd20562c321",
+      "bytes": 236
+    },
+    {
+      "path": ".agents/skills/impeccable/LICENSE",
       "sha256": "02bb8c3b4e70190e3986c0404ad2fd8d639b4f534252d82379cc1b502b6d1812",
       "bytes": 10766
     },
     {
-      "path": ".design-skills/impeccable/reference/adapt.md",
-      "sha256": "004b339416187222206adee5ff08ef1fa9bc346d4ceba2932f770d640449ec6d",
-      "bytes": 11330
+      "path": ".agents/skills/impeccable/reference/adapt.md",
+      "sha256": "9807cdc112b8bcbdeff9cd2516cda4d07129f1d47f29df4d57645344f34950c1",
+      "bytes": 11313
     },
     {
-      "path": ".design-skills/impeccable/reference/audit.md",
-      "sha256": "b715832f7288e57d46581fdc9874e4df1a08430ea683462e17a2493e878adb5c",
-      "bytes": 8559
+      "path": ".agents/skills/impeccable/reference/adapt.native.md",
+      "sha256": "2455a2613e1fa29b986521c73cbad9424ccda70ef6cbe505779dbca5e16272a2",
+      "bytes": 3910
     },
     {
-      "path": ".design-skills/impeccable/reference/clarify.md",
-      "sha256": "4738e125835bd6c166aec2622977c9bc59bada52aaeb186585ed38b3900860b5",
-      "bytes": 4607
+      "path": ".agents/skills/impeccable/reference/android.md",
+      "sha256": "058f81f256134841875fd3183e06b37a023de0c877fd2b9eecd97011640791fe",
+      "bytes": 4093
     },
     {
-      "path": ".design-skills/impeccable/reference/colorize.md",
-      "sha256": "dcc0c3ebb76bd22c543f45d73c283e3890e5b8a44eb5053ca2f7fdd425635c32",
-      "bytes": 4554
+      "path": ".agents/skills/impeccable/reference/animate.md",
+      "sha256": "d658c48ffbe0031e8e3b318996cad6ceafe29e40aa50d5bb25e4bf1d6839dc7c",
+      "bytes": 5236
     },
     {
-      "path": ".design-skills/impeccable/reference/craft-floor.md",
-      "sha256": "e4bfdb63ede878d6326831efbe76b98d3e63a4327088607dfd8b1589559c76de",
-      "bytes": 7136
+      "path": ".agents/skills/impeccable/reference/audit.md",
+      "sha256": "4b726d8f13ca1dbb82ca8179cbfefca8c53c13766fef4d7b8870f5d4324da2d6",
+      "bytes": 9250
     },
     {
-      "path": ".design-skills/impeccable/reference/distill.md",
-      "sha256": "d087dc612fdeb0aa8d5b56fa0ca006802f71511beafb56ffca55179393234e2b",
-      "bytes": 5539
+      "path": ".agents/skills/impeccable/reference/audit.native.md",
+      "sha256": "2898eff507738f9102107809e671df3e69f889dee30073030fe96fb2483d8ea3",
+      "bytes": 8326
     },
     {
-      "path": ".design-skills/impeccable/reference/document.md",
+      "path": ".agents/skills/impeccable/reference/bolder.md",
+      "sha256": "05b78fb0595e4d5afbf5f17470c84e89cf82f205fea3a6e9b6d8d779b7c4aab1",
+      "bytes": 3566
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/clarify.md",
+      "sha256": "173dd66abe65633910dcb04a51f40d6ff2a793f87088f022a02fc4cad24dd133",
+      "bytes": 4590
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/colorize.md",
+      "sha256": "bc5f71f1129d0f2c310d913d07c8dc609a1d25644121bd78c308f42d52a0b9e9",
+      "bytes": 4537
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/component-review.md",
+      "sha256": "10489e5265e49a4ef2737cd0e674c149ed41e1f703efe922e53ea3c91e833427",
+      "bytes": 8017
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/craft-floor.md",
+      "sha256": "52b523e92b76daff71be2ec8c732c374c670f8d03e1296388738e581479ec1bb",
+      "bytes": 5502
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/craft.md",
+      "sha256": "9205e222bc6565b37fb504ceec93233c2d2a456802b69d16e6b1c44723907c4c",
+      "bytes": 555
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/critique.md",
+      "sha256": "c210c9506877c6c8d88880a337fddd95d4315daf70ed6bc631ee6520481f1a0c",
+      "bytes": 48958
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/degraded/asset-producer.md",
+      "sha256": "877d274f41500c780bad25b2bca7fa95eff1a32a7b95397dd388c72848e86a6c",
+      "bytes": 8581
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/degraded/documenter.md",
+      "sha256": "bcc05ea92faebb5c74037a9d4263a5ce9a56f5ab07c8ab3c59ee704d8cade745",
+      "bytes": 3325
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/degraded/finish-reviewer.md",
+      "sha256": "c33c4cfa7f0ce0bedde80d4fc3b595e747d0e9b43a77f06cacb8e899802f709d",
+      "bytes": 15803
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/degraded/manual-edit-applier.md",
+      "sha256": "5fae7f8a2fc3ddd49ad0a413446dc44daedef5b6b7de5eb935bd2fbfad646d58",
+      "bytes": 7196
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/delight.md",
+      "sha256": "098a891028ce59c212b747d3c70468dd750aff7053a703d1336045ed31e0da7c",
+      "bytes": 3716
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/distill.md",
+      "sha256": "56ca75d680eb8b61ca3a298d18e895cd4a0dcc520c31d7938a4807ff8dcf18ea",
+      "bytes": 5648
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/doctor.md",
+      "sha256": "3dbef3fe606de4de0f1b5cab5f19902799e05cf566eb8223e9aa1632eeb04698",
+      "bytes": 5563
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/document.md",
       "sha256": "531d2b6c8c9affc7b794de7904905ff9b73962b986968fd1e90273eb26930b6e",
       "bytes": 27523
     },
     {
-      "path": ".design-skills/impeccable/reference/extract.md",
-      "sha256": "89d5627dc5f80449a1ab23830e65b952dd03821e6a7307dbb3eeb5dd57e9516e",
-      "bytes": 3279
+      "path": ".agents/skills/impeccable/reference/extract.md",
+      "sha256": "5477ae97189e5c1236cee71a25a5ae50014429a5a2e6da28355c8021a6cdeddd",
+      "bytes": 3406
     },
     {
-      "path": ".design-skills/impeccable/reference/init.md",
-      "sha256": "72a41672b391085738ded0ab3cf8235866dab15fc931f9e2b43c914c3ece915f",
-      "bytes": 11640
+      "path": ".agents/skills/impeccable/reference/generate.md",
+      "sha256": "11385badfb532196cec249e73bac2b7f58ada033ed8c4b02b9f0d64ddb46f0dc",
+      "bytes": 13221
     },
     {
-      "path": ".design-skills/impeccable/reference/new-work.md",
-      "sha256": "cbe4612444af11a45c3d0e6f1e0b3790e8f935f995d3c5fcda1a08cad3a6c6a5",
-      "bytes": 63661
+      "path": ".agents/skills/impeccable/reference/harden.md",
+      "sha256": "4167eb7fc456cdfe09ff0ac2dbcb5e59cee57e590137aab6cc8ec08aafb6d775",
+      "bytes": 10748
     },
     {
-      "path": ".design-skills/impeccable/reference/operate.md",
-      "sha256": "e5bf4980c547e60b091f82f38d0eec4cc3ab85610b4b15ec8f1d86584f9eb404",
-      "bytes": 5200
+      "path": ".agents/skills/impeccable/reference/hooks.md",
+      "sha256": "4a19b53425643c01332a2f83ae71d58f267f4a1fb72e07378a5310f69c34108e",
+      "bytes": 14117
     },
     {
-      "path": ".design-skills/impeccable/SKILL.md",
+      "path": ".agents/skills/impeccable/reference/init.md",
+      "sha256": "51349b3a32c7f907102dd680d8e2df9da27082caf46ee15c673be7ce14a5363b",
+      "bytes": 11766
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/ios.md",
+      "sha256": "40c87038b5f75147a5952a96237acf312a327bf70c1bcd8e0a5f064625ae9668",
+      "bytes": 3812
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/layout.md",
+      "sha256": "0bc7d7971b3edf2acd0580e847458dc6d84129d90715b452799ace3bed815c7c",
+      "bytes": 5161
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/live-setup.md",
+      "sha256": "2b5b2fbf5f658f34ea1997fb1aeebe01604d05187f75c6a4f1f55a5bc78520a4",
+      "bytes": 8186
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/live.md",
+      "sha256": "7caeecefe54d68bc915a7f2978cba5e88eda69a239cb09dcce78c6d94e93df84",
+      "bytes": 36792
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/mode-operate.md",
+      "sha256": "7a52dd7a94ee75f6ae89542c86a1b6e1d306812b16e0d9dbf12d4acad44d148b",
+      "bytes": 4716
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/mode-persuade.md",
+      "sha256": "21e78c8a77badb3f83290cd4577ed3b24bd4dd3b57136d7da75733d4f3ee9ac0",
+      "bytes": 3638
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/mode-read.md",
+      "sha256": "a569989e6a3d6453b4c45e9474e162a15cc54e11732ac6baa7990a6e7cccc0b5",
+      "bytes": 4396
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/new-work.md",
+      "sha256": "2ecb8674f239b5386faf955a52f9cc58c7a064a27d7c91bfc871b63d6a9c9c15",
+      "bytes": 61922
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/onboard.md",
+      "sha256": "a2b8fd01ea12139b39b3285393f805bb8c326e11b2234dbff4c26c17b4e9c280",
+      "bytes": 7688
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/operate.md",
+      "sha256": "a9d2203acd45ca33a13d5c68b02b23ed512425ac15f0e8438318ed124b43729d",
+      "bytes": 4145
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/optimize.md",
+      "sha256": "89d679ec08e55fe7661d54addc950c2ff77cf574aa97e593ec6da089fd1efedf",
+      "bytes": 7594
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/overdrive.md",
+      "sha256": "0a0d4ae6eea720c6d6e1c073fc77192d7c2100f78a44d9a8d262ddf22270cf4d",
+      "bytes": 9079
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/polish.md",
+      "sha256": "81666fc7f783b4e3514db6554e713dc0479bd9cdedb06e93d15f8b579aae869a",
+      "bytes": 6646
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/quieter.md",
+      "sha256": "9e03b55c6bbdd4acba28cfa9c3b74ba1a4448cdbd35a7200990ab460c6eecaa0",
+      "bytes": 5020
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/region-map.md",
+      "sha256": "778cedc9199b407d3e23fa1041e38d548b00b1101a33517aa2a2eb299f9d0edc",
+      "bytes": 3361
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/routing.md",
+      "sha256": "77ae09542fbc10aa4e8b119d6fd19359908a47c13c30068d6a150bfdb50e3e10",
+      "bytes": 3336
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/shape.md",
+      "sha256": "a55f016c046cb6a27c55bd7f346375aeb506a755c4fbca19a5f92dbd42309c23",
+      "bytes": 3547
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/typeset.md",
+      "sha256": "c26c5b4524f3ccb650ed0680c10c25fd18083f8ebfd00a54c4d983c4747aab70",
+      "bytes": 6263
+    },
+    {
+      "path": ".agents/skills/impeccable/reference/visualize.md",
+      "sha256": "1c81a831f9dd28b908306fa06e2f2944ca4595ff3df6570750c10bf806465f00",
+      "bytes": 13918
+    },
+    {
+      "path": ".agents/skills/impeccable/scripts/command-metadata.json",
+      "sha256": "e8720f3aa41135211cc58cc299a39eeda86c75651f4279cc1ede8db10dcc0584",
+      "bytes": 8392
+    },
+    {
+      "path": ".agents/skills/impeccable/scripts/data/font-index-failures.json",
+      "sha256": "835f19a0a3812f3652dd6979a2ce5597f654fd01f26e1b420b92d5f42b997ce4",
+      "bytes": 2437
+    },
+    {
+      "path": ".agents/skills/impeccable/scripts/data/font-index.json",
+      "sha256": "47edbdfaf27073c47033d1ac7dfee881be49e2dcbda7671d1157300481dde6da",
+      "bytes": 1100013
+    },
+    {
+      "path": ".agents/skills/impeccable/scripts/impeccable",
+      "sha256": "f5d9fcd37559ed6af782306f71b7688ad1ec5e1a4f8ae1ef4d3168f42523b1b1",
+      "bytes": 8827
+    },
+    {
+      "path": ".agents/skills/impeccable/scripts/impeccable.cmd",
+      "sha256": "e0dcc4cd739c8a6ac9e8ce637c216cf8bd4ddae36a8bac458345bdb5a5d7e252",
+      "bytes": 9306
+    },
+    {
+      "path": ".agents/skills/impeccable/scripts/live-browser-dom.js",
+      "sha256": "4b379aff87ce0f485008a2b6a0dc711d00a869f5cf0ec2459279d6364fbf0c9e",
+      "bytes": 12283
+    },
+    {
+      "path": ".agents/skills/impeccable/scripts/live-browser-ignores.js",
+      "sha256": "c1cb6877ca99a0c1b38ba0c7d59f32702d3022f6821d8045f7133f7c40b6362f",
+      "bytes": 10346
+    },
+    {
+      "path": ".agents/skills/impeccable/scripts/live-browser-session.js",
+      "sha256": "2b45c12bef4e25d40b673044c9f124d1da6dfa72ef3f0c09ff30fdb419048e5d",
+      "bytes": 5751
+    },
+    {
+      "path": ".agents/skills/impeccable/scripts/live-browser.js",
+      "sha256": "8f26a309ae1af52d2413a39a886908721e78c55b468025054e06e8faffe90cf0",
+      "bytes": 550029
+    },
+    {
+      "path": ".agents/skills/impeccable/scripts/modern-screenshot.umd.js",
+      "sha256": "bb36665889124a0b6e15f16045265737449c3bdcf2712cdb08af3cfa01563e2b",
+      "bytes": 29290
+    },
+    {
+      "path": ".agents/skills/impeccable/scripts/VERSION",
+      "sha256": "7470694a0b5af87394b523c1a640e2ad099efbe0e6d9e6d2f7a70703e4d04457",
+      "bytes": 7
+    },
+    {
+      "path": ".agents/skills/impeccable/SKILL.md",
       "sha256": "88e9a46a91b6ddd1059f03f578bd0f9bbe6d212d6a395124379b9bb5c97c5cf2",
       "bytes": 11659
     },
     {
-      "path": ".design-skills/impeccable/USAGE.md",
-      "sha256": "b7a81ebde79c73c234fb317b4f5cf2de9e852dc4892022ae78cb4952cbd2e969",
-      "bytes": 579
+      "path": ".agents/skills/ui-ux-pro-max/data/app-interface.csv",
+      "sha256": "331e7cf2c0b222d80c566c5f255c63cb339f65bfd02e471a720f28e4864a9f08",
+      "bytes": 11046
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/catalog-summary.json",
+      "sha256": "6638da97231c07fb5cef3cd9d3ce483ca7b2f9748980f8c27490eb03968d8894",
+      "bytes": 2392
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/charts.csv",
+      "sha256": "4115cf1120680f2cedef0676cb648f30c7ef4699e2a947535d4113e71ed3b12a",
+      "bytes": 23365
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/colors.csv",
+      "sha256": "8162429222bce22df62b564085946a30d07cc9722c58d0a3a494bd0d1d00841c",
+      "bytes": 37940
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/data-provenance.json",
+      "sha256": "e82fb33ed49375a300e93d9c11ccd1c1493c999e84ee7ee295e527634786e2e0",
+      "bytes": 36686
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/google-font-licenses.json",
+      "sha256": "35688523f2955795caa1a47c53b83099e60c1708461476f9cc3a050cf3b0148a",
+      "bytes": 433127
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/google-fonts.csv",
+      "sha256": "1c8c3b2ea1faf6a1012da463756def8b3889db33f2226f0343bb4daa80307d03",
+      "bytes": 747241
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/icons.csv",
+      "sha256": "50816c6012030178195a16ee481ebf58b47bd985d70e8ec58886cc83f6eddafc",
+      "bytes": 57945
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/landing.csv",
+      "sha256": "9a2edd3bb676c2a58f00ade7a062e285222d4297bfd847c8d5b056f0dbbf52d0",
+      "bytes": 25449
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/motion.csv",
+      "sha256": "381affe8df8ea1f66fbbda2598827f9f54299107bbe6a1b4e9b68f6b62091ceb",
+      "bytes": 14679
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/phosphor-icons-upstream.json",
+      "sha256": "2399325233b277b5c97a80e6a5e8941154f5d057beee4e7613db87c87d700236",
+      "bytes": 823933
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/products.csv",
+      "sha256": "42473f75e8dde5987bdf89ce55d8c168091b80a356cae691dd60247d80720b70",
+      "bytes": 75623
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/react-performance.csv",
+      "sha256": "3d925802539abac5afeb63ae8aa1960b7229ad271b3a47caed40ab2d97ad0734",
+      "bytes": 15080
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/angular.csv",
+      "sha256": "704be83f2bad30c7e6de01afb113ffa01e0c458762f48b7102f31ba2367b5553",
+      "bytes": 19863
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/astro.csv",
+      "sha256": "2c2f55fadaafc05e04cc321c8194a1a28b656e6757fe2ba316f41b16428299c6",
+      "bytes": 14591
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/avalonia.csv",
+      "sha256": "442fca14675a020683473e7e49f08abb27b9df0765c80efe54aef61f1a4ac258",
+      "bytes": 27327
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/flutter.csv",
+      "sha256": "64dba0ac17349f28bce517a0f5f48c54d9ed2e487ec0c0258303463b382f41a0",
+      "bytes": 14192
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/html-tailwind.csv",
+      "sha256": "d05a581d20af57b8ca0104a6d31d90a07c437d500662a96c3029fc2f9a4678ee",
+      "bytes": 16551
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/javafx.csv",
+      "sha256": "2e819b8d5abdd23ad4dae0991650fdb57af497aabd68b37463aa9c442944c869",
+      "bytes": 33577
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/jetpack-compose.csv",
+      "sha256": "699de218b286948eaec7d15767b6e1350ee299167e49bf476d82e3ff58724e0a",
+      "bytes": 12295
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/laravel.csv",
+      "sha256": "854ea4daa5fc61292d22235ad33b49ba3fe22423c3de8d3cb03758ffed3b59f9",
+      "bytes": 20163
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/nextjs.csv",
+      "sha256": "ecd2c27b2ea0127d203ae726060efcdd7335b5e83f96b99e4f3befbbfeebd5a4",
+      "bytes": 18687
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/nuxt-ui.csv",
+      "sha256": "fce682a338cfcdbf35d318d20e5befbe7b5d81b05abc37f87677a6d9cde84dc6",
+      "bytes": 28700
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/nuxtjs.csv",
+      "sha256": "3d9b54ed2d151bd9c86e9e5609b8a6f88a00c4c52fa601a30af96c49b2c4d176",
+      "bytes": 23014
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/react-native.csv",
+      "sha256": "ba31dd9c0c04da6bc02a74448bf121f9c0728ae5ba3b4d47b487778b0a1135b5",
+      "bytes": 14049
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/react.csv",
+      "sha256": "4dd176a9787e5c6306b5df94158d75955adcdc6edab41ce5286641a5842303c1",
+      "bytes": 21166
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/shadcn.csv",
+      "sha256": "e56cfde5b74907836ac3582a4779d5b7f3d206a702ab81b8669a1b668c3eeb51",
+      "bytes": 23184
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/svelte.csv",
+      "sha256": "f6e379ba802941ba26b01d4ffbe3cd39120f2587659a1d93851c707f66bc13db",
+      "bytes": 15078
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/swiftui.csv",
+      "sha256": "bdd9231ff3ad658f4e7c063e1eb49df2fd09ac8d90631a86df899b39833b9623",
+      "bytes": 15323
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/threejs.csv",
+      "sha256": "155d583b9c64da0df4b6c6cb060c02eab222505e0734d6353da02c9e2b5d982b",
+      "bytes": 46769
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/uno.csv",
+      "sha256": "a0474363e4225b5367214d5675fd3e075f137026f9500f0d04357882ef4f6d48",
+      "bytes": 30091
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/uwp.csv",
+      "sha256": "c409f08c1fbba1f1029f1acaa554e7b4471cc85517a5751c9f2e62465badcd5c",
+      "bytes": 24692
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/vue.csv",
+      "sha256": "b655f1ebb9dff2652d15981f31b1784c8a6d4759efd2815a14f3088257569f95",
+      "bytes": 12813
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/winui.csv",
+      "sha256": "e676dc1c13ee6c205c40b0746f1335150a346c7a49a0616d2545bc3d2c930c85",
+      "bytes": 27890
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/stacks/wpf.csv",
+      "sha256": "9781a9950b20333637b30a02e498b7efca21b618a3eeb8665836f3ac6e974da7",
+      "bytes": 24158
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/styles.csv",
+      "sha256": "a93a4d9d7025856575d7b7583bda020be9043013432c5af7c58af9dbdfb206b7",
+      "bytes": 149478
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/typography.csv",
+      "sha256": "321fc446e89024488ebae96dda93efc4d2307bd8bddb240857ad51364f6782c8",
+      "bytes": 49997
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/ui-reasoning.csv",
+      "sha256": "f0774dd741cecdad5eec842034bd6d5e9ea50e9f220a1910069748daa0bb8e9a",
+      "bytes": 77360
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/data/ux-guidelines.csv",
+      "sha256": "ff81ec613f70ba9fc3fcce52dbe4ae35d44b2079dbe6dc066d2d6e38c28facd5",
+      "bytes": 27516
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/LICENSE",
+      "sha256": "738f69dfa83db5c347c678fb9d90e560877059f0de93a327c39001bff92dc014",
+      "bytes": 1075
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/references/pro-rules.md",
+      "sha256": "d28442d61c310b49c054a4ea736f89fb3008beebdbbc38c4b3a540b8f7fadf23",
+      "bytes": 10909
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/references/quick-reference.md",
+      "sha256": "0609bc7c89dacb40472465d8fc14257b56b2c43439660fc8d6fa3b8c022e1876",
+      "bytes": 24526
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/core.py",
+      "sha256": "dfb34cbca66a704a5bfae48c1ab5f82d2a6573b9509c5accceb3d248715a18f6",
+      "bytes": 41242
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/design_system.py",
+      "sha256": "e7d1c94c4b2eada17c5551157668362659ccf9626d34dbd58e68142410f90103",
+      "bytes": 71537
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/reasoning_contract.py",
+      "sha256": "b8bac1af82aa280d3e06f00aabaeac4337e632996b07fed874e2b6ee6e9c5913",
+      "bytes": 5824
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/search.py",
+      "sha256": "d54e648fe0ec2932cac66684220cc17be4bd4b4eba1d23d3195d509d398db374",
+      "bytes": 9373
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-api.json",
+      "sha256": "22d8dc81a7d6827b7e8b64b53e7d184210fb9759e8e294e0d5133c81cc460176",
+      "bytes": 1079
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-catalog.json",
+      "sha256": "c608ad5c4084ebc50a4bbbfb69ea2456c01fd5519c457e18410fffd250ae948f",
+      "bytes": 1772
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-existing.csv",
+      "sha256": "4e0761b839dc6b2187a370e82eddc0aed8a7ff10c09e28dd814bb3656dac595b",
+      "bytes": 480
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-metadata.json",
+      "sha256": "30bffc29ae348416a2de2f9c6c418e768e4578f136b0f4bac5d2f70124f2e9ba",
+      "bytes": 328
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-overrides.json",
+      "sha256": "6243a48a4619986768c4628e2d0c98ff195beba71ba9be5df8f0c52fc6d90c0b",
+      "bytes": 97
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/icons-curated.csv",
+      "sha256": "68362c9a700c13b96f000784a0198c1c7e117a7088a01c85744e44233038fe9d",
+      "bytes": 495
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/phosphor-core.json",
+      "sha256": "ae4d0bb076240824e1b643c2270d1f8cc0952a69502ec1e622b7dedd85b930bb",
+      "bytes": 571
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/phosphor-package.json",
+      "sha256": "500588c757d6de03e3d7e69b27a8b8b1f88ccf6bb0333e4c1e9b0d6a4f112475",
+      "bytes": 370
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/phosphor-react-exports.json",
+      "sha256": "d79f2ee0afdbc2f87776733e145df3538a16a25d7c2fba0056bb48295dad0ded",
+      "bytes": 87
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/phosphor-react-package.json",
+      "sha256": "1c57a1d76bcc0cdd3632d4c18b9c0e79576b4591df39831c9607e5d0eb4f2cec",
+      "bytes": 81
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/fixtures/relevance-baseline.json",
+      "sha256": "0df200fc54c1cb97a52d6775e7f501509163cea8f8b73fd7268429bc1f835afe",
+      "bytes": 89426
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/fixtures/relevance-cases.json",
+      "sha256": "e77d36eebbf6ddc2860946a02cdb659351da6c09f2688f1ed30939a418099646",
+      "bytes": 36734
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/fixtures/relevance-thresholds.json",
+      "sha256": "1fbe8623fe3e49c8d828139bca9df69043746e488e8bf09d93dfb9cbc31f5cef",
+      "bytes": 5079
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/test_catalog_refresh.py",
+      "sha256": "3e2ca5d12702318f641ae62d0c14f22a3bcc84d84e79b863c0e947d475604adb",
+      "bytes": 19466
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/test_catalog_summary_line_endings.py",
+      "sha256": "fa6ff09f0ec2c99013588c77397f5082dddebe8f467e94c5f8378ec9595f4989",
+      "bytes": 2947
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/test_core_data_quality.py",
+      "sha256": "3ffc6b4905c9ea26d7ac4527ab154d153584231aee71b2ae4bd017977fa09cc5",
+      "bytes": 8954
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/test_core.py",
+      "sha256": "3527fe2f4b852f69f07c17ddc0d615d9a6e025c924e45a33985579a94a8d2118",
+      "bytes": 16680
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/test_data_contracts.py",
+      "sha256": "0360d6e10080c0bca214f2b0bbad582ba50702a542ce21013351aca54938df3a",
+      "bytes": 19513
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/test_design_system_mode.py",
+      "sha256": "95ad2c154349f7021f55a558f8dcdd71df1a24fcf531a4364a8e49526a0865ef",
+      "bytes": 9815
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/test_design_system_stack.py",
+      "sha256": "83d09ffe8cfbf7b265f362129f061dfe8e5e167ce5db43adaead197cabc9ca38",
+      "bytes": 2261
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/test_native_desktop_stack_freshness.py",
+      "sha256": "3942845712b9a829323cd3568511483135f2a8c7cd79ccf61679da4b0f624dbb",
+      "bytes": 8375
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/test_relevance_evaluator.py",
+      "sha256": "2fe56a4d6fe5fff15ff592274b0eeaba925146cefea6c0fa29d8f1b77c9aca1f",
+      "bytes": 8430
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/test_skill_script_paths.py",
+      "sha256": "7cec24b94be771bc60bc84f8993e614bb16d4047930e1dd3d3bed91628311d44",
+      "bytes": 4305
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/test_style_taxonomy.py",
+      "sha256": "cd14d0092e8a454d213aa104b53e4e70ba698491fa00fde9fdec5ca8a3d70011",
+      "bytes": 7425
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/test_text_layout_resilience.py",
+      "sha256": "b51d32ee8a15505b87cb81957fb2d1b385e041e8beb4463c311d236bfd29ebd4",
+      "bytes": 5874
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/tests/test_web_stack_freshness.py",
+      "sha256": "cba3dd79b3bd7ed9479e8cd0e7efb0594d998160bc712f9865fb0ab6e29dda5a",
+      "bytes": 8288
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/scripts/validate_data.py",
+      "sha256": "a599aa256049cf30954d1f164721b99e453eb7e4cb8241bcab2d5573e6cf58b8",
+      "bytes": 52230
+    },
+    {
+      "path": ".agents/skills/ui-ux-pro-max/SKILL.md",
+      "sha256": "c79ea861d67679ef5f777de9163a8ecdb4f59260d4a96d33ce7d0b3cddf88a7b",
+      "bytes": 15595
+    },
+    {
+      "path": ".agents/skills/web-design-guidelines/LICENSE",
+      "sha256": "6cd1609c9c12233507cdd2ce0d32e9a721e3c27494951be06b90090deeeb7af2",
+      "bytes": 1068
+    },
+    {
+      "path": ".agents/skills/web-design-guidelines/references/guidelines.md",
+      "sha256": "d246b026f4f29b5823a9cc857f9edf3d2507002e055e32040cadeaf3b38e0234",
+      "bytes": 8055
+    },
+    {
+      "path": ".agents/skills/web-design-guidelines/references/upstream-readme.md",
+      "sha256": "7c02f64b08fc6c4eef03c01d64f3e2ed478193ccfcbd14edba379abe23304651",
+      "bytes": 7838
+    },
+    {
+      "path": ".agents/skills/web-design-guidelines/SKILL.md",
+      "sha256": "7c082fa182b176247b5cdf0da1136d97c745dd471ac099b24e01c6d2109f4fe9",
+      "bytes": 1485
     },
     {
       "path": ".env.example",
@@ -88,23 +728,23 @@
     },
     {
       "path": ".gitattributes",
-      "sha256": "92f47bcad064ab86191cdabcad7ca3af3e5867a116ea1415b25be88d258a6062",
+      "sha256": "3ec3c85b2fe9c82a234b6f1f822e560272a92b161e9436f92b32bc1609a034c3",
       "bytes": 140
     },
     {
       "path": ".github/workflows/verify.yml",
-      "sha256": "408eb6cf8aa85d78e00fd70892f725b0b6a07193c7cbba756d6d5b00dc4d928c",
-      "bytes": 457
+      "sha256": "b6fe83611711e465031faa302f91a416f283d2a01e03bf8971612a470f80b7ae",
+      "bytes": 524
     },
     {
       "path": ".gitignore",
-      "sha256": "4e58cc26b9609bfc5736f831bc9845c4bbca5aa07ed39d9a23cecc5b82032e3e",
-      "bytes": 598
+      "sha256": "e0d7a0ebcc22c45ea66c12f282322eb04980e45ce9d6ba16e6539c3284d3798c",
+      "bytes": 709
     },
     {
       "path": "AGENTS.md",
-      "sha256": "5cef9d22b326a3993a2de181274f89c35c0fe53f5776ad34bf400fafa2370e9e",
-      "bytes": 3740
+      "sha256": "1fac2c20d2f867b93ee7de3670310383ecb402e3d3fdb1edceff1dc0f9c92552",
+      "bytes": 4975
     },
     {
       "path": "config/firebase.example.json",
@@ -122,6 +762,11 @@
       "bytes": 453
     },
     {
+      "path": "DESIGN.md",
+      "sha256": "e7b0327e943fbe2d997da7fbc4b52c85cff748f4ad50f4b5f526c04f6f108427",
+      "bytes": 12225
+    },
+    {
       "path": "docs/ARQUITECTURA.md",
       "sha256": "6ea6f6fdad6669af0f4027a32bae015921fffc815246245d37591e2fd4b02d19",
       "bytes": 7023
@@ -137,9 +782,14 @@
       "bytes": 5701
     },
     {
+      "path": "docs/DISENO-080.md",
+      "sha256": "8c28de0479ceb3a176b8bf9092be1ad72df8befe537226d87a2372a2c7a5d7e9",
+      "bytes": 5153
+    },
+    {
       "path": "docs/distribution/README.md",
-      "sha256": "27dd2a1b72cc211d39493716ae3eea193b039a740480c13467e851dc08cbf9d7",
-      "bytes": 4635
+      "sha256": "babf78ac78bb9429c98d0ee9672dd1d6ce4f6a4d2ebcb04462ac674b3edbc3c2",
+      "bytes": 5041
     },
     {
       "path": "docs/IMPORTACION-EXCEL.md",
@@ -167,9 +817,14 @@
       "bytes": 4976
     },
     {
+      "path": "docs/SKILLS.md",
+      "sha256": "02d11bb0cebaf4a11ba7c7416f417cf194f0bdfec130efe8ba6da95b52aec61f",
+      "bytes": 5604
+    },
+    {
       "path": "docs/VALIDACION.md",
-      "sha256": "0d17259bf9a1499f72d7bd08de56df44211152863c3bd8b40a12a6c82abc8a3a",
-      "bytes": 13217
+      "sha256": "5f49195a5afce51a40556928574ae85e66f66fbed3aba7cbb68def5f61fa2a97",
+      "bytes": 13797
     },
     {
       "path": "docs/WHATSAPP.md",
@@ -1818,18 +2473,23 @@
     },
     {
       "path": "package-lock.json",
-      "sha256": "4f891974f81e13f068f07806b8e565794b6ce2a3d1644ece260ce33bd4c2a4d4",
+      "sha256": "e98f53a6418f4f04d712967db2b8643a2b72d6a4952b9cdfc9fc963286efa81c",
       "bytes": 212288
     },
     {
       "path": "package.json",
-      "sha256": "82173c169db36d8e0decebe90fb8f5e0787194d17997825a75ad7686a971e5d4",
-      "bytes": 1723
+      "sha256": "c72edcc711bb8322d04f3973b16c3e519fb7f8d9e203ac4ae40e192c8e67adba",
+      "bytes": 1934
     },
     {
       "path": "playwright.config.ts",
       "sha256": "f44ca5707491b7fcbc5dddafa33a4227d795d5f7430914f3a279a31e8c5ebabb",
       "bytes": 483
+    },
+    {
+      "path": "PRODUCT.md",
+      "sha256": "a6742bb3bbfc3b6aeb2bfa64d9bb4f3d3f9c024537c559d78411ce139350fa1d",
+      "bytes": 1437
     },
     {
       "path": "public/brand/apple-touch-icon.png",
@@ -1922,9 +2582,14 @@
       "bytes": 828
     },
     {
+      "path": "qa/visual-080/prototype.html",
+      "sha256": "cf65ac32fb12a7ebf9c4f84c15315e6f81fb9b8f1fa6dca2ae110d5acdc518a3",
+      "bytes": 10401
+    },
+    {
       "path": "README.md",
-      "sha256": "27dd2a1b72cc211d39493716ae3eea193b039a740480c13467e851dc08cbf9d7",
-      "bytes": 4635
+      "sha256": "babf78ac78bb9429c98d0ee9672dd1d6ce4f6a4d2ebcb04462ac674b3edbc3c2",
+      "bytes": 5041
     },
     {
       "path": "scripts/bootstrap-admin.mjs",
@@ -1947,14 +2612,19 @@
       "bytes": 1812
     },
     {
+      "path": "scripts/dev-demo.mjs",
+      "sha256": "1493d79da1a4b7cd408ee39e5200c8bce2948707a993f8b59a2299a4071528e6",
+      "bytes": 568
+    },
+    {
       "path": "scripts/installation-lib.mjs",
       "sha256": "bc3c1247726682fb7053599928897d87fb6a2994ed9767b842eeeeac835416ae",
       "bytes": 5963
     },
     {
       "path": "scripts/prepare-public-release.mjs",
-      "sha256": "e9b499149e5e8a86d943a244359e3ff4e419661edf114a0421e5cd991072202d",
-      "bytes": 7562
+      "sha256": "c704a0c66fb7d45a90c53569e1ce54326a9fb06cc155a0b9f2fa01d6e65c8290",
+      "bytes": 7804
     },
     {
       "path": "scripts/prepare-tour-assets.py",
@@ -1972,14 +2642,19 @@
       "bytes": 6765
     },
     {
+      "path": "scripts/skills.mjs",
+      "sha256": "6bc04839ff19f54f9d8a89ccf20ff612b657b8d7335107d557f00c8772909a7d",
+      "bytes": 5867
+    },
+    {
       "path": "scripts/with-cli-auth.mjs",
       "sha256": "62d105c9e1db54ca4fe07ea4373ca8d2c45fc4505b5660ce7c51b1103437c4fa",
       "bytes": 2321
     },
     {
       "path": "src/App.tsx",
-      "sha256": "91d1edfe7f949f739a2141ecf001ff85afdb821b828b7e368cb5a826326023bf",
-      "bytes": 29964
+      "sha256": "7205463f9f389e525b73bb5343d39d05b34b86e15202d13f5168a20fb606b071",
+      "bytes": 29983
     },
     {
       "path": "src/components/AdminPanel.tsx",
@@ -2003,8 +2678,8 @@
     },
     {
       "path": "src/components/CalendarPanel.tsx",
-      "sha256": "cfbd26a3df4ce482161cb46dacc7e944f846d7fb8cb043260d5fc6ec0d252084",
-      "bytes": 7389
+      "sha256": "31b09a25a4e8261d8656d679ab727edf5b5a39a435005f6a01a4883bc8d0c6b9",
+      "bytes": 8143
     },
     {
       "path": "src/components/CalendarSettings.tsx",
@@ -2028,8 +2703,8 @@
     },
     {
       "path": "src/components/DepartmentTours.tsx",
-      "sha256": "1c4d54c8e155e559b7fd78cb116306a23e47e15f2320fcfd540cf74f075a0c8a",
-      "bytes": 5202
+      "sha256": "86520beef9c8d16bff59283ddd810ab9964c64d103ecbe748ed560058d5ce7a8",
+      "bytes": 5527
     },
     {
       "path": "src/components/DirectoryPanel.tsx",
@@ -2048,8 +2723,8 @@
     },
     {
       "path": "src/components/HistoryPanel.tsx",
-      "sha256": "5eb8835b969147fa30519937a8630c3fc43b7419251f5c80be1a4414ff9c8b08",
-      "bytes": 10385
+      "sha256": "e6e40bcfeaeaf4a28104b5b3e4298efe46313ade35c193931586ded50f4ec078",
+      "bytes": 10960
     },
     {
       "path": "src/components/HomeFocus.tsx",
@@ -2058,13 +2733,13 @@
     },
     {
       "path": "src/components/HomePanel.tsx",
-      "sha256": "d2d84ea7147e25f8c55d3acb5181ae925e506a8c0a0a5cf26d1c295397b3348d",
-      "bytes": 19778
+      "sha256": "e23da60156f85a8533f650f669d357baaa6cf0d826bc8660ab02e2b1dd36d9c7",
+      "bytes": 19748
     },
     {
       "path": "src/components/MeetingsPanel.tsx",
-      "sha256": "6a6490a997f7a797fe32139919608828d456e94d54bf7f3e131fec746eaaf754",
-      "bytes": 33441
+      "sha256": "f3bf174d6d2371ebd6ee65ae76095b31dfcb1b1f79281a0d2c6b29dfcfb10ae9",
+      "bytes": 33534
     },
     {
       "path": "src/components/PersonContact.tsx",
@@ -2078,8 +2753,8 @@
     },
     {
       "path": "src/components/ProgramPanel.tsx",
-      "sha256": "ec1d614d3685d1469daa3cc7cb2df168ec8a52eedeac7f13fb21f8c305aec54d",
-      "bytes": 13501
+      "sha256": "2dd1934930edef9e32d7fd612f2d34bc3db5340f80ed667b835129335918b9a8",
+      "bytes": 13621
     },
     {
       "path": "src/components/SenderSettings.tsx",
@@ -2098,18 +2773,18 @@
     },
     {
       "path": "src/components/ShiftsPanel.tsx",
-      "sha256": "191eb15e31e7dc18dfb2100a0c6a83dbe9e7b21939ea9e53af942c40dea9b453",
-      "bytes": 14048
+      "sha256": "a6c2d2c8d8c9f71a25fb241b172019d944878162b021a61a1f1bdc11b607c54d",
+      "bytes": 14168
     },
     {
       "path": "src/components/StageEditor.tsx",
-      "sha256": "0b09f7b0ea1f34657d921e9b9153f061936adc28cc98882ad667c6f6862c1dcc",
-      "bytes": 31709
+      "sha256": "8b4cb73c48da62963912ef11983bb0ad72284e223ffb37bde5bc36858c8f6785",
+      "bytes": 31708
     },
     {
       "path": "src/components/TeamPanel.tsx",
-      "sha256": "404f2cd0b2e81bc122a3d817894d9857f78190749d8c6688d80f63aff6e60254",
-      "bytes": 32009
+      "sha256": "df5b03b363bf847b0c4e9ff906dad6ff328008a870a4b3ce468ab0809e5474a7",
+      "bytes": 32969
     },
     {
       "path": "src/components/TourCanvas.tsx",
@@ -2118,8 +2793,8 @@
     },
     {
       "path": "src/components/TourDialog.tsx",
-      "sha256": "a42b488bb9f2c7cfcd8705d44b2e216b59e60a20f866b18a02667a375af5a6c4",
-      "bytes": 8732
+      "sha256": "9c49a40412c9e629b39652aca8fa126554cd15215f64b1609dfccef35b0099dd",
+      "bytes": 8700
     },
     {
       "path": "src/components/TourIcons.tsx",
@@ -2128,8 +2803,8 @@
     },
     {
       "path": "src/components/UI.tsx",
-      "sha256": "8bcc9054e03690e605e540aa224c37321a2d12ea2239425fbb55109a492ec06e",
-      "bytes": 3914
+      "sha256": "2d1cc36e849114ec907f979b651797ddabf5e0b3d811d2955209cf3206448c7e",
+      "bytes": 4994
     },
     {
       "path": "src/components/useUnsavedChanges.ts",
@@ -2403,8 +3078,8 @@
     },
     {
       "path": "src/styles/calendar.css",
-      "sha256": "ace213a4540463bb9001b50323795c8fd29e8769217d908334e816718c599377",
-      "bytes": 699
+      "sha256": "cdc2e069259f3584342a86c9707bbd4cad0ac36f7c9a04731eac597b654e78df",
+      "bytes": 1294
     },
     {
       "path": "src/styles/contacts.css",
@@ -2413,8 +3088,8 @@
     },
     {
       "path": "src/styles/excel-import.css",
-      "sha256": "011d17053885b792ddce2031ddc36dd2a13b4141a6680813b5142b08a166642c",
-      "bytes": 2425
+      "sha256": "4e568b8357d4644e919a559e41e5cbb40e15553f9160dbed81dfdf373984df5a",
+      "bytes": 3183
     },
     {
       "path": "src/styles/history.css",
@@ -2458,23 +3133,23 @@
     },
     {
       "path": "src/styles/tours-entry.css",
-      "sha256": "8f82544996badf179a2bf52f32740d1310b91f052a1bd8222c6b4c5e8ae71e61",
-      "bytes": 698
+      "sha256": "38dafa461e0bd7f2df4a67da6a10c2ea282e495efe8421b3449be9527a7a05e1",
+      "bytes": 1133
     },
     {
       "path": "src/styles/tours.css",
-      "sha256": "a2c9ff48a7472511e03bc3de3036568fa21e805947ea785777b8a2a6a6649191",
-      "bytes": 5858
+      "sha256": "885f453afa5ddb67ae34344426e1ccc064c3d73a2f9281abf1e1c8f0ed5e4a39",
+      "bytes": 6598
     },
     {
       "path": "src/styles/visual-system.css",
-      "sha256": "4165013ee93a8e1b983cba95c0154c3ea9009d036f5bb1f6cdbb144cc2ff0e4a",
-      "bytes": 19630
+      "sha256": "55512344306d117ea94d8ff7b2464d5784473aaa7cbebbfaf0e51cea393e8baf",
+      "bytes": 22074
     },
     {
       "path": "tests/accessibility.e2e.spec.ts",
-      "sha256": "7e9e14137fbad1755c79f5010759298230f871f1926600eab8a4cf0fbbe3b10a",
-      "bytes": 1980
+      "sha256": "777ab0a7fdfbdbf3d508ef2fe9abb6ca6e030194b61fab7d1b3f592e58d6bf94",
+      "bytes": 1978
     },
     {
       "path": "tests/account-migration.e2e.spec.ts",
@@ -2483,8 +3158,8 @@
     },
     {
       "path": "tests/app.e2e.spec.ts",
-      "sha256": "4cad0d8d38e2a2cc882be18299403cdbbbbafc0626bb5b47ba407192361a0987",
-      "bytes": 6734
+      "sha256": "6f80e4a2167763de87e173a7402a5a244ed688097a261dc9bba1273fdcf54cc8",
+      "bytes": 6702
     },
     {
       "path": "tests/attendance-flow.e2e.spec.ts",
@@ -2503,8 +3178,8 @@
     },
     {
       "path": "tests/calendar.e2e.spec.ts",
-      "sha256": "068f5d4038b9bef320d5b1db9bf2e70dc0dc637fa60f1e7a0876c271c9c718c0",
-      "bytes": 4693
+      "sha256": "669ab782b5057c5a798b5b8cd4a9939dbc5387983f5cce3b4cbfeb5dccb053c2",
+      "bytes": 4704
     },
     {
       "path": "tests/calendar.test.ts",
@@ -2563,8 +3238,8 @@
     },
     {
       "path": "tests/history-team.e2e.spec.ts",
-      "sha256": "d604ab9ee294b7814ca8bfe544c34b3289588b9271dd0a1a4173a9b5ab29cfdb",
-      "bytes": 8722
+      "sha256": "a8786a5e1d53c036830a02dc2802ccb11cbcf48a61fb325896c66cb97c281d69",
+      "bytes": 8776
     },
     {
       "path": "tests/home-dashboard.e2e.spec.ts",
@@ -2578,8 +3253,8 @@
     },
     {
       "path": "tests/mail-templates.e2e.spec.ts",
-      "sha256": "39fde41a8a4adfe9929127c0d62b819b3a4291a278b0495cf956740231c0c87a",
-      "bytes": 5251
+      "sha256": "45c0513d0de95d0bf85c162aba31fdce557b57c8992cf1b0812d70b6966e5a8b",
+      "bytes": 5593
     },
     {
       "path": "tests/meeting-store.test.ts",
@@ -2588,8 +3263,8 @@
     },
     {
       "path": "tests/meetings.e2e.spec.ts",
-      "sha256": "162a84ee6e11aab2ec12d89b40e4f43010c1e5798c1f7319129ab8599698b443",
-      "bytes": 10684
+      "sha256": "484695ce8a747054fffcf6ae36adecd4b2120d4d1ded152c8f7c3d3de27cc3d1",
+      "bytes": 10668
     },
     {
       "path": "tests/meetings.test.ts",
@@ -2598,13 +3273,13 @@
     },
     {
       "path": "tests/offline-build.e2e.spec.ts",
-      "sha256": "6268c553d361d94354eacbcb22f59a83044a343d383f30f02d4e4470b114df27",
-      "bytes": 2384
+      "sha256": "e2ded0fa7abce34b94db3b6bc289d96a5ba56c893c0caf35f46a38d7e9acab2c",
+      "bytes": 2582
     },
     {
       "path": "tests/operation-guards.e2e.spec.ts",
-      "sha256": "e7cb2851a8008f526091f590eaf81f4ca0372cf3fc2fd61fb7f5a57ecf50e0e9",
-      "bytes": 11671
+      "sha256": "42189b52abda47603fa574ab5efe2e65cf10a61ce532247020729d55d8f2d7df",
+      "bytes": 11654
     },
     {
       "path": "tests/person-conflict.e2e.spec.ts",
@@ -2643,23 +3318,28 @@
     },
     {
       "path": "tests/shift-team-order.e2e.spec.ts",
-      "sha256": "5bd6ecdc7d431589cbf9d4a4197bac53b39a1bb462d393d74d2dcc1dd94d7e8c",
-      "bytes": 7515
+      "sha256": "a322b1223c8a823ca4445604801fb8ed79cf2635dbc0be81b74875afaa7a8d7a",
+      "bytes": 7623
+    },
+    {
+      "path": "tests/skills.test.mjs",
+      "sha256": "b2e70c571d3552a890797d755ac95ca6e4dad8b4ef6a966a5f210072b1d44092",
+      "bytes": 3721
     },
     {
       "path": "tests/team-regularization.e2e.spec.ts",
-      "sha256": "edcc6b20557bccbebc610f52ff1b5c64b18f99efe605371cf448cd990dd64ae8",
-      "bytes": 5360
+      "sha256": "dbefdee388184c377c0553f3e1d5d11114a209d01c3b96e3bedebe7e0ff9b02d",
+      "bytes": 5496
     },
     {
       "path": "tests/team.e2e.spec.ts",
-      "sha256": "59c38af9eb736c5626d5902b7799eccf4610615fa5d5b8ed13231933e60f912e",
-      "bytes": 9474
+      "sha256": "4b147de4ef26c7c9f903cc56e698a94ba65448b0603669eeafcf9aa18c4d246a",
+      "bytes": 9692
     },
     {
       "path": "tests/tours.e2e.spec.ts",
-      "sha256": "fc15a0610e2010fdddfdeca3435fb723544d39cd6ca66f60d7c75ad3329ecb11",
-      "bytes": 8191
+      "sha256": "a2d1585deb8b4ad9d120b2fd8abd4eae366e44451c795f9851d84f055ea2b3ca",
+      "bytes": 8213
     },
     {
       "path": "tests/tours.test.ts",
@@ -2672,19 +3352,24 @@
       "bytes": 241
     },
     {
+      "path": "tests/visual-080.e2e.spec.ts",
+      "sha256": "803478c8d8aa17afbdbaf403b3d62287e18d6a131825fed6c4d9da3935de2b44",
+      "bytes": 4704
+    },
+    {
       "path": "tests/visual-baseline.e2e.spec.ts",
       "sha256": "f213ac9c09624a31b313d838ba2ac5f7ddd7f3097c8c1c78cbae321fc0468335",
       "bytes": 1600
     },
     {
       "path": "tests/visual-redesign.e2e.spec.ts",
-      "sha256": "c61196f1308f7fd397fdd93c76d579f34f3ed961bc20b57f183d86f0cfeb3942",
-      "bytes": 13529
+      "sha256": "968280a116f94e37d493006c3dbe351afbc38aed0243b7bb8437a7783c9faa84",
+      "bytes": 13423
     },
     {
       "path": "tests/whatsapp.e2e.spec.ts",
-      "sha256": "532bc9a3443c3fd6da96ddf1e7ec729996e3265dbe1e884a57be42990c7a2d71",
-      "bytes": 12808
+      "sha256": "1648afdec9c0fc8e367920beeda7a2f306c3f0a0ecec2debb876361a7a369f02",
+      "bytes": 12881
     },
     {
       "path": "tests/whatsapp.test.ts",
@@ -2693,8 +3378,8 @@
     },
     {
       "path": "THIRD-PARTY-NOTICES.md",
-      "sha256": "1a4b0e97c8c304ce786baeb5d0cf09cd255724256db2079d8ea8d48c852f2815",
-      "bytes": 16504
+      "sha256": "6b475d0729b8ea096139a5a8ad8a0dc8c121a1838a4c75667620c82c6f3c5f9c",
+      "bytes": 16523
     },
     {
       "path": "tsconfig.json",
