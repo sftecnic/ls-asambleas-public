@@ -16,6 +16,8 @@ Desde 0.8.0, **Agenda** reúne Programa y Reuniones; las fichas separan **Datos,
 
 Desde 0.9.0, **Agenda → Reuniones** permite alternar **Mes · Lista** y consultar una o todas las asambleas autorizadas. Consulta [uso, impresión y modo offline](docs/REUNIONES-VISTAS.md). Actualizar esta versión solo requiere Hosting.
 
+Desde 0.10.0, **Más → Permisos** separa los accesos de la asamblea y la administración general. **Persona → Acciones → Revisar** muestra qué puede hacer cada cuenta, con Consulta o Gestión, acciones individuales y revisión de permisos añadidos o retirados. [Guía de permisos](docs/PERMISOS.md). Mantiene los cargos, las seis capacidades y las reglas actuales. Actualización solo de Hosting.
+
 **Código disponible para uso no comercial**, bajo [PolyForm Noncommercial 1.0.0](LICENSE). Permite usar, modificar y distribuir respetando sus condiciones. Las dependencias conservan sus licencias; consulta [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
 ## Empezar

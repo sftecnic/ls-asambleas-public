@@ -1,18 +1,19 @@
+import AccessPanel from './AccessPanel';
 import CalendarPanel from './CalendarPanel';
 import {configured} from '../data/repository';
 import {meetingRequest} from '../data/meetingApi';
 import {toLocalInput,fromLocalInput} from '../domain/format';
 import {compareCircuits} from '../domain/circuits';
 import {validateEventHours} from '../domain/calendar';
-import {useViewState} from './ViewState';
+import {useViewState,ViewStateProvider} from './ViewState';
 import SenderSettings from './SenderSettings';
 import ExcelImporter from './ExcelImporter';
 import {Fragment,useEffect,useState,type FormEvent} from 'react';
 import {CalendarDays,MapPin,Layers3,Mail,ShieldCheck,History,Download,Upload,Plus,Pencil,Save,Check,Building2,FileJson,Users,AlertTriangle,Archive,Eye,Trash2,ArrowLeft} from 'lucide-react';
-import type {AppData,AssemblyEvent,Capability,Department,Grant,PanelProps,Row,VenueTemplate} from '../domain/types';
-import {can,isAdmin,capabilities,grantId,validateData,changesBetween} from '../domain/rules';
+import type {AppData,AssemblyEvent,Department,PanelProps,Row,VenueTemplate} from '../domain/types';
+import {can,isAdmin,validateData,changesBetween} from '../domain/rules';
 import {uid,dateLabel,safeDriveUrl} from '../domain/format';
-import {MAIL_FIELDS,getMailTemplates,isGmail} from '../domain/mail';
+import {MAIL_FIELDS,getMailTemplates} from '../domain/mail';
 import {collectionLabel,createBackup,prepareImport,type ImportPreview} from '../domain/adminImport';
 import {Modal,ErrorMessage,Empty,Status,DepartmentIcon} from './UI';
 import {StageScene} from './StageEditor';
@@ -24,8 +25,6 @@ type ConfigCollection='events'|'venues'|'departments'|'congregations'|'templates
 type Draft=Record<string,unknown>&{id:string};
 const sectionNames:Record<Section,string>={sender:'Avisos y correo',events:'Eventos',venues:'Sedes',departments:'Departamentos',congregations:'Congregaciones',templates:'Plantillas',grants:'Permisos',history:'Histórico',backup:'Copias',import:'Importar'};
 const sectionIcons={sender:Mail,events:CalendarDays,venues:MapPin,departments:Layers3,congregations:Building2,templates:Mail,grants:ShieldCheck,history:History,backup:Download,import:Upload};
-const capabilityNames:Record<Capability,string>={view:'Consultar',edit:'Editar',assign:'Asignar turnos',publish:'Publicar',manageAccess:'Dar acceso',contacts:'Ver contactos'};
-const roleNames:Record<Grant['role'],string>={admin:'Administración',responsible:'Responsable',assistant:'Auxiliar',volunteer:'Voluntario'};
 function downloadJson(name:string,value:unknown){const url=URL.createObjectURL(new Blob([JSON.stringify(value,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function upsert<T extends Row>(rows:T[],row:T):T[]{return rows.some(r=>r.id===row.id)?rows.map(r=>r.id===row.id?row:r):[...rows,row];}
 const displayDate=(value:string)=>{try{return dateLabel(value);}catch{return 'Fecha sin indicar';}};
@@ -55,34 +54,6 @@ function ConfigEditor({collection,initial,data,onSave,onClose,online}:{collectio
   </form></Modal>;
 }
 
-function AccessEditor({initial,data,event,user,onSave,onClose,online}:{initial?:Grant;data:AppData;event:AssemblyEvent;user:PanelProps['user'];onSave:(grant:Grant)=>Promise<void>;onClose:()=>void;online:boolean}){
-  const admin=isAdmin(user,data);const departments=data.departments.filter(d=>admin||can(user,data,'manageAccess',event.id,d.id));
-  const [scope,setScope]=useState(initial?.eventId||event.id),[department,setDepartment]=useState(initial?.departmentId||departments[0]?.id||''),[personId,setPersonId]=useState(initial?.personId||''),[role,setRole]=useState<Grant['role']>(initial?.role||'volunteer');
-  const [selected,setSelected]=useState<Capability[]>(initial?.capabilities||['view']),[active,setActive]=useState(initial?.active??true),[busy,setBusy]=useState(false),[error,setError]=useState('');
-  const people=role==='admin'?data.persons:data.persons.filter(p=>data.candidates.some(c=>c.personId===p.id&&c.eventId===scope&&c.departmentId===department&&c.committee==='approved'&&c.availability==='accepted')||p.id===initial?.personId);
-  const allowed=capabilities.filter(cap=>admin||can(user,data,cap,scope,department));
-  const accountOnly=Boolean(initial?.role==='admin'&&!data.persons.some(p=>p.id===initial.personId));
-  async function submit(e:FormEvent){e.preventDefault();if(busy||!online)return;setBusy(true);setError('');try{
-    const person=data.persons.find(p=>p.id===personId);if(!person&&!accountOnly)throw new Error('Elige una persona.');const email=initial?.email||person?.gmail.trim().toLowerCase()||'';if(!initial&&!isGmail(email))throw new Error('Añade el Gmail a la ficha de esta persona.');
-    const grant:Grant={...(initial||{}),id:initial?.id||'',email,personId,eventId:role==='admin'?'*':scope,departmentId:role==='admin'?'*':department,role,capabilities:role==='admin'?[...capabilities]:selected,active};grant.id=initial?.id||grantId(grant);
-    if(!initial&&data.grants.some(g=>g.id===grant.id))throw new Error('Este acceso ya existe. Ábrelo para cambiar sus permisos.');
-    if(active&&!grant.capabilities.includes('view'))throw new Error('Un acceso activo necesita Consultar.');
-    if(!admin&&(grant.role==='admin'||grant.eventId!==event.id||grant.departmentId==='*'||!can(user,data,'manageAccess',grant.eventId,grant.departmentId)||grant.capabilities.some(cap=>!can(user,data,cap,grant.eventId,grant.departmentId))))throw new Error('Solo puedes delegar los permisos que tienes en este departamento.');
-    if(initial?.role==='admin'&&!active&&data.grants.filter(g=>g.active&&g.role==='admin').length===1)throw new Error('Debe quedar al menos una persona administradora.');
-    await onSave(grant);onClose();
-  }catch(e){setError(e instanceof Error?e.message:'No se ha guardado el acceso.');}finally{setBusy(false);}}
-  return <Modal title={initial?'Cambiar permisos':'Dar acceso'} onClose={onClose}><form className="admin-config-form" onSubmit={e=>void submit(e)}><ErrorMessage message={error}/>
-    <label className="field">Función<select value={role} disabled={!!initial&&initial.role==='admin'} onChange={e=>{setRole(e.target.value as Grant['role']);setPersonId('');}}><option value="volunteer">Voluntario</option><option value="assistant">Auxiliar</option><option value="responsible">Responsable</option>{admin&&(!initial||initial.role==='admin')&&<option value="admin">Administración general</option>}</select></label>
-    {role!=='admin'&&<div className="form-grid"><label className="field">Evento<select value={scope} disabled={!!initial||!admin} onChange={e=>{setScope(e.target.value);setPersonId('');}}>{data.events.filter(ev=>admin||ev.id===event.id).map(ev=><option key={ev.id} value={ev.id}>{ev.title} · {displayDate(ev.startDate)}</option>)}</select></label><label className="field">Departamento<select value={department} disabled={!!initial} onChange={e=>{setDepartment(e.target.value);setPersonId('');}}><option value="" disabled>Elegir…</option>{(admin?data.departments:departments).map(d=><option value={d.id} key={d.id}>{d.name}</option>)}</select></label></div>}
-    {accountOnly?<label className="field">Cuenta administrativa<input name="administrative-account" type="email" autoComplete="off" spellCheck={false} readOnly value={initial?.email||''}/></label>:<label className="field">Persona<select value={personId} disabled={!!initial} required onChange={e=>setPersonId(e.target.value)}><option value="">Elegir…</option>{people.map(p=><option value={p.id} key={p.id}>{p.name}{p.gmail?'':' · sin Gmail'}</option>)}</select></label>}
-    {!accountOnly&&personId&&<p className="admin-access-email">{initial?.email||data.persons.find(p=>p.id===personId)?.gmail||'Falta el Gmail en la ficha'}</p>}
-    {!accountOnly&&!people.length&&<p className="admin-note">Primero deben constar la aprobación del comité y la aceptación del voluntario.</p>}
-    {role!=='admin'&&<fieldset className="admin-capabilities"><legend>Puede</legend>{allowed.map(cap=><label className="admin-check" key={cap}><input type="checkbox" checked={selected.includes(cap)} onChange={e=>setSelected(p=>e.target.checked?[...p,cap]:p.filter(c=>c!==cap))}/>{capabilityNames[cap]}</label>)}</fieldset>}
-    <label className="admin-check"><input type="checkbox" checked={active} onChange={e=>setActive(e.target.checked)}/><ShieldCheck size={20}/>Acceso activo</label>
-    <div className="modal-actions"><button type="button" className="btn" onClick={onClose}>Cancelar</button><button className="btn btn-primary" disabled={!online||busy}><Save size={20}/>{busy?'Guardando…':'Guardar'}</button></div>
-  </form></Modal>;
-}
-
 interface SourcePerson {id:string;name:string;congregation:string;email?:string;phone?:string;department?:string;issues?:string[];possibleMatches?:string[];source?:{sourceId?:string;sheet?:string;row?:number}}
 interface SourceReview {people:SourcePerson[];sourceFiles?:{id:string;name:string}[];excludedSources?:unknown[]}
 function SourceReviewer({source,data,onPreview}:{source:SourceReview;data:AppData;onPreview:(preview:ImportPreview)=>void}){
@@ -93,10 +64,10 @@ function SourceReviewer({source,data,onPreview}:{source:SourceReview;data:AppDat
 
 export function AdminPanel({data,event,user,onChange,onImport,canEdit:_canEdit,canPublish:_canPublish,online,initialHistoryPersonId,initialSection}:PanelProps&{initialHistoryPersonId?:string;initialSection?:Section}){
   const admin=isAdmin(user,data),accessManager=admin||data.departments.some(d=>can(user,data,'manageAccess',event.id,d.id));
-  const [section,setSection]=useViewState<Section>('admin.section',initialSection||'history'),[editing,setEditing]=useState<{collection:ConfigCollection;row:Draft}>(),[access,setAccess]=useState<Grant|'new'>(),[error,setError]=useState(''),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false);
+  const [section,setSection]=useViewState<Section>('admin.section',initialSection||'history'),[editing,setEditing]=useState<{collection:ConfigCollection;row:Draft}>(),[error,setError]=useState(''),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false);
   const [calendarId,setCalendarId]=useState('');
   const [preview,setPreview]=useState<ImportPreview>(),[source,setSource]=useState<SourceReview>(),[restore,setRestore]=useState(false),[fileName,setFileName]=useState('');
-  const [menu,setMenu]=useState(!initialSection&&!initialHistoryPersonId);
+  const [menu,setMenu]=useViewState('admin.menu',!initialSection&&!initialHistoryPersonId);
   useEffect(()=>{if(initialHistoryPersonId){setSection('history');setMenu(false);}else if(initialSection){setSection(initialSection);setMenu(false);}},[initialHistoryPersonId,initialSection]);
   const sections=(Object.keys(sectionNames) as Section[]).filter(key=>admin||['history','templates'].includes(key)||(key==='grants'&&accessManager));
   async function commit(next:AppData,description:string){if(!online)throw new Error('Conéctate para guardar.');await onChange(next,description);setNotice('Cambios guardados');}
@@ -107,7 +78,6 @@ export function AdminPanel({data,event,user,onChange,onImport,canEdit:_canEdit,c
     }else setPreview(prepareImport(text,data,isRestore));}catch(e){setError(e instanceof SyntaxError?'El archivo no contiene JSON válido.':e instanceof Error?e.message:'No se ha podido leer este archivo.');}}
   async function applyImport(){if(!preview||busy||!admin)return;setBusy(true);setError('');try{if(preview.baseSignature!==JSON.stringify(data))throw new Error('Hay cambios nuevos. Vuelve a elegir el archivo y revisa la importación.');await commit(preview.next,`${restore?'Restauración':'Importación'} revisada: ${preview.total} registros · ${fileName}`);setPreview(undefined);setSource(undefined);setFileName('');}catch(e){setError(e instanceof Error?e.message:'No se ha completado.');}finally{setBusy(false);}}
   const configRows=[...(section==='events'?data.events:section==='venues'?data.venues:section==='departments'?data.departments:section==='congregations'?data.congregations:section==='templates'?getMailTemplates(data):[])].sort((a,b)=>{const first=a as unknown as Record<string,unknown>,second=b as unknown as Record<string,unknown>;return (section==='congregations'?compareCircuits(String(first.circuit||''),String(second.circuit||'')):0)||String(first.startDate||first.name||first.title).localeCompare(String(second.startDate||second.name||second.title),'es');});
-  const visibleGrants=data.grants.filter(g=>admin||(g.eventId===event.id&&can(user,data,'manageAccess',g.eventId,g.departmentId)));
   return <section className="admin-panel" aria-label="Más opciones"><div className="section-heading"><h1>{menu?'Más':sectionNames[section]}</h1>{!menu&&<button className="btn" onClick={()=>{if(!window.dispatchEvent(new Event('ls:before-navigate',{cancelable:true})))return;setMenu(true);setError('');setNotice('');}}><ArrowLeft size={20}/>Volver</button>}</div>
     {menu&&<div className="admin-groups">{([
       ['Organización',['events','venues','departments','congregations','history']],
@@ -116,9 +86,9 @@ export function AdminPanel({data,event,user,onChange,onImport,canEdit:_canEdit,c
     ] as [string,Section[]][]).map(([name,keys])=>{const visible=keys.filter(key=>sections.includes(key));return visible.length>0&&<section key={name}><h2>{name}</h2><nav className="admin-nav" aria-label={name}>{visible.map(key=>{const Icon=sectionIcons[key];return <button type="button" key={key} onClick={()=>{setSection(key);setMenu(false);setError('');setNotice('');setPreview(undefined);setSource(undefined);}}><Icon size={24}/><span>{sectionNames[key]}</span></button>;})}</nav></section>;})}</div>}
 
     <ErrorMessage message={error}/>{notice&&<div className="message success" role="status"><Check size={20}/>{notice}</div>}
-    <div className="admin-content" hidden={menu}><div className="admin-section-heading">{admin&&['events','venues','departments','congregations','templates'].includes(section)&&<button className="btn btn-primary" disabled={!online} onClick={()=>beginConfig(section as ConfigCollection)}><Plus size={20}/>Añadir</button>}{section==='grants'&&accessManager&&<button className="btn btn-primary" disabled={!online} onClick={()=>setAccess('new')}><Plus size={20}/>Dar acceso</button>}</div>
+    <div className="admin-content" hidden={menu}><div className="admin-section-heading">{admin&&['events','venues','departments','congregations','templates'].includes(section)&&<button className="btn btn-primary" disabled={!online} onClick={()=>beginConfig(section as ConfigCollection)}><Plus size={20}/>Añadir</button>}</div>
       {['events','venues','departments','congregations','templates'].includes(section)&&<>{!admin&&section==='templates'&&<p className="admin-note">Puedes adaptar cada mensaje antes de copiarlo. Las plantillas generales las guarda administración.</p>}<div className="admin-config-list">{configRows.map((row,index)=>{const record=row as unknown as Record<string,unknown>;const name=String(record.name||record.title||'');const subtitle=section==='events'?`${displayDate(String(record.startDate))} · ${data.venues.find(v=>v.id===record.venueId)?.city||'Sin sede'}`:section==='venues'?`${record.city} · ${record.address}`:section==='congregations'?`${record.circuit||'Circuito sin indicar'} · ${record.committeeEmail||'Sin correo del comité'}`:section==='templates'?String(record.subject||''):'Departamento disponible';const Icon=sectionIcons[section];return <Fragment key={row.id}>{section==='congregations'&&(index===0||(configRows[index-1] as any).circuit!==record.circuit)&&<h2 className="admin-circuit-title">{String(record.circuit||'Circuito sin indicar')}</h2>}<article className="admin-config-row"><div className="admin-row-icon">{section==='departments'?<DepartmentIcon department={row as Department}/>:<Icon size={25}/>}</div><div className="admin-row-copy"><h3>{name}</h3><p>{subtitle}</p>{record.archived===true&&<Status kind="draft">Archivado</Status>}</div>{admin&&section==='events'&&<button className="btn" disabled={!online} onClick={()=>setCalendarId(row.id)}><CalendarDays size={20}/>Calendar</button>}{admin?<button className="btn btn-ghost" disabled={!online} onClick={()=>beginConfig(section as ConfigCollection,row)}><Pencil size={19}/>Editar</button>:section==='templates'?<details><summary className="btn"><Eye size={19}/>Ver</summary><pre className="admin-template-preview">{String(record.body)}</pre></details>:null}</article></Fragment>;})}{!configRows.length&&<Empty>Aún no hay registros.</Empty>}</div></>}
-      {section==='grants'&&<div className="admin-config-list">{visibleGrants.map(g=><article className="admin-config-row" key={g.id}><div className="admin-row-icon"><ShieldCheck size={25}/></div><div className="admin-row-copy"><h3>{data.persons.find(p=>p.id===g.personId)?.name||g.email}</h3><p>{roleNames[g.role]} · {g.departmentId==='*'?'Todos los departamentos':data.departments.find(d=>d.id===g.departmentId)?.name}</p><p>{g.email}</p><div className="admin-grant-caps">{g.capabilities.map(c=><span key={c}>{capabilityNames[c]}</span>)}</div></div><div className="admin-row-actions"><Status kind={g.active?'good':'draft'}>{g.active?'Activo':'Sin acceso'}</Status><button className="btn btn-ghost" disabled={!online} onClick={()=>setAccess(g)}><Pencil size={19}/>Cambiar</button></div></article>)}{!visibleGrants.length&&<Empty>No hay accesos en tu ámbito.</Empty>}</div>}
+      {!menu&&section==='grants'&&accessManager&&<ViewStateProvider key={event.id} scope={`${user.uid}:access:${event.id}`}><AccessPanel data={data} event={event} user={user} online={online} onSave={grant=>{const existing=data.grants.find(g=>g.id===grant.id);if(existing&&(existing.revision??0)!==(grant.revision??0))return Promise.reject(new Error('Este acceso ha cambiado. Cierra y vuelve a abrirlo para revisar la versión actual.'));return commit({...data,grants:upsert(data.grants,grant)},`Acceso ${grant.active?'actualizado':'revocado'}: ${grant.email}`);}}/></ViewStateProvider>}
       {section==='sender'&&admin&&<SenderSettings online={online}/>}
       {section==='history'&&<HistoryPanel data={data} user={user} initialPersonId={initialHistoryPersonId}/>}
       {!menu&&section==='import'&&admin&&<ExcelImporter data={data} user={user} online={online} operations={onImport}/>}
@@ -132,7 +102,6 @@ export function AdminPanel({data,event,user,onChange,onImport,canEdit:_canEdit,c
     </div>
     {calendarId&&<Modal title="Calendar · Asamblea" onClose={()=>setCalendarId('')}><CalendarPanel kind="event" id={calendarId} data={data} user={user} online={online}/></Modal>}
     {editing&&<ConfigEditor collection={editing.collection} initial={editing.row} data={data} online={online} onClose={()=>setEditing(undefined)} onSave={row=>saveConfig(editing.collection,row)}/>}
-    {access&&<AccessEditor initial={access==='new'?undefined:access} data={data} event={event} user={user} online={online} onClose={()=>setAccess(undefined)} onSave={grant=>{const existing=data.grants.find(g=>g.id===grant.id);if(existing&&(existing.revision??0)!==(grant.revision??0))return Promise.reject(new Error('Este acceso ha cambiado. Cierra y vuelve a abrirlo.'));return commit({...data,grants:upsert(data.grants,grant)},`Acceso ${grant.active?'actualizado':'revocado'}: ${grant.email}`);}}/>}
   </section>;
 }
 export default AdminPanel;
